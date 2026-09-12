@@ -255,7 +255,7 @@ def reset_enabled() -> bool:
 
 
 def create_app(data_dir: str | os.PathLike[str] | None = None) -> FastAPI:
-    app = FastAPI(title="Household", version="0.2.0")
+    app = FastAPI(title="Kith", version="0.2.0")
     root = Path(data_dir or os.environ.get("HOUSEHOLD_DATA_DIR") or JsonLedgerStore().root)
     ledger = JsonLedgerStore(root=root)
     signer = SessionSigner()

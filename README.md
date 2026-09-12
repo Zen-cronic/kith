@@ -1,8 +1,8 @@
-# PLACEHOLDER — a Strands Agents household authority agent
+# Kith — a Strands Agents household authority agent
 
-> `PLACEHOLDER` is a working stand-in for the product name. Built with the **Strands Agents SDK** (`strands-agents` 1.54.0, `bidi` extra) and Amazon Bedrock — Nova Pro for vision, Nova 2 Lite for reasoning, Nova 2 Sonic for voice — for the AWS **Agents for Humans** hackathon, Everyday Agents track. MIT licensed.
+> **Kith** is built with the **Strands Agents SDK** (`strands-agents` 1.54.0, `bidi` extra) and Amazon Bedrock — Nova Pro for vision, Nova 2 Lite for reasoning, Nova 2 Sonic for voice — for the AWS **Agents for Humans** hackathon, Everyday Agents track. MIT licensed.
 
-Every member of the household — including the kids — talks to it or shows it a photo. PLACEHOLDER knows exactly **who may decide what for whom**, does the work it is allowed to do and proves it with a **receipt**, routes the rest to the right parent for one tap, and publishes the number that matters: **0 out-of-scope actions executed across 29 adversarial requests, with a measured false-refusal rate.**
+Every member of the household — including the kids — talks to it or shows it a photo. Kith knows exactly **who may decide what for whom**, does the work it is allowed to do and proves it with a **receipt**, routes the rest to the right parent for one tap, and publishes the number that matters: **0 out-of-scope actions executed across 29 adversarial requests, with a measured false-refusal rate.**
 
 The agent has a channel-agnostic core with a shared identity and per-channel trust seam (`household/identity.py`, `household/channels/policy.py`), so the same authority engine can reach families over chat, voice, or MCP; Telegram, SMS, and Alexa+ are the roadmap, not shipped today. The current web UI is an editorial "paper and ink" screen (screenshots below); a warmer family-friendly mascot redesign is briefed (`docs/design/family-friendly-brief-2026-09-12.md`) but not yet built.
 

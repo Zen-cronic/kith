@@ -1,6 +1,6 @@
-# PLACEHOLDER architecture
+# Kith architecture
 
-`PLACEHOLDER` is six Strands agents in a Strands Graph, one provider interface, a code-only authority ledger, and a thin household screen on top. The rule that makes it safe: **the model proposes, code decides, and code executes.** No model output ever becomes a decision or a side effect without being recomputed in code first.
+Kith is six Strands agents in a Strands Graph, one provider interface, a code-only authority ledger, and a thin household screen on top. The rule that makes it safe: **the model proposes, code decides, and code executes.** No model output ever becomes a decision or a side effect without being recomputed in code first.
 
 The execution-edge diagram below is generated from the real graph with `household graph`; the dashed edges carry data between nodes without deciding who runs next.
 

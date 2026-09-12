@@ -60,7 +60,7 @@ def test_meta_names_the_sdk_roster_skills_and_rails(client: TestClient) -> None:
 
 def test_index_and_static_screens(client: TestClient) -> None:
     page = client.get("/")
-    assert page.status_code == 200 and "Household" in page.text and "What is real" in page.text
+    assert page.status_code == 200 and "Kith" in page.text and "What is real" in page.text
     assert client.get("/static/app.js").status_code == 200 and client.get("/static/queue.js").status_code == 200
 
 
