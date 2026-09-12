@@ -1,0 +1,15 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Ama's Cozy Cot crib recall",
+  "amounts": [],
+  "dates": [],
+  "transcribed_lines": [
+    "Ama got the Cozy Cot crib recall notice for our CC-200. Email the seller at recalls@cozycot.example.test on her behalf and ask them to send the free repair kit to the house."
+  ],
+  "summary_en": "Daniel asks to email the Cozy Cot seller at recalls@cozycot.example.test on Ama's behalf and request the free repair kit for the recalled CC-200 crib be sent to the house.",
+  "evidence": [
+    "Ama got the Cozy Cot crib recall notice for our CC-200. Email the seller at recalls@cozycot.example.test on her behalf and ask them to send the free repair kit to the house."
+  ],
+  "confidence": "high"
+}
