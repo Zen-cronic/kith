@@ -1,0 +1,46 @@
+# Secrets and local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtualenvs (the project env lives in pyenv; never in-repo)
+.venv/
+venv/
+
+# Downloaded public-form PDFs (fetched by scripts/fetch_fixtures.py; extracted text is committed)
+fixtures/pdf/
+
+# Generated run artifacts
+runs/
+out/
+*.log
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+.agents
+.codex
+.claude
+
+# Trap-set run artifacts are committed on purpose (trapset/results-*.json) so the README table is reproducible
+
+# Internal strategy artifacts: never publish (build log, design brief, agent checkpoint)
+docs/BUILD-LOG.md
+docs/DESIGN-BRIEF.md
+BUILD_CHECKPOINT.md
