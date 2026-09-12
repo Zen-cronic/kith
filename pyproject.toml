@@ -29,6 +29,7 @@ include = [
   { path = "fixtures/documents/*.json", format = ["sdist", "wheel"] },
   { path = "fixtures/canned/*.json", format = ["sdist", "wheel"] },
   { path = "fixtures/households/*.json", format = ["sdist", "wheel"] },
+  { path = "fixtures/requests/*.json", format = ["sdist", "wheel"] },
   { path = "fixtures/skills/**/*.json", format = ["sdist", "wheel"] },
   { path = "fixtures/images/*", format = ["sdist", "wheel"] },
 ]

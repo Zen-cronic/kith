@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Front Desk</title>
+<title>Household</title>
 <meta name="theme-color" content="#F4F1E9">
 <link rel="preload" href="/static/fonts/fraunces.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="/static/fonts/manrope.ttf" as="font" type="font/ttf" crossorigin>
@@ -11,164 +11,127 @@
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="/" aria-label="Front Desk home"><span class="brand-mark" aria-hidden="true"><i></i><i></i></span><strong>Front Desk<span class="brand-period">.</span></strong></a>
+  <a class="brand" href="/" aria-label="Household home"><span class="brand-mark" aria-hidden="true"><i></i><i></i></span><strong>Household<span class="brand-period">.</span></strong></a>
   <ol class="steps" id="steps">
-    <li data-step="language" class="current">Language</li>
-    <li data-step="consent">Consent</li>
-    <li data-step="document">Document</li>
+    <li data-step="members" class="current">Members</li>
+    <li data-step="home">Home</li>
     <li data-step="session">Session</li>
   </ol>
   <div class="topbar-right">
     <span class="mono" id="provider-line">Loading…</span>
-    <a class="demo-link" href="/static/demo/index.html">Watch the demo <span aria-hidden="true">↗</span></a>
-    <button class="btn ghost" id="new-session" hidden>New visitor</button>
-    <button class="btn ghost" id="privacy-toggle" title="Turn the screen to the visitor" hidden>Privacy mode</button>
+    <span class="who-line" id="who-line" hidden></span>
+    <button class="btn ghost" id="switch-member" hidden>Switch member</button>
   </div>
 </header>
 
-<main id="screen-consent" class="screen single" hidden>
-  <div class="section-heading"><span class="eyebrow">02 / Your choice</span><h1 class="display">Before we read<br><em>your letter.</em></h1></div>
-  <div class="consent-layout">
-    <section class="consent-paper" aria-label="Consent in your language"><span class="eyebrow">Please read with the visitor</span>
-  <div class="consent-target" id="consent-target" hidden></div>
-  <label class="staff-note" id="consent-assist" hidden><input type="checkbox" id="consent-confirm"> Staff: interpret the consent and provider details above in the selected language. Check only after the visitor understands and agrees.</label>
-  <p role="status" id="consent-status"></p>
-  <div class="row">
-    <button class="btn primary big" id="consent-agree" disabled>I agree</button>
-    <button class="btn ghost big" id="consent-decline">Not today</button>
-    <button class="btn ghost" id="consent-back">Choose language</button>
-  </div>
-    </section>
-    <aside class="consent-context"><h2>What you're agreeing to</h2>
-  <p class="lead" id="consent-lead">A computer program will read your letter. This app does not save letters or transcripts to a file. Ending the visit clears this screen. You can print a summary and an approved reply. Legal notices require help from a person. You can choose not to use the program.</p>
-  <dl class="facts">
-    <div><dt>Stored after the visit</dt><dd>This app keeps no saved letter or transcript. Any external model provider has its own retention policy.</dd></div>
-    <div><dt>Where the reading happens</dt><dd id="consent-where">This computer, in demo mode.</dd></div>
-    <div><dt>What you take home</dt><dd>A printable summary and, when approved, a reply to review with staff.</dd></div>
-    <div><dt>What we will not do</dt><dd>Draft your answer to an eviction notice, an immigration letter, or a court document. A person does that with you.</dd></div>
-  </dl>
-    </aside>
-  </div>
-</main>
-
-<main id="screen-language" class="screen single welcome">
+<main id="screen-members" class="screen single welcome">
   <section class="welcome-story">
-    <span class="eyebrow"><span class="tiny-rule"></span> A little help, face to face</span>
-    <h1 class="display">A letter.<br>A little <em>clarity.</em></h1>
-    <p class="lead">Understand what's in front of you.<br>Find a next step, together.</p>
-    <div class="paper-vignette" aria-hidden="true">
-      <div class="vignette-rule"><span>ONE LETTER. TWO READINGS.</span><span>↗</span></div>
-      <div class="letter-sheet letter-original"><div class="sheet-top">THE LETTER <span>01</span></div><div class="sheet-lines"><i></i><i></i><i></i></div><div class="sheet-highlight"></div><div class="sheet-lines short"><i></i><i></i></div><div class="sheet-signature"></div></div>
-      <div class="letter-sheet letter-reading"><div class="sheet-top">A LITTLE CLARITY <span>02</span></div><p>Read.<br>Understand.<br><em>Take the next step.</em></p><div class="sheet-bottom">WITH A PERSON, AT YOUR PACE <span>↗</span></div></div>
-      <span class="desk-stamp">HERE<br>TO HELP</span>
-    </div>
-  </section>
-  <section class="language-panel" aria-labelledby="language-heading">
-    <div class="section-topline"><span class="eyebrow">01 / Begin here</span><span class="muted small">Choose one to continue</span></div>
-    <h2 id="language-heading">What language <br>feels like <em>home?</em></h2>
-    <p class="language-instruction">Pick the visitor's language.</p>
+    <span class="eyebrow"><span class="tiny-rule"></span> Who is speaking?</span>
+    <h1 class="display">One household.<br>Everyone decides <em>their part.</em></h1>
+    <p class="lead">Pick your card and enter your PIN. The agent knows who may decide what for whom: it completes what it is allowed to and proves it with a receipt, and it routes the rest to the right parent for one tap.</p>
     <div id="service-unavailable" hidden>
       <p class="staff-note" id="startup-error" role="alert"></p>
-      <button class="btn ghost" id="reload-service">Reload Front Desk</button>
+      <button class="btn ghost" id="reload-service">Reload</button>
     </div>
-    <div class="grid-languages" id="language-grid"></div>
-    <p class="language-help"><span aria-hidden="true">◎</span> Audio depends on voices installed in this browser.<br>Staff can help with consent before any letter is sent.</p>
+    <div class="mount" id="mount-members"></div>
   </section>
-  <footer class="welcome-footer"><span>One letter. A shared understanding.</span><span>Read with care · Review with staff</span></footer>
+  <section class="member-panel" aria-labelledby="members-heading">
+    <div class="section-topline"><span class="eyebrow">Members</span><span class="muted small" id="household-name"></span></div>
+    <h2 id="members-heading">Whose turn <em>is it?</em></h2>
+    <div class="member-grid" id="member-grid"></div>
+    <form class="pin-form card" id="pin-form" hidden>
+      <div class="pin-head"><strong id="pin-for"></strong><span class="muted small" id="pin-hint"></span></div>
+      <label class="field-label" for="pin">PIN</label>
+      <div class="row pin-row">
+        <input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12" required>
+        <button class="btn primary" id="pin-submit" type="submit">Continue</button>
+        <button class="btn ghost" id="pin-cancel" type="button">Back</button>
+      </div>
+      <p role="alert" id="pin-error" class="error-line"></p>
+    </form>
+  </section>
 </main>
 
-<main id="screen-document" class="screen single" hidden>
-  <div class="section-heading"><span class="eyebrow">03 / Bring it to the desk</span><h1 class="display">Let’s open <em>the letter.</em></h1></div>
-  <p class="lead">Pick a fixture document (real public forms and labelled synthetic letters), or paste the text of a letter. Pasted text lives only in this session.</p>
-  <div class="doc-layout">
-    <section class="fixture-archive"><div class="archive-heading"><h2>From the sample collection</h2><span class="eyebrow">Fixture documents</span></div><div class="doc-list" id="fixture-list"></div></section>
-    <div class="doc-paste">
-      <div class="paste-heading"><span class="eyebrow">Or use your own</span><label for="paste">A letter in your hands.</label><p>Paste the text below. It stays in this session.</p></div>
-      <textarea id="paste" rows="10" placeholder="Paste the text of the letter here…"></textarea>
-      <label class="field-label" for="paste-title">Short title <span class="muted">(optional)</span></label><input id="paste-title" placeholder="e.g. Appointment letter">
-      <button class="btn primary" id="run-paste">Read this letter</button>
-    </div>
-  </div>
+<main id="screen-home" class="screen home" hidden>
+  <section class="column ledger">
+    <div class="pane-head"><strong>Ledger</strong><span class="muted small">Who may decide what for whom</span></div>
+    <article class="card"><h2>Members</h2><div id="ledger-members"></div></article>
+    <article class="card"><h2>Grants</h2><div id="ledger-grants"></div></article>
+    <article class="card"><h2>Consents</h2><div id="ledger-consents"></div></article>
+    <article class="card"><h2>Accounts</h2><div id="ledger-accounts"></div></article>
+  </section>
+
+  <section class="column ask">
+    <div class="pane-head"><strong>Ask</strong><span class="muted small" id="ask-as"></span></div>
+    <article class="card ask-card">
+      <h2>Your request</h2>
+      <textarea id="request-text" rows="5" placeholder="Type what you need, in your own words…"></textarea>
+      <div class="upload-row">
+        <label class="btn ghost file-label" for="upload-file">Photo or PDF</label>
+        <input id="upload-file" type="file" accept="image/png,image/jpeg,image/gif,image/webp,application/pdf" hidden>
+        <span class="small" id="upload-status" role="status"></span>
+        <button class="btn ghost compact" id="upload-clear" type="button" hidden>Remove</button>
+      </div>
+      <p class="small muted" id="upload-note"></p>
+      <div class="row"><button class="btn primary" id="run-request">Ask the household agent</button></div>
+      <p role="alert" id="ask-error" class="error-line"></p>
+    </article>
+    <article class="card"><h2>Sample requests</h2><p class="small muted">Written for the member who is speaking. Pick one to fill it in.</p><div class="sample-list" id="sample-list"></div></article>
+  </section>
+
+  <section class="column queue">
+    <div class="pane-head"><strong>Action queue</strong><span class="muted small">Proposed, waiting, done</span></div>
+    <div id="queue"></div>
+    <article class="card"><h2>Receipts</h2><div id="receipts"></div></article>
+    <div class="mount" id="mount-home"></div>
+  </section>
 </main>
 
 <main id="screen-session" class="screen session" hidden>
   <aside class="rail">
-    <div class="rail-head"><span class="eyebrow">Behind the reading</span><strong>The process</strong><span class="muted">One graph · five agents</span></div>
+    <div class="rail-head"><span class="eyebrow">Behind the answer</span><strong>Six agents</strong><span class="muted" id="rail-provider"></span></div>
     <ol class="roster" id="roster"></ol>
-    <div class="rail-foot">
-      <div class="mono small" id="rail-provider"></div>
-      <details><summary>Show the graph</summary><pre class="mono small" id="graph-src"></pre></details>
-    </div>
+    <div class="mount rail-foot" id="mount-session"></div>
   </aside>
 
   <section class="staff">
-    <div class="pane-head"><div class="head-row"><strong>Staff review<span class="pane-index">01</span></strong><span class="gauge-chip" id="gauge-chip">fidelity: waiting</span></div><span class="muted">English · check what was said</span><span class="chip" id="doc-chip"></span></div>
+    <div class="pane-head"><strong>Session<span class="pane-index">01</span></strong><span class="muted small" id="session-sub"></span></div>
     <p class="staff-note" id="session-error" role="alert" hidden></p>
-    <p class="meaning-warning" id="meaning-warnings" role="alert" hidden></p>
-    <button class="btn ghost" id="choose-document">Choose another letter</button>
-    <details class="card" id="handoff-editor" hidden>
-      <summary>Record a confirmed handoff</summary>
-      <p class="small">Only record an agreement a person has accepted. Nothing is sent to a booking system. This stays in the browser until the visit is cleared.</p>
-      <form id="handoff-form">
-        <div class="handoff-grid">
-          <label>Responsible person <input id="handoff-owner" maxlength="80" required autocomplete="off"></label>
-          <label>Meeting point <input id="handoff-place" maxlength="120" required autocomplete="off"></label>
-          <label>Agreed next step <select id="handoff-action" required><option value="">Choose an action</option><option value="review">Review this letter together</option><option value="contact">Help contact the appropriate service</option><option value="language">Help explain the letter in their language</option></select></label>
-          <label>Agreed timing <select id="handoff-mode" required><option value="">Choose the timing</option><option value="now">At the desk now</option><option value="scheduled">Agreed date and time</option></select></label>
-          <label id="handoff-time-field" hidden>Date and time <input id="handoff-time" type="datetime-local"></label>
-          <label>Your name <input id="handoff-recorded-by" maxlength="80" required autocomplete="off"></label>
-        </div>
-        <p id="handoff-time-help" class="small"></p>
-        <label class="handoff-attest"><input id="handoff-attest" type="checkbox" required> I confirmed this plan with the responsible person and explained it to the visitor in their language.</label>
-        <p class="small">Names and meeting points appear exactly as entered. Explain how to recognize the person and location.</p>
-        <p id="handoff-error" role="alert"></p><p id="handoff-edit-status" class="small" role="status"></p>
-        <div class="row"><button class="btn primary" id="handoff-save" type="submit">Record confirmation</button><button class="btn" id="handoff-withdraw" type="button" hidden>Withdraw confirmation</button></div>
-      </form>
-    </details>
-    <article class="card" id="reading-card"><h2>Reading</h2><p class="muted">Waiting for the document reader…</p></article>
-    <article class="card" id="backtrans-card" hidden>
-      <h2>Back-translation <span class="muted">what the interpreter's words say when translated back</span></h2>
-      <p id="backtrans-text"></p>
-      <div class="chips" id="number-chips"></div>
-    </article>
-    <article class="card" id="verdict-card" hidden><h2>Critic</h2><div id="verdict-log"></div></article>
-    <article class="card" id="draft-card" hidden><h2>Drafts</h2><div id="draft-log"></div></article>
+    <button class="btn ghost" id="back-home">Back to home</button>
+    <article class="card" id="request-card"><h2>Request</h2><p id="request-who" class="small muted"></p><p id="request-text-view" class="request-text"></p></article>
+    <article class="card" id="intake-card" hidden><h2>Intake</h2><div id="intake-body"></div></article>
+    <article class="card" id="matcher-card" hidden><h2>Case</h2><div id="matcher-body"></div></article>
+    <article class="card" id="plan-card" hidden><h2>Plan and authority</h2><div id="plan-body"></div></article>
+    <article class="card" id="executor-card" hidden><h2>Executor</h2><div id="executor-body"></div></article>
   </section>
 
-  <div class="seam" id="seam" title="Fidelity: how much of the reading survived the round trip">
-    <div class="seam-fill" id="seam-fill"></div>
-    <div class="seam-label" id="seam-label">fidelity</div>
-  </div>
-
-  <section class="visitor" id="visitor">
-    <div class="pane-head visitor-head"><div class="head-row"><strong id="visitor-lang">Visitor</strong><span class="gauge-chip" id="gauge-chip-visitor" hidden></span></div><button class="btn ghost" id="read-aloud">Read aloud</button></div>
-    <div class="visitor-body"><span class="eyebrow visitor-reading-label">Your letter, in your language</span>
-      <p class="small" id="speech-status" role="status"></p>
-      <div class="visitor-text" id="visitor-text">…</div>
-      <dl class="source-facts" id="source-facts" hidden></dl>
-      <article class="card visitor-card" id="visitor-card" hidden>
-        <span class="eyebrow takeaway-label">A next step, together</span>
-        <h2 class="card-headline" id="card-headline"></h2>
-        <dl class="next-step-callout"><dt id="lbl-next">Next</dt><dd id="card-next"></dd></dl>
-        <div class="card-statement" id="card-statement"></div>
-        <dl class="card-facts">
-          <div><dt id="lbl-who">Who</dt><dd id="card-who"></dd></div>
-          <div><dt id="lbl-when">When</dt><dd id="card-when"></dd></div>
-          <div><dt id="lbl-safe">Safe today</dt><dd id="card-safe"></dd></div>
-        </dl>
-        <p class="rule mono small" id="card-rule"></p>
-        <section id="approved-reply" hidden><h3 id="approved-reply-heading"></h3><pre id="approved-reply-text"></pre><section id="original-form" hidden><h4 id="original-form-heading"></h4><p id="original-form-note" class="small"></p><pre id="original-form-text" lang="en"></pre></section></section>
-        <section id="visitor-handoff" hidden></section>
-        <div class="row">
-          <button class="btn primary" id="print-summary" disabled>Print summary</button>
-        </div>
-      </article>
-    </div>
+  <section class="member-pane" id="member-pane">
+    <div class="pane-head member-head"><strong id="member-pane-title">For you</strong><span class="chip outcome" id="outcome-chip" hidden></span></div>
+    <article class="card briefing" id="briefing-card" hidden>
+      <span class="eyebrow">What happened</span>
+      <h3 class="briefing-headline" id="briefing-headline"></h3>
+      <p class="small muted" id="briefing-headline-en"></p>
+      <dl class="briefing-facts">
+        <div id="briefing-done-row" hidden><dt>Done</dt><dd><ul id="briefing-done"></ul></dd></div>
+        <div id="briefing-waiting-row" hidden><dt>Waiting on</dt><dd><ul id="briefing-waiting"></ul></dd></div>
+        <div><dt>Next</dt><dd id="briefing-next"></dd></div>
+      </dl>
+      <div class="chips" id="briefing-labels"></div>
+    </article>
+    <article class="card" id="approvals-card" hidden><h2>Waiting for approval</h2><div id="approvals"></div></article>
+    <article class="card" id="session-receipts-card" hidden><h2>Receipts</h2><div id="session-receipts"></div></article>
+    <article class="card" id="guard-card" hidden><h2>Authority guard</h2><p id="guard-text" class="small"></p><ul id="guard-notes" class="small muted"></ul></article>
   </section>
 </main>
 
-<section id="print-area" class="print-only"></section>
-<script src="/static/handoff.js"></script>
+<aside class="what-is-real" id="what-is-real" aria-labelledby="wir-heading">
+  <h2 id="wir-heading">What is real</h2>
+  <p class="small" id="wir-env"></p>
+  <ul class="wir-rails" id="wir-rails"></ul>
+  <details class="wir-more"><summary>How labels are decided</summary><p class="small" id="wir-intro"></p></details>
+</aside>
+
+<script src="/static/queue.js"></script>
 <script src="/static/app.js"></script>
 </body>
 </html>

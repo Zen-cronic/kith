@@ -1,295 +1,277 @@
-/* Front Desk screen: language -> consent -> document -> two-faced session. Vanilla JS, no build. */
+/* Household screens: members -> home -> session. Vanilla JS, no build. Everything shown comes from the API. */
 (() => {
   const $ = (id) => document.getElementById(id);
-  const state = { meta: null, language: "es", fixture: null, docTitle: "", privacy: false, result: null, drafts: [], request: null, generation: 0, consented: false, handoff: null, interpretationText: "" };
-  const LABELS = {
-    es: { who: "Quién", next: "Siguiente paso", when: "Cuándo", safe: "Lo seguro hoy", visitor: "Visitante", readAloud: "Leer en voz alta", consent: "Un programa leerá el texto de su carta. Esta aplicación no guarda la carta ni la conversación en un archivo. Al terminar la visita, borramos el texto de esta pantalla. Puede imprimir un resumen y, si se aprueba, un borrador de respuesta. Los avisos legales requieren ayuda de una persona. Puede elegir no usar el programa.", agree: "Estoy de acuerdo", decline: "Hoy no", reply: "Borrador para revisar con el personal", print: "Imprimir resumen y respuesta", printSummary: "Imprimir resumen" },
-    en: { who: "Who", next: "Next", when: "When", safe: "Safe today", visitor: "Visitor", readAloud: "Read aloud", consent: "", agree: "I agree", decline: "Not today", reply: "Draft to review with staff", print: "Print summary and reply", printSummary: "Print summary" },
+  const Q = window.HouseholdQueue;
+  const el = Q.el;
+  const LANGUAGE_NAMES = { en: "English", es: "Español", fr: "Français" };
+  const state = { meta: null, household: null, fixtures: [], member: null, token: null, fixtureId: null, upload: null, generation: 0, request: null, session: null };
+
+  // Context shared with queue.js
+
+  const ctx = {
+    member: (id) => (state.household ? state.household.members.find((m) => m.id === id) : null) || null,
+    name: (id) => { const m = ctx.member(id); return m ? m.name : id === "agent" ? "the agent" : id || "—"; },
+    railName: (id) => { const rail = state.meta && state.meta.rails.items.find((r) => r.id === id); return rail ? rail.name : id; },
+    skillName: (id) => { const skill = state.meta && state.meta.skills.find((s) => s.id === id); return skill ? skill.name : id || "—"; },
+    onDecided: async (actionId, data) => {
+      if (state.session) state.session.decided[actionId] = data;
+      await loadHousehold();
+      if (state.session) renderOutcome();
+    },
   };
-  const labels = () => LABELS[state.language] || LABELS.en;
+
+  // Screens
 
   function show(step) {
-    ["language", "consent", "document", "session"].forEach((s) => { $("screen-" + s).hidden = s !== step; });
-    document.body.classList.toggle("in-session", step === "session");
+    ["members", "home", "session"].forEach((s) => { $("screen-" + s).hidden = s !== step; });
     document.body.dataset.screen = step;
     window.scrollTo({ top: 0, behavior: "instant" });
-    $("privacy-toggle").hidden = step !== "session";
-    $("new-session").hidden = step !== "session";
+    $("mount-" + step).appendChild($("what-is-real"));
+    $("switch-member").hidden = !state.member;
+    $("who-line").hidden = !state.member;
+    const order = ["members", "home", "session"];
     document.querySelectorAll("#steps li").forEach((li) => {
-      const order = ["language", "consent", "document", "session"];
       li.classList.toggle("current", li.dataset.step === step);
       li.classList.toggle("done", order.indexOf(li.dataset.step) < order.indexOf(step));
     });
   }
 
-  // Presentation only: sentence segments retain the complete original text, including whitespace.
-  function presentParagraphs(element, text, perParagraph = 2) {
-    element.replaceChildren();
-    const sentences = typeof Intl.Segmenter === "function"
-      ? Array.from(new Intl.Segmenter(state.language, { granularity: "sentence" }).segment(text), (part) => part.segment)
-      : [text];
-    for (let index = 0; index < sentences.length; index += perParagraph) {
-      const paragraph = document.createElement("p");
-      paragraph.textContent = sentences.slice(index, index + perParagraph).join("");
-      element.appendChild(paragraph);
-    }
-  }
-
-  function presentSourceFacts(reading) {
-    const facts = $("source-facts"); facts.replaceChildren();
-    // Read-only source facts; interpretation and model outputs stay intact.
-    if (!reading || reading.source_issues?.length || !["en", "es"].includes(state.language)) { facts.hidden = true; return; }
-    const entries = [];
-    if (reading.deadlines?.length) entries.push([state.language === "es" ? "Fechas de la carta" : "Dates in the letter", reading.deadlines.map((date) => date.date_text).join(" · ")]);
-    if (reading.amounts?.length) entries.push([state.language === "es" ? "Cantidades de la carta" : "Amounts in the letter", reading.amounts.join(" · ")]);
-    entries.forEach(([label, value]) => {
-      const row = document.createElement("div"), term = document.createElement("dt"), detail = document.createElement("dd");
-      term.textContent = label; detail.textContent = value;
-      row.append(term, detail); facts.appendChild(row);
-    });
-    facts.hidden = !entries.length;
-    if (entries.length && state.interpretationText) {
-      const text = state.interpretationText;
-      const marker = state.language === "es" ? " Fechas: " : " Dates: ";
-      const boundary = text.lastIndexOf(marker);
-      const sourceValues = [...(reading.deadlines || []).map((date) => date.date_text), ...(reading.amounts || [])];
-      // Only fold a known trailing annotation when every source value is present there.
-      if (boundary >= 0 && sourceValues.length && sourceValues.every((value) => text.slice(boundary).includes(value))) {
-        presentParagraphs($("visitor-text"), text.slice(0, boundary));
-        const wrapper = document.createElement("div"), details = document.createElement("details"), summary = document.createElement("summary"), full = document.createElement("div");
-        wrapper.className = "full-interpretation";
-        summary.textContent = state.language === "es" ? "Interpretación completa" : "Full interpretation";
-        full.className = "full-interpretation-text";
-        presentParagraphs(full, text);
-        details.append(summary, full); wrapper.appendChild(details); facts.appendChild(wrapper);
-      }
-    }
-  }
+  // Meta and the "What is real" panel
 
   async function loadMeta() {
     const response = await fetch("/api/meta");
-    if (!response.ok) throw new Error("The reading service is unavailable. Ask staff for help, then reload to try again.");
+    if (!response.ok) throw new Error("The household service is unavailable. Reload to try again.");
     state.meta = await response.json();
     const m = state.meta;
-    const line = `${m.sdk} · ${m.provider === "fake" ? "demo mode (fake provider)" : m.provider} · ${m.model_id}`;
-    $("provider-line").textContent = m.provider === "fake" ? "Fixture demonstration" : `${m.provider} · ${m.model_id}`;
-    $("rail-provider").textContent = line;
-    const remote = m.backend && m.backend !== "local";
-    const destination = m.backend === "agentcore" ? "AWS AgentCore Runtime" : "the configured Runtime service";
-    $("consent-where").textContent = remote
-      ? `The letter is sent to ${destination}. ` + (m.provider === "fake" ? "It runs a fixture demonstration without calling an AI model. Service logging policies still apply; ask staff to explain them before agreeing." : `It calls a model host (${m.provider}, ${m.model_id}). The service logging and model provider retention policies apply; ask staff to explain them before agreeing.`)
-      : m.provider === "fake" ? "This computer, in demo mode. No network call is made." : `A model host (${m.provider}, ${m.model_id}). The letter is sent to that provider; its retention policy also applies. Ask staff to explain that policy before agreeing.`;
-    $("graph-src").textContent = m.graph_mermaid;
-    const grid = $("language-grid"); grid.innerHTML = "";
-    m.languages.filter((l) => l.code !== "en").forEach((l) => {
-      const b = document.createElement("button"); b.className = "btn lang"; b.dataset.code = l.code;
-      const voice = l.browser;
-      b.innerHTML = `<span class="native" lang="${l.code}">${l.name_native}</span><span class="language-name">${l.name_en}</span><span class="language-arrow" aria-hidden="true">↗</span>`;
-      b.title = voice ? "Audio depends on installed browser voice" : "Text; audio only if a matching voice is installed";
-      b.onclick = () => {
-        state.language = l.code; $("visitor-lang").textContent = `${labels().visitor} · ${l.name_native}`; $("read-aloud").textContent = labels().readAloud;
-        state.consented = false;
-        $("visitor").lang = l.code; $("visitor").dir = ["ar", "fa"].includes(l.code) ? "rtl" : "ltr";
-        const consent = labels().consent;
-        $("consent-target").hidden = !consent; $("consent-target").lang = l.code;
-        $("consent-target").textContent = consent + (remote ? (m.provider === "fake" ? " El texto se envía al servicio Runtime para una demostración sin llamar a un modelo de inteligencia artificial. Las políticas de registro del servicio también se aplican; pida al personal que se las explique." : " El texto se envía al servicio Runtime y a un proveedor de inteligencia artificial. Sus políticas de registro y conservación también se aplican; pida al personal que se las explique.") : m.provider === "fake" ? " En esta demostración, el texto se procesa en esta computadora sin enviarlo a un modelo externo." : " El texto se envía a un proveedor de inteligencia artificial; su política de conservación también se aplica. Pida al personal que se la explique.");
-        if (consent && typeof Intl.Segmenter === "function") {
-          const sentences = Array.from(new Intl.Segmenter("es", { granularity: "sentence" }).segment($("consent-target").textContent), (part) => part.segment);
-          const sections = [sentences.slice(0, 1).join("") + sentences.slice(6).join(""), sentences.slice(1, 4).join(""), sentences.slice(4, 6).join("")];
-          $("consent-target").replaceChildren(...sections.map((text) => { const p = document.createElement("p"); p.textContent = text; return p; }));
-        }
-        $("consent-assist").hidden = Boolean(consent);
-        $("consent-confirm").checked = false;
-        $("consent-agree").disabled = !consent;
-        $("consent-agree").textContent = labels().agree;
-        $("consent-decline").textContent = labels().decline;
-        $("consent-status").textContent = "";
-        show("consent");
-      };
-      grid.appendChild(b);
+    const providerWords = m.provider === "fake" ? "demo mode (fake provider)" : `${m.provider} · ${m.model_id}`;
+    $("provider-line").textContent = `${providerWords} · execution ${m.execution_mode}`;
+    $("rail-provider").textContent = `${m.sdk} · ${providerWords}`;
+    const backend = m.backend === "local" ? "this computer" : m.backend === "agentcore" ? "AWS AgentCore Runtime" : "the configured Runtime service";
+    $("wir-env").textContent = `Execution mode: ${m.execution_mode} · Model: ${providerWords} · Runs on: ${backend}. Labels below are what each rail earns in this environment right now.`;
+    $("wir-intro").textContent = m.rails.intro;
+    const list = $("wir-rails"); list.replaceChildren();
+    m.rails.items.forEach((rail) => {
+      const li = el("li"); li.dataset.rail = rail.id;
+      li.appendChild(Q.modeChip(rail.now.mode));
+      li.appendChild(el("span", "name", rail.name));
+      li.appendChild(el("span", "reason", `${rail.now.reason} — ${rail.real}`));
+      list.appendChild(li);
     });
-    const roster = $("roster"); roster.innerHTML = "";
+    const roster = $("roster"); roster.replaceChildren();
     m.roster.forEach((a) => {
-      const li = document.createElement("li"); li.className = "agent"; li.id = "agent-" + a.id;
-      li.innerHTML = `<span class="dot"></span><div><div class="name">${a.name}</div><div class="state"></div><details class="agent-details"><summary aria-label="About ${a.name}">About this step</summary><div class="job">${a.job}</div>${a.can_reject ? '<div class="job">Can reject a draft</div>' : ""}${a.tools.length ? `<div class="tools">tools: ${a.tools.join(", ")}</div>` : ""}</details></div>`;
+      const li = el("li", "agent"); li.id = "agent-" + a.id;
+      li.appendChild(el("span", "dot"));
+      const body = el("div");
+      body.appendChild(el("div", "name", a.name));
+      body.appendChild(el("div", "job", a.job));
+      body.appendChild(el("div", "state", ""));
+      li.appendChild(body);
       roster.appendChild(li);
+    });
+    $("upload-note").textContent = m.upload.available
+      ? `Photos (${m.upload.kinds.filter((k) => k !== "pdf").join(", ")}) and PDFs up to ${Math.round(m.upload.max_bytes / 1048576)} MB are read by the intake agent.`
+      : "Photos and PDFs can be uploaded; reading them arrives with the vision packet, so type the request for now.";
+  }
+
+  // Household ledger
+
+  async function loadHousehold() {
+    const response = await fetch("/api/household");
+    if (!response.ok) throw new Error("Could not load the household ledger.");
+    state.household = await response.json();
+    renderMembers();
+    renderLedger();
+    Q.renderQueue($("queue"), state.household.actions, ctx);
+    Q.renderReceipts($("receipts"), state.household.receipts.map((r) => withAction(r)), ctx);
+  }
+
+  function withAction(receipt) {
+    const action = state.household.actions.find((a) => a.id === receipt.action_id);
+    return action ? { ...receipt, action_type: action.action_type, amount: action.amount, currency: action.currency, subject_member_id: action.subject_member_id } : receipt;
+  }
+
+  function memberMeta(m) {
+    const meta = el("span", "meta");
+    meta.appendChild(el("span", `badge ${m.role}`, m.role));
+    meta.appendChild(el("span", "", LANGUAGE_NAMES[m.language] || m.language));
+    if (m.guardians.length) meta.appendChild(el("span", "", `guardians: ${m.guardians.map(ctx.name).join(", ")}`));
+    return meta;
+  }
+
+  function renderMembers() {
+    const h = state.household;
+    $("household-name").textContent = h.name;
+    const grid = $("member-grid"); grid.replaceChildren();
+    h.members.forEach((m) => {
+      const card = el("button", "member-card"); card.type = "button"; card.dataset.memberId = m.id; card.dataset.role = m.role;
+      card.appendChild(el("span", "name", m.name));
+      card.appendChild(memberMeta(m));
+      card.appendChild(el("span", "note", m.role === "minor" ? "Asks for themself; a guardian approves what is above their allowance rule." : "Decides for themself and approves for the children."));
+      card.onclick = () => choose(m);
+      grid.appendChild(card);
     });
   }
 
+  function choose(m) {
+    document.querySelectorAll(".member-card").forEach((c) => c.classList.toggle("selected", c.dataset.memberId === m.id));
+    const form = $("pin-form"); form.hidden = false; form.dataset.memberId = m.id;
+    $("pin-for").textContent = `${m.name}, enter your PIN`;
+    const hint = state.household.demo_pins && state.household.demo_pins[m.id];
+    $("pin-hint").textContent = hint ? `Demo household: ${m.name.split(" ")[0]}'s PIN is ${hint}` : "";
+    $("pin-error").textContent = ""; $("pin").value = ""; $("pin").focus();
+  }
+
+  function ledgerRow(title, right, subParts) {
+    const row = el("div", "ledger-row");
+    row.appendChild(el("span", "title", title));
+    const rightNode = el("span", "right"); if (right instanceof Node) rightNode.appendChild(right); else rightNode.textContent = right || "";
+    row.appendChild(rightNode);
+    const sub = el("span", "sub");
+    subParts.forEach((part) => { if (part instanceof Node) sub.appendChild(part); else if (part) sub.appendChild(document.createTextNode(part + " ")); });
+    row.appendChild(sub);
+    return row;
+  }
+
+  function renderLedger() {
+    const h = state.household;
+    const members = $("ledger-members"); members.replaceChildren();
+    h.members.forEach((m) => {
+      const row = ledgerRow(m.name, el("span", `badge ${m.role}`, m.role), [LANGUAGE_NAMES[m.language] || m.language, m.guardians.length ? `· guardians ${m.guardians.map(ctx.name).join(", ")}` : "", m.email ? `· ${m.email}` : ""]);
+      row.dataset.memberId = m.id; members.appendChild(row);
+    });
+    const grants = $("ledger-grants"); grants.replaceChildren();
+    h.grants.forEach((g) => {
+      const limit = g.limit_amount ? `up to ${g.limit_amount} ${g.limit_currency} ${g.limit_period}` : "no amount limit";
+      const scope = el("span"); g.scope.forEach((s) => scope.appendChild(el("span", "chip", s)));
+      const row = ledgerRow(`${ctx.name(g.grantor_id)} lets ${ctx.name(g.grantee_id)} decide for ${ctx.name(g.subject_id)}`, el("span", `chip state-${g.state}`, g.state), [scope, `${limit} · ${g.basis} · until ${Q.when(g.expires_at)}`, g.consent_id ? `· consent ${g.consent_id}` : "· no consent record"]);
+      row.dataset.grantId = g.id; row.dataset.state = g.state; grants.appendChild(row);
+    });
+    const consents = $("ledger-consents"); consents.replaceChildren();
+    if (!h.consents.length) consents.appendChild(el("p", "empty", "No consents recorded."));
+    h.consents.forEach((c) => {
+      const row = ledgerRow(`${ctx.name(c.member_id)} · ${c.kind}`, Q.when(c.at), [`for ${c.target_id} · via ${c.channel}`]);
+      row.dataset.consentId = c.id; row.dataset.kind = c.kind; consents.appendChild(row);
+    });
+    const accounts = $("ledger-accounts"); accounts.replaceChildren();
+    h.accounts.forEach((a) => {
+      const rules = Object.entries(a.rules || {}).map(([k, v]) => `${k.replace("_", " ")} ${v}`).join(" · ");
+      const row = ledgerRow(`${ctx.name(a.owner_member_id)} · ${a.kind}`, `${a.balance} ${a.currency}`, [a.id, rules ? `· ${rules}` : ""]);
+      row.dataset.accountId = a.id; row.dataset.balance = a.balance; accounts.appendChild(row);
+    });
+  }
+
+  // Identify
+
+  $("pin-form").onsubmit = async (event) => {
+    event.preventDefault();
+    const memberId = $("pin-form").dataset.memberId;
+    $("pin-error").textContent = "";
+    try {
+      const data = await Q.post("/api/identify", { member_id: memberId, pin: $("pin").value });
+      state.member = data.member; state.token = data.session_token;
+      $("pin").value = "";
+      const who = $("who-line"); who.replaceChildren(el("span", "", data.member.name), el("span", `badge ${data.member.role}`, data.member.role));
+      $("ask-as").textContent = `Speaking as ${data.member.name} · ${data.member.role} · ${LANGUAGE_NAMES[data.member.language] || data.member.language}`;
+      await loadFixtures();
+      await loadHousehold();
+      show("home");
+    } catch (err) { $("pin-error").textContent = err.message; }
+  };
+  $("pin-cancel").onclick = () => { $("pin-form").hidden = true; document.querySelectorAll(".member-card").forEach((c) => c.classList.remove("selected")); };
+
+  function switchMember() {
+    resetSession();
+    state.member = null; state.token = null; state.fixtureId = null; state.upload = null;
+    $("request-text").value = ""; $("upload-status").textContent = ""; $("upload-clear").hidden = true; $("ask-error").textContent = "";
+    $("pin-form").hidden = true;
+    document.querySelectorAll(".member-card").forEach((c) => c.classList.remove("selected"));
+    show("members");
+    loadHousehold().catch((err) => { $("startup-error").textContent = err.message; $("service-unavailable").hidden = false; });
+  }
+  $("switch-member").onclick = switchMember;
+
+  // Ask
+
   async function loadFixtures() {
-    const docs = await (await fetch("/api/fixtures")).json();
-    const list = $("fixture-list"); list.innerHTML = "";
-    const order = (d) => (d.tags.includes("hero") ? 0 : 1);
-    docs.sort((a, b) => order(a) - order(b) || a.title.localeCompare(b.title)).forEach((d) => {
-      const b = document.createElement("button"); b.className = "btn doc"; b.dataset.featured = String(d.tags.includes("hero"));
-      b.innerHTML = `<span class="row1"><span class="title">${esc(d.title)}</span><span class="stakes">${d.stakes}</span></span><span class="src" title="${esc(d.source)}">${d.is_real ? "real public form" : "synthetic, labelled fictional"}${d.tags.includes("hero") ? " · demo" : ""}</span>`;
-      b.onclick = () => startSession({ fixture_id: d.id, language: state.language }, d.title);
+    const response = await fetch("/api/fixtures");
+    state.fixtures = response.ok ? await response.json() : [];
+    const list = $("sample-list"); list.replaceChildren();
+    const mine = state.fixtures.filter((f) => f.actor_member_id === state.member.id);
+    if (!mine.length) list.appendChild(el("p", "empty", "No sample requests are written for this member."));
+    mine.forEach((f) => {
+      const b = el("button", "sample"); b.type = "button"; b.dataset.fixtureId = f.id;
+      b.appendChild(el("span", "text", f.request));
+      b.appendChild(el("span", "tags", f.tags.join(" · ")));
+      b.onclick = () => { $("request-text").value = f.request; state.fixtureId = f.id; clearUpload(); $("ask-error").textContent = ""; };
       list.appendChild(b);
     });
   }
 
+  $("request-text").oninput = () => { state.fixtureId = null; };
+
+  function clearUpload() { state.upload = null; $("upload-status").textContent = ""; $("upload-clear").hidden = true; $("upload-file").value = ""; }
+  $("upload-clear").onclick = clearUpload;
+  $("upload-file").onchange = async () => {
+    const file = $("upload-file").files[0];
+    if (!file) return;
+    $("ask-error").textContent = ""; $("upload-status").textContent = `Uploading ${file.name}…`;
+    const body = new FormData(); body.append("file", file); body.append("session_token", state.token);
+    try {
+      const response = await fetch("/api/intake", { method: "POST", body });
+      const data = await response.json();
+      if (!response.ok) throw new Error(typeof data.detail === "string" ? data.detail : "Upload failed.");
+      state.upload = data;
+      $("upload-status").textContent = `Uploaded ${data.filename} (${data.kind}, ${Math.max(1, Math.round(data.size / 1024))} KB)`;
+      $("upload-clear").hidden = false;
+      $("request-text").value = ""; state.fixtureId = null;
+    } catch (err) { clearUpload(); $("ask-error").textContent = err.message; }
+  };
+
+  $("run-request").onclick = () => {
+    const text = $("request-text").value.trim();
+    $("ask-error").textContent = "";
+    if (state.upload) {
+      if (!state.meta.upload.available) { $("ask-error").textContent = $("upload-note").textContent; return; }
+      startSession({ upload_id: state.upload.upload_id }, `Uploaded ${state.upload.filename}`);
+      return;
+    }
+    if (!text) { $("ask-error").textContent = "Type what you need, pick a sample request, or upload a document."; return; }
+    const fixture = state.fixtureId && state.fixtures.find((f) => f.id === state.fixtureId && f.request === text);
+    startSession(fixture ? { fixture_id: fixture.id } : { request_text: text }, text);
+  };
+
+  // Session
+
   function resetSession() {
     state.generation += 1;
-    state.request?.abort(); state.request = null;
-    if ("speechSynthesis" in window) speechSynthesis.cancel();
-    state.result = null; state.drafts = []; state.handoff = null; state.interpretationText = "";
-    $("handoff-form").reset(); $("handoff-editor").hidden = true; $("handoff-editor").open = false;
-    $("handoff-withdraw").hidden = true; $("visitor-handoff").hidden = true; $("visitor-handoff").replaceChildren();
-    ["handoff-error", "handoff-edit-status", "handoff-time-help"].forEach(id => { $(id).textContent = ""; });
-    $("handoff-time-field").hidden = true; $("handoff-time").required = false;
-    ["backtrans-text", "card-headline", "card-statement", "card-who", "card-next", "card-when", "card-safe", "card-rule", "approved-reply-text", "original-form-text", "original-form-heading", "original-form-note", "print-area", "meaning-warnings", "session-error", "speech-status"].forEach((id) => { $(id).textContent = ""; });
-    $("approved-reply").hidden = true; $("print-summary").disabled = true;
-    $("session-error").hidden = true; $("meaning-warnings").hidden = true;
-    document.querySelectorAll(".agent").forEach((li) => { li.className = "agent"; li.querySelector(".state").textContent = ""; li.querySelector(".state").className = "state"; });
-    $("reading-card").innerHTML = '<h2>Reading</h2><p class="muted">Waiting for the document reader…</p>';
-    ["backtrans-card", "verdict-card", "draft-card", "visitor-card"].forEach((id) => { $(id).hidden = true; });
-    $("verdict-log").innerHTML = ""; $("draft-log").innerHTML = ""; $("number-chips").innerHTML = "";
-    $("visitor-text").textContent = "…";
-    $("source-facts").replaceChildren(); $("source-facts").hidden = true;
-    document.querySelectorAll(".agent-details").forEach((details) => { details.open = false; });
-    setSeam(null);
-  }
-
-  function newVisitor() {
-    resetSession(); state.language = "es"; state.fixture = null; state.docTitle = ""; state.consented = false;
-    state.privacy = false; document.body.classList.remove("privacy");
-    $("privacy-toggle").textContent = "Privacy mode";
-    ["paste", "paste-title"].forEach((id) => { $(id).value = ""; });
-    $("doc-chip").textContent = ""; $("visitor-lang").textContent = "Visitor";
-    $("visitor").lang = ""; $("visitor").dir = "ltr";
-    $("consent-target").textContent = ""; $("consent-confirm").checked = false;
-    $("consent-status").textContent = ""; $("consent-agree").disabled = true;
-    $("fixture-list").replaceChildren(); show("language");
-  }
-
-  function setSeam(fid) {
-    const seam = $("seam"); seam.className = "seam";
-    const chips = [$("gauge-chip"), $("gauge-chip-visitor")];
-    if (!fid) { $("seam-fill").style.height = "0%"; chips.forEach((c) => { c.className = "gauge-chip"; c.textContent = "fidelity: waiting"; }); $("gauge-chip-visitor").hidden = true; return; }
-    $("meaning-warnings").textContent = (fid.meaning_warnings || []).join(" ");
-    $("meaning-warnings").hidden = !fid.meaning_warnings?.length;
-    seam.classList.add(fid.band);
-    $("seam-fill").style.height = Math.round(fid.score * 100) + "%";
-    chips.forEach((c) => { c.className = "gauge-chip " + fid.band; c.textContent = `fidelity ${fid.score.toFixed(2)} · ${fid.band}`; c.hidden = false; });
-  }
-
-  function esc(s) { return String(s ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
-
-  function renderReading(r, policy) {
-    $("reading-card").innerHTML = `<h2>Reading</h2>${policy ? `<p class="small">Source-checked policy explanation · ${esc(policy.rule_id)} · ${esc(policy.version)}</p>` : ""}<p class="reading-title">${esc(r.title)}</p>
-      <div class="chips"><span class="chip">${esc(r.document_class)}</span><span class="chip stakes-${esc(r.stakes)}">stakes ${esc(r.stakes)}</span><span class="chip">confidence ${Number(r.confidence).toFixed(2)}</span></div>
-      <p>${esc(r.what_it_is)}</p><p>${esc(r.what_it_asks)}</p>
-      <dl class="kv">${(r.deadlines || []).map((d) => `<dt>${esc(d.label)}</dt><dd><strong>${esc(d.date_text)}</strong></dd>`).join("")}${r.amounts?.length ? `<dt>amounts</dt><dd><strong>${esc(r.amounts.join(", "))}</strong></dd>` : ""}</dl>
-      ${(r.evidence || []).slice(0, 3).map((q) => `<p class="quote">“${esc(q)}”</p>`).join("")}`;
-  }
-
-  function renderInterpretation(i, fid) {
-    state.interpretationText = i.target_text;
-    presentParagraphs($("visitor-text"), i.target_text);
-    $("visitor-text").classList.toggle("long", i.target_text.length > 420);
-    $("backtrans-card").hidden = false;
-    $("backtrans-text").textContent = i.back_translation;
-    const chips = $("number-chips"); chips.innerHTML = "";
-    if (fid) {
-      fid.numbers_expected.forEach((n) => { const c = document.createElement("span"); const missing = fid.numbers_missing.includes(n); c.className = "chip " + (missing ? "missing" : "kept"); c.textContent = n; chips.appendChild(c); });
-      setSeam(fid);
-    }
-    (i.flagged_terms || []).forEach((t) => { const c = document.createElement("span"); c.className = "chip"; c.title = t.note; c.textContent = "term: " + t.term; chips.appendChild(c); });
-  }
-
-  function renderVerdict(v, run) {
-    $("verdict-card").hidden = false;
-    const div = document.createElement("div"); div.className = "verdict";
-    div.innerHTML = `<div><span class="decision ${esc(v.decision)}">${esc(v.decision).toUpperCase()}</span> ${v.rule_id ? `<span class="chip">${esc(v.rule_id)}</span>` : ""} <span class="muted small">critic run ${run}</span></div>
-      ${(v.checks || []).map((c) => `<div class="check"><span class="${c.passed ? "ok" : "fail"}">${c.passed ? "ok" : "FAIL"}</span><span>${esc(c.name)}: ${esc(c.detail)}</span></div>`).join("")}
-      ${(v.revision_notes || []).map((n) => `<div class="note">→ ${esc(n)}</div>`).join("")}`;
-    $("verdict-log").appendChild(div);
-    const agent = $("agent-critic"); const st = agent.querySelector(".state");
-    st.textContent = v.decision === "refuse" ? `refused · ${v.rule_id || ""}` : v.decision === "revise" ? "sent the draft back" : "approved";
-    st.className = "state " + (v.decision === "approve" ? "good" : "bad");
-    if (v.decision !== "approve") agent.classList.add(v.decision === "refuse" ? "refused" : "rejected");
-  }
-
-  function renderDrafts() {
-    $("draft-card").hidden = false; const log = $("draft-log"); log.innerHTML = "";
-    state.drafts.forEach((d, idx) => {
-      const later = state.drafts[idx + 1];
-      const laterLines = later ? new Set(later.body_en.split("\n").map((l) => l.trim())) : null;
-      const body = d.body_en.split("\n").map((line) => laterLines && line.trim() && !laterLines.has(line.trim()) ? `<span class="removed">${esc(line)}</span>` : esc(line)).join("\n");
-      const div = document.createElement("div"); div.className = "draft";
-      div.innerHTML = `<div><strong>v${d.revision}</strong> · ${esc(d.kind)} · ${esc(d.title)}${d.assumptions?.length ? ` <span class="chip missing">assumptions: ${d.assumptions.length}</span>` : ""}</div><pre>${body}</pre>`;
-      log.appendChild(div);
-    });
-  }
-
-  function renderCard(result) {
-    const c = result.card; if (!c) return;
-    const L = labels();
-    $("handoff-editor").hidden = !["en", "es"].includes(state.language);
-    $("lbl-who").textContent = L.who; $("lbl-next").textContent = L.next; $("lbl-when").textContent = L.when; $("lbl-safe").textContent = L.safe;
-    $("card-headline").textContent = c.headline_target;
-    presentParagraphs($("card-statement"), c.statement_target);
-    presentSourceFacts(result.reading);
-    $("card-who").textContent = c.who_target;
-    $("card-next").textContent = c.next_step_target;
-    $("card-when").textContent = c.when_target;
-    $("card-safe").textContent = c.safe_today_target;
-    $("card-rule").textContent = c.rule_citation ? `${result.guard.rule_id} · ${c.rule_citation}` : "";
-    const card = $("visitor-card"); card.hidden = false; card.className = "card visitor-card " + result.outcome;
-    card.scrollIntoView({ behavior: "smooth", block: "start" });
-    const draft = approvedDraft(result);
-    $("approved-reply").hidden = !draft;
-    $("approved-reply-heading").textContent = L.reply;
-    $("approved-reply-text").textContent = draft?.body_target || "";
-    const sourceForm = draft ? result.source_form : null;
-    const formHeading = state.language === "es" ? "Referencia: campos del documento original" : "Reference: fields from the original document";
-    const formNote = state.language === "es" ? "Este fragmento se conserva en inglés, sin cambios. Complete el documento original; estas notas no sustituyen su consentimiento ni su firma." : "This English excerpt is unchanged. Complete the original document; these notes do not replace your consent or signature.";
-    $("original-form").hidden = !sourceForm;
-    $("original-form-heading").textContent = sourceForm ? formHeading : "";
-    $("original-form-note").textContent = sourceForm ? formNote : "";
-    $("original-form-text").textContent = sourceForm || "";
-    $("print-summary").disabled = false; $("print-summary").textContent = draft ? L.print : L.printSummary;
-    $("visitor-handoff").hidden = !state.handoff;
-    $("visitor-handoff").innerHTML = state.handoff ? handoffMarkup(state.handoff, state.language) : "";
-    $("print-area").innerHTML = `<h1>${esc(c.headline_en)}</h1><p>${esc(c.summary_en)}</p><p class="small">${esc(c.statement_en)}</p><dl><dt>Who</dt><dd>${esc(c.who)}</dd><dt>Next</dt><dd>${esc(c.next_step_en)}</dd><dt>When</dt><dd>${esc(c.when)}</dd><dt>Safe today</dt><dd>${esc(c.safe_today_en)}</dd></dl><hr><section lang="${esc(state.language)}"><h1>${esc(c.headline_target)}</h1><p>${esc(c.summary_target)}</p><p class="small">${esc(c.statement_target)}</p><dl><dt>${esc(L.who)}</dt><dd>${esc(c.who_target)}</dd><dt>${esc(L.next)}</dt><dd>${esc(c.next_step_target)}</dd><dt>${esc(L.when)}</dt><dd>${esc(c.when_target)}</dd><dt>${esc(L.safe)}</dt><dd>${esc(c.safe_today_target)}</dd></dl></section>${draft ? `<section class="printed-reply"><h2>Draft to review with staff</h2><pre>${esc(draft.body_en)}</pre><h2>${esc(L.reply)}</h2><pre lang="${esc(state.language)}">${esc(draft.body_target)}</pre></section>` : ""}${sourceForm ? `<section class="printed-source"><h2>${esc(formHeading)}</h2><p>${esc(formNote)}</p><pre lang="en">${esc(sourceForm)}</pre></section>` : ""}<p class="small">${esc(c.rule_citation || "")}</p><p class="small">Front Desk · ${result.provider === "fake" ? "Deterministic demonstration" : "Review this page with staff"}</p>`;
-    if (state.handoff) {
-      $("print-area").insertAdjacentHTML("beforeend", `<section class="printed-handoff" lang="en">${handoffMarkup(state.handoff, "en")}<hr><section lang="${esc(state.language)}">${handoffMarkup(state.handoff, state.language)}</section></section>`);
-    }
-  }
-
-  function handoffMarkup(plan, language) {
-    const d = FrontDeskHandoff.describe(plan, language), w = d.words;
-    return `<h3>${esc(w.title)}</h3><p class="small">${esc(w.intro)}</p><dl class="handoff-facts"><dt>${esc(w.owner)}</dt><dd>${esc(plan.owner)}</dd><dt>${esc(w.place)}</dt><dd>${esc(plan.place)}</dd><dt>${esc(w.action)}</dt><dd>${esc(d.action)}</dd><dt>${esc(w.when)}</dt><dd>${esc(d.when)}</dd><dt>${esc(w.by)}</dt><dd>${esc(plan.recordedBy)}</dd><dt>${esc(w.at)}</dt><dd>${esc(d.recordedAt)}</dd></dl><p class="small">${esc(w.note)}</p>`;
-  }
-
-  function refreshHandoffTiming() {
-    const scheduled = $("handoff-mode").value === "scheduled";
-    $("handoff-time-field").hidden = !scheduled; $("handoff-time").required = scheduled;
-    const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const date = new Date($("handoff-time").value);
-    $("handoff-time-help").textContent = scheduled && Number.isFinite(date.getTime()) ? FrontDeskHandoff.timeText(date.toISOString(), "en", zone) : `Times use this browser's timezone: ${zone}.`;
-  }
-
-  function approvedDraft(result) {
-    if (result?.outcome !== "proceed" || result.verdicts?.at(-1)?.decision !== "approve") return null;
-    const draft = result.drafts?.at(-1);
-    return draft && draft.kind !== "none" ? draft : null;
-  }
-
-  function showError(detail, code) {
-    $("session-error").textContent = code === "runtime_configuration" ? `The reading did not finish. ${detail}` : `The reading did not finish. ${detail} Choose “Choose another letter” to try again, or “New visitor” to clear this visit.`;
-    $("session-error").hidden = false;
-    document.querySelectorAll(".agent.running").forEach((li) => { li.classList.remove("running"); li.querySelector(".state").textContent = "stopped"; });
+    if (state.request) state.request.abort();
+    state.request = null;
+    state.session = null;
+    ["session-error", "session-sub", "request-who", "request-text-view", "intake-body", "matcher-body", "plan-body", "executor-body", "briefing-headline", "briefing-headline-en", "briefing-next", "guard-text"].forEach((id) => { $(id).textContent = ""; });
+    ["intake-card", "matcher-card", "plan-card", "executor-card", "briefing-card", "approvals-card", "session-receipts-card", "guard-card", "outcome-chip", "session-error", "briefing-done-row", "briefing-waiting-row"].forEach((id) => { $(id).hidden = true; });
+    ["approvals", "session-receipts", "briefing-done", "briefing-waiting", "briefing-labels", "guard-notes"].forEach((id) => { $(id).replaceChildren(); });
+    $("outcome-chip").className = "chip outcome";
+    document.querySelectorAll(".agent").forEach((li) => { li.className = "agent"; const st = li.querySelector(".state"); st.textContent = ""; st.className = "state"; });
   }
 
   async function startSession(body, title) {
-    if (!state.consented) return;
-    resetSession(); state.docTitle = title; $("doc-chip").textContent = title; show("session");
+    if (!state.member || !state.token) { show("members"); return; }
+    resetSession();
+    state.session = { events: [], actions: {}, receipts: {}, approvals: [], decided: {}, result: null, start: null };
+    $("request-who").textContent = `${state.member.name} (${state.member.role}) asked`;
+    $("request-text-view").textContent = title;
+    $("member-pane-title").textContent = `For ${state.member.name.split(" ")[0]}`;
+    show("session");
     const generation = state.generation;
     const controller = new AbortController(); state.request = controller;
     try {
-      const res = await fetch("/api/run", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...body, consent_token: state.meta.consent_token }), signal: controller.signal });
-      if (!res.ok || !res.body) throw new Error(`Server returned ${res.status}.`);
+      const res = await fetch("/api/run", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...body, actor_member_id: state.member.id, session_token: state.token }), signal: controller.signal });
+      if (!res.ok || !res.body) {
+        let detail = `Server returned ${res.status}.`;
+        try { const data = await res.json(); if (typeof data.detail === "string") detail = data.detail; } catch { /* keep the status line */ }
+        if (res.status === 401) { showError(detail); switchMember(); return; }
+        throw new Error(detail);
+      }
       const reader = res.body.getReader(); const dec = new TextDecoder(); let buf = "";
       while (true) {
         const { value, done } = await reader.read();
@@ -305,104 +287,202 @@
           handle(ev);
         }
       }
-      if (!state.result) throw new Error("The connection ended before a result arrived.");
+      if (!state.session || !state.session.result) throw new Error("The connection ended before a result arrived.");
+      await loadHousehold();
     } catch (error) {
-      if (generation === state.generation && error.name !== "AbortError") {
-        if (error.code === "model_call_limit" || state.meta.backend !== "local") {
-          resetSession();
-          $("reading-card").innerHTML = '<h2>Reading stopped</h2><p>Ask staff for help before trying again.</p>';
-          $("visitor-text").textContent = state.language === "es" ? "La lectura no terminó. Pida ayuda al personal." : "The reading did not finish. Ask staff for help.";
-        }
-        if (error.code === "runtime_configuration") state.consented = false;
-        showError(error.message, error.code);
-      }
+      if (generation === state.generation && error.name !== "AbortError") showError(error.message);
     } finally {
       if (generation === state.generation) state.request = null;
     }
   }
 
+  function showError(detail) {
+    $("session-error").textContent = `The session did not finish. ${detail}`;
+    $("session-error").hidden = false;
+    document.querySelectorAll(".agent.running").forEach((li) => { li.classList.remove("running"); li.querySelector(".state").textContent = "stopped"; });
+  }
+
   function handle(ev) {
-    if (ev.event === "node_start") {
+    const s = state.session; if (!s) return;
+    s.events.push(ev);
+    if (ev.event === "session_start") {
+      s.start = ev;
+      $("request-who").textContent = `${ev.actor_name} (${ctx.member(ev.actor_member_id)?.role || ""}) asked · ${ev.request_id === "adhoc" ? "typed request" : "sample request " + ev.request_id}`;
+      $("request-text-view").textContent = ev.request_text;
+      $("session-sub").textContent = `${ev.provider === "fake" ? "demo mode (fake provider)" : ev.provider + " · " + ev.model_id} · execution ${ev.execution_mode} · up to ${ev.model_calls.limit} model calls`;
+    } else if (ev.event === "node_start") {
       const li = $("agent-" + ev.node_id); li.classList.remove("done"); li.classList.add("running");
-      li.querySelector(".state").textContent = ev.run > 1 ? `running · run #${ev.run}` : "running";
+      li.querySelector(".state").textContent = ev.run > 1 ? `running · run ${ev.run}` : "running";
     } else if (ev.event === "node_done") {
       const li = $("agent-" + ev.node_id); li.classList.remove("running"); li.classList.add("done");
-      const st = li.querySelector(".state"); if (!st.textContent.startsWith("refused") && !st.textContent.startsWith("sent")) st.textContent = `${ev.status} · ${ev.execution_ms} ms${ev.run > 1 ? ` · run #${ev.run}` : ""}`;
-      if (ev.node_id === "reader" && ev.output) renderReading(ev.output, ev.reading_policy);
-      if (ev.node_id === "interpreter" && ev.output) renderInterpretation(ev.output, ev.fidelity);
-      if (ev.node_id === "drafter" && ev.output) { state.drafts.push(ev.output); renderDrafts(); }
-      if (ev.node_id === "critic" && ev.output) renderVerdict(ev.output, ev.run);
+      const st = li.querySelector(".state"); st.textContent = `${ev.status} · ${ev.execution_ms} ms${ev.run > 1 ? ` · run ${ev.run}` : ""}`;
+      if (ev.node_id === "intake" && ev.output) renderIntake(ev.output);
+      if (ev.node_id === "matcher" && ev.output) renderMatcher(ev.output);
+      if (ev.node_id === "planner" && ev.output) renderPlanNode(ev.output, ev.run);
+      if (ev.node_id === "authority" && ev.output) renderVerdict(ev.output, ev.run, li);
+      if (ev.node_id === "executor" && ev.output) renderExecutorNode(ev.output);
+      if (ev.node_id === "briefer" && ev.output) renderBriefing(ev.output);
+    } else if (ev.event === "action") {
+      s.actions[ev.proposal.id] = ev;
+      renderAction(ev);
+    } else if (ev.event === "approval_needed") {
+      s.approvals.push(ev);
+      renderApproval(ev);
+    } else if (ev.event === "receipt") {
+      s.receipts[ev.receipt.action_id] = ev.receipt;
+      renderReceipt(ev.receipt);
     } else if (ev.event === "result") {
-      state.result = ev.result;
-      if (ev.result.reading_policy && ev.result.reading) renderReading(ev.result.reading, ev.result.reading_policy);
-      state.meta.roster.forEach((a) => { if (!ev.result.execution_order.includes(a.id)) { const li = $("agent-" + a.id); li.classList.add("skipped"); li.querySelector(".state").textContent = "skipped: the graph branched around it"; } });
-      if (ev.result.fidelity && ev.result.fidelity.band) setSeam(ev.result.fidelity);
-      renderCard(ev.result);
-    } else if (ev.event === "error") {
-      $("reading-card").innerHTML = `<h2>Error</h2><p>${esc(ev.detail)}</p>`;
+      s.result = ev.result;
+      state.meta.roster.forEach((a) => { if (!ev.result.execution_order.includes(a.id)) { const li = $("agent-" + a.id); li.classList.add("skipped"); li.querySelector(".state").textContent = "not needed this time"; } });
+      if (ev.result.briefing) renderBriefing(ev.result.briefing);
+      renderGuard(ev.result);
+      renderOutcome();
     }
   }
 
-  function readAloud() {
-    if (!("speechSynthesis" in window)) { $("speech-status").textContent = "Audio is unavailable in this browser. Ask staff for reading assistance."; return; }
-    const c = state.result?.card;
-    const draft = approvedDraft(state.result);
-    let text = c ? [c.headline_target, c.statement_target, c.who_target, c.next_step_target, c.when_target, c.safe_today_target, c.summary_target, draft?.body_target].filter(Boolean).join(". ") : state.interpretationText || $("visitor-text").textContent;
-    if (state.handoff) {
-      const d = FrontDeskHandoff.describe(state.handoff, state.language);
-      text += ". " + [d.words.title, d.words.intro, state.handoff.owner, state.handoff.place, d.action, d.when, d.words.note].join(". ");
-    }
-    const voice = speechSynthesis.getVoices().find((v) => v.lang.toLowerCase().startsWith(state.language));
-    if (!voice) { $("speech-status").textContent = "No voice is installed for this language. Ask staff for reading assistance."; return; }
-    const u = new SpeechSynthesisUtterance(text);
-    u.voice = voice; u.lang = voice.lang; u.rate = 0.92;
-    $("speech-status").textContent = "";
-    u.onerror = () => { $("speech-status").textContent = "Audio stopped. Ask staff for reading assistance."; };
-    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  function kv(pairs) {
+    const dl = el("dl", "kv");
+    pairs.forEach(([k, v]) => { if (v === undefined || v === null || v === "") return; dl.appendChild(el("dt", "", k)); dl.appendChild(el("dd", "", v)); });
+    return dl;
   }
 
-  $("handoff-form").oninput = (event) => {
-    $("handoff-error").textContent = "";
-    if (event.target.id !== "handoff-attest") $("handoff-attest").checked = false;
-    $("handoff-edit-status").textContent = state.handoff ? "Changes are not recorded yet. The previous confirmation remains on the takeaway until you confirm again or withdraw it." : "";
-    refreshHandoffTiming();
-  };
-  $("handoff-form").onsubmit = (event) => {
-    event.preventDefault(); if (!state.result?.card || !["en", "es"].includes(state.language)) return;
-    try {
-      const plan = FrontDeskHandoff.create({ owner: $("handoff-owner").value, place: $("handoff-place").value, recordedBy: $("handoff-recorded-by").value, action: $("handoff-action").value, mode: $("handoff-mode").value, localTime: $("handoff-time").value, attested: $("handoff-attest").checked });
-      state.handoff = plan; $("handoff-error").textContent = ""; $("handoff-edit-status").textContent = "Confirmation recorded for this visit. Print the takeaway before clearing it.";
-      $("handoff-withdraw").hidden = false; renderCard(state.result);
-      $("visitor-handoff").scrollIntoView({ behavior: "smooth", block: "start" });
-    } catch (error) { $("handoff-error").textContent = error.message; }
-  };
-  $("handoff-withdraw").onclick = () => {
-    state.handoff = null; $("handoff-form").reset(); $("handoff-withdraw").hidden = true;
-    $("handoff-error").textContent = ""; $("handoff-edit-status").textContent = "Confirmation withdrawn. The takeaway shows the original suggested next step.";
-    refreshHandoffTiming(); if (state.result?.card) renderCard(state.result);
-  };
+  function renderIntake(r) {
+    const body = $("intake-body"); body.replaceChildren();
+    const chips = el("div", "chips");
+    chips.appendChild(el("span", "chip", r.document_class));
+    chips.appendChild(el("span", "chip", `confidence ${r.confidence}`));
+    body.appendChild(chips);
+    body.appendChild(el("p", "", r.summary_en));
+    body.appendChild(kv([["From", r.issuer], ["About", r.subject_hint], ...(r.amounts || []).map((a) => [a.label, a.amount_text]), ...(r.dates || []).map((d) => [d.label, d.date_text])]));
+    (r.evidence || []).slice(0, 2).forEach((q) => body.appendChild(el("p", "quote", `“${q}”`)));
+    $("intake-card").hidden = false;
+  }
 
-  $("consent-confirm").onchange = () => { $("consent-agree").disabled = !$("consent-confirm").checked; };
-  $("consent-agree").onclick = async () => {
-    if ($("consent-agree").disabled) return;
-    state.consented = true;
-    try { await loadFixtures(); if (state.consented) show("document"); }
-    catch { $("consent-status").textContent = "Could not load the letters. Please try again."; }
-  };
-  $("consent-decline").onclick = () => {
-    state.consented = false; $("consent-agree").disabled = true; $("consent-confirm").checked = false;
-    $("consent-status").textContent = state.language === "es" ? "No se enviará ninguna carta. Pida al personal otra forma de ayuda." : "No letter will be sent. Ask staff about another way to get help.";
-  };
-  $("consent-back").onclick = newVisitor;
-  $("choose-document").onclick = () => { resetSession(); show("document"); };
-  $("run-paste").onclick = () => { const text = $("paste").value.trim(); if (!text) return; startSession({ document_text: text, title: $("paste-title").value || "Pasted letter", language: state.language }, $("paste-title").value || "Pasted letter"); };
-  $("privacy-toggle").onclick = () => { state.privacy = !state.privacy; document.body.classList.toggle("privacy", state.privacy); $("privacy-toggle").textContent = state.privacy ? "Staff view" : "Privacy mode"; };
-  $("read-aloud").onclick = readAloud;
-  $("print-summary").onclick = () => { if (state.result?.card) window.print(); };
-  $("new-session").onclick = newVisitor;
+  function renderMatcher(a) {
+    const body = $("matcher-body"); body.replaceChildren();
+    body.appendChild(kv([["About", ctx.name(a.subject_member_id)], ["Asked by", ctx.name(a.actor_member_id)], ["Skill", ctx.skillName(a.skill_id)], ["Account", a.account_id], ["Confidence", a.confidence]]));
+    if (a.reasons && a.reasons.length) { const ul = el("ul", "line-list"); a.reasons.forEach((r) => ul.appendChild(el("li", "", r))); body.appendChild(ul); }
+    $("matcher-card").hidden = false;
+  }
 
+  function revisionBlock(run) {
+    let block = document.querySelector(`#plan-body .plan-revision[data-revision="${run}"]`);
+    if (!block) {
+      block = el("div", "plan-revision"); block.dataset.revision = String(run);
+      block.appendChild(el("div", "rev", run > 1 ? `Plan revision ${run} (sent back by the authority)` : "Plan revision 1"));
+      $("plan-body").appendChild(block);
+    }
+    return block;
+  }
+
+  function renderPlanNode(plan, run) {
+    const block = revisionBlock(run);
+    let note = block.querySelector(".plan-note");
+    if (!note) { note = el("div", "why plan-note"); block.appendChild(note); }
+    const parts = [`${plan.actions.length} action${plan.actions.length === 1 ? "" : "s"} proposed`];
+    if (plan.needs && plan.needs.length) parts.push(`needs: ${plan.needs.join("; ")}`);
+    if (plan.notes && plan.notes.length) parts.push(plan.notes.join(" "));
+    note.textContent = parts.join(" · ");
+    $("plan-card").hidden = false;
+  }
+
+  function renderAction(ev) {
+    const block = revisionBlock(ev.revision);
+    const p = ev.proposal, d = ev.decision;
+    const card = el("div", "action"); card.dataset.actionId = p.id; card.dataset.outcome = d.outcome;
+    const words = Q.describe({ ...p }, ctx);
+    const head = el("div", "head");
+    head.appendChild(el("span", "title", words.title));
+    head.appendChild(Q.outcomeChip(d.outcome));
+    card.appendChild(head);
+    card.appendChild(el("div", "why", `${words.sub}${p.claimed_grant_id ? " · cites " + p.claimed_grant_id : ""}`));
+    if (p.rationale) card.appendChild(el("div", "why", p.rationale));
+    card.appendChild(el("div", "explain", ev.explanation));
+    block.appendChild(card);
+    $("plan-card").hidden = false;
+  }
+
+  function renderVerdict(v, run, li) {
+    const block = revisionBlock(run);
+    let line = block.querySelector(".verdict-line");
+    if (!line) { line = el("div", "why verdict-line"); block.appendChild(line); }
+    line.textContent = `Authority verdict: ${v.verdict}`;
+    const st = li.querySelector(".state");
+    if (v.verdict === "revise") { st.textContent = "sent the plan back"; st.className = "state bad"; li.classList.add("rejected"); }
+    else if (v.verdict === "stop") { st.textContent = "stopped: nothing may proceed"; st.className = "state bad"; }
+    else { st.textContent = "proceed"; st.className = "state good"; }
+  }
+
+  function renderExecutorNode(report) {
+    const body = $("executor-body");
+    let note = body.querySelector(".exec-note");
+    if (!note) { note = el("p", "why exec-note"); body.appendChild(note); }
+    note.textContent = `${report.receipts.length} receipt${report.receipts.length === 1 ? "" : "s"} issued by execute_action` + (report.skipped.length ? ` · skipped ${report.skipped.length}` : "");
+    $("executor-card").hidden = false;
+  }
+
+  function renderReceipt(receipt) {
+    const action = state.session.actions[receipt.action_id];
+    const enriched = action ? { ...receipt, action_type: action.proposal.action_type, amount: action.proposal.amount, currency: action.proposal.currency, subject_member_id: action.proposal.subject_member_id } : receipt;
+    $("executor-body").appendChild(Q.receiptRow(enriched, ctx));
+    $("session-receipts").appendChild(Q.receiptRow(enriched, ctx));
+    $("executor-card").hidden = false; $("session-receipts-card").hidden = false;
+  }
+
+  function renderApproval(ev) {
+    const action = state.session.actions[ev.action_id];
+    const box = el("div", "action approval"); box.dataset.actionId = ev.action_id;
+    const words = action ? Q.describe(action.proposal, ctx) : { title: ev.action_id, sub: "" };
+    const head = el("div", "head");
+    head.appendChild(el("span", "title", words.title));
+    head.appendChild(Q.outcomeChip("needs-approval"));
+    box.appendChild(head);
+    box.appendChild(el("div", "why", `${words.sub} · needs ${ev.approver_ids.map(ctx.name).join(" or ")}`));
+    box.appendChild(el("div", "explain", ev.explanation));
+    box.appendChild(Q.approvalForm({ id: ev.action_id, approver_ids: ev.approver_ids }, ctx));
+    $("approvals").appendChild(box);
+    $("approvals-card").hidden = false;
+  }
+
+  function renderBriefing(b) {
+    const lang = state.session && state.session.start ? state.session.start.language : state.member.language;
+    $("briefing-headline").textContent = b.headline_target; $("briefing-headline").lang = lang;
+    $("briefing-headline-en").textContent = b.headline_en !== b.headline_target ? b.headline_en : "";
+    const done = $("briefing-done"); done.replaceChildren(); (b.done || []).forEach((line) => done.appendChild(el("li", "", line)));
+    $("briefing-done-row").hidden = !(b.done && b.done.length);
+    const waiting = $("briefing-waiting"); waiting.replaceChildren(); (b.waiting_on || []).forEach((line) => waiting.appendChild(el("li", "", line)));
+    $("briefing-waiting-row").hidden = !(b.waiting_on && b.waiting_on.length);
+    $("briefing-next").textContent = b.next_step_target + (b.next_step_en !== b.next_step_target ? ` (${b.next_step_en})` : "");
+    $("briefing-next").lang = lang;
+    const labels = $("briefing-labels"); labels.replaceChildren(); (b.labels || []).forEach((mode) => labels.appendChild(Q.modeChip(mode)));
+    $("briefing-card").hidden = false;
+  }
+
+  function renderGuard(result) {
+    const g = result.guard;
+    $("guard-text").textContent = `${g.decisions_checked} decision${g.decisions_checked === 1 ? "" : "s"} recomputed in code · ${g.overrides} override${g.overrides === 1 ? "" : "s"} of the model's echo · ${g.verdict_overrides} verdict override${g.verdict_overrides === 1 ? "" : "s"} · ${g.dropped_proposals} proposal${g.dropped_proposals === 1 ? "" : "s"} dropped · ${g.dropped_receipts} receipt${g.dropped_receipts === 1 ? "" : "s"} dropped`;
+    const notes = $("guard-notes"); notes.replaceChildren();
+    [...(g.notes || []), ...(result.notes || [])].forEach((n) => notes.appendChild(el("li", "", n)));
+    $("guard-card").hidden = false;
+  }
+
+  function renderOutcome() {
+    const s = state.session; if (!s || !s.result) return;
+    const pending = s.approvals.filter((a) => !s.decided[a.action_id]).length;
+    const approvedReceipts = Object.values(s.decided).filter((d) => d.receipt).length;
+    let outcome = s.result.outcome;
+    if (s.approvals.length && !pending) outcome = approvedReceipts || Object.keys(s.receipts).length ? "executed" : "declined";
+    else if (approvedReceipts && pending) outcome = "partial";
+    const chip = $("outcome-chip");
+    chip.className = `chip outcome outcome-${outcome === "executed" ? "allow" : outcome === "needs-approval" || outcome === "partial" ? "needs-approval" : outcome === "no-action" ? "none" : "block"}`;
+    chip.textContent = { executed: "done", "needs-approval": "waiting for approval", partial: "partly done, waiting for approval", blocked: "blocked", "no-action": "nothing to do", declined: "declined" }[outcome] || outcome;
+    chip.hidden = false;
+  }
+
+  $("back-home").onclick = async () => { resetSession(); await loadHousehold(); show("home"); };
   $("reload-service").onclick = () => window.location.reload();
-  loadMeta().then(() => show("language")).catch((error) => {
+
+  loadMeta().then(loadHousehold).then(() => show("members")).catch((error) => {
     $("provider-line").textContent = error.message;
     $("startup-error").textContent = error.message;
     $("service-unavailable").hidden = false;
