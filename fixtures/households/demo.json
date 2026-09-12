@@ -1,0 +1,231 @@
+{
+  "id": "demo",
+  "name": "Okafor-Lim household (fictional demo)",
+  "jurisdiction": "CA-ON",
+  "currency": "CAD",
+  "self_confirm_limit": "200.00",
+  "members": [
+    {
+      "id": "ama",
+      "name": "Ama Okafor-Lim",
+      "role": "adult",
+      "birth_year": 1984,
+      "guardians": [],
+      "email": "ama@example.test",
+      "language": "en",
+      "pin_hash": "388f4200697f9d85b5bb8ad2c2a768a6fa31cb54583f195fd611a29962b2ef31",
+      "pin_salt": "e234937a1062c030152b69b5bd28f01b",
+      "memory_actor_id": "demo.ama"
+    },
+    {
+      "id": "daniel",
+      "name": "Daniel Lim",
+      "role": "adult",
+      "birth_year": 1982,
+      "guardians": [],
+      "email": null,
+      "language": "fr",
+      "pin_hash": "09bdb86e4be61727d4e5adc737cb4c5c297d770c30fd3f217cc12defdd448e85",
+      "pin_salt": "13c4bc0c67b0e50331df298095e450a2",
+      "memory_actor_id": "demo.daniel"
+    },
+    {
+      "id": "kofi",
+      "name": "Kofi Okafor-Lim",
+      "role": "minor",
+      "birth_year": 2012,
+      "guardians": [
+        "ama",
+        "daniel"
+      ],
+      "email": null,
+      "language": "en",
+      "pin_hash": "1dd75f0a6a110ce361dbcabfef501e12b0b2df2dd490308caebfbe0c0159bd82",
+      "pin_salt": "407be81a884d109a8bc4b16b56556a08",
+      "memory_actor_id": "demo.kofi"
+    },
+    {
+      "id": "mei",
+      "name": "Mei Okafor-Lim",
+      "role": "minor",
+      "birth_year": 2016,
+      "guardians": [
+        "ama",
+        "daniel"
+      ],
+      "email": null,
+      "language": "en",
+      "pin_hash": "e8b30b9e9040135b29f4d1b7b1bfc9234cf96ae3fcdf955ff87760bdd1418978",
+      "pin_salt": "bc0e4b15e9f018316d2d536766c35a54",
+      "memory_actor_id": "demo.mei"
+    }
+  ],
+  "grants": [
+    {
+      "id": "g-daniel-ama-benefits",
+      "grantor_id": "daniel",
+      "grantee_id": "ama",
+      "subject_id": "daniel",
+      "scope": [
+        "benefits:claim",
+        "form:prepare",
+        "email:send"
+      ],
+      "limit_amount": "500.00",
+      "limit_currency": "CAD",
+      "limit_period": "per-action",
+      "expires_at": "2027-01-01T00:00:00-05:00",
+      "status": "active",
+      "basis": "spouse-grant",
+      "consent_id": "c-daniel-benefits",
+      "created_at": "2026-09-01T09:00:00-04:00"
+    },
+    {
+      "id": "g-daniel-ama-payments",
+      "grantor_id": "daniel",
+      "grantee_id": "ama",
+      "subject_id": "daniel",
+      "scope": [
+        "payment:transfer"
+      ],
+      "limit_amount": "300.00",
+      "limit_currency": "CAD",
+      "limit_period": "per-month",
+      "expires_at": "2027-01-01T00:00:00-05:00",
+      "status": "active",
+      "basis": "spouse-grant",
+      "consent_id": "c-daniel-payments",
+      "created_at": "2026-09-01T09:00:00-04:00"
+    },
+    {
+      "id": "g-ama-agent-recall",
+      "grantor_id": "ama",
+      "grantee_id": "agent",
+      "subject_id": "ama",
+      "scope": [
+        "recall:remedy",
+        "email:send"
+      ],
+      "limit_amount": "100.00",
+      "limit_currency": "CAD",
+      "limit_period": "per-action",
+      "expires_at": "2027-01-01T00:00:00-05:00",
+      "status": "active",
+      "basis": "self",
+      "consent_id": null,
+      "created_at": "2026-09-01T09:00:00-04:00"
+    },
+    {
+      "id": "g-expired",
+      "grantor_id": "daniel",
+      "grantee_id": "ama",
+      "subject_id": "daniel",
+      "scope": [
+        "payment:transfer"
+      ],
+      "limit_amount": "300.00",
+      "limit_currency": "CAD",
+      "limit_period": "per-month",
+      "expires_at": "2026-08-01T00:00:00-04:00",
+      "status": "active",
+      "basis": "spouse-grant",
+      "consent_id": null,
+      "created_at": "2026-02-01T09:00:00-05:00"
+    },
+    {
+      "id": "g-revoked",
+      "grantor_id": "ama",
+      "grantee_id": "daniel",
+      "subject_id": "ama",
+      "scope": [
+        "benefits:claim"
+      ],
+      "limit_amount": "500.00",
+      "limit_currency": "CAD",
+      "limit_period": "per-action",
+      "expires_at": "2027-01-01T00:00:00-05:00",
+      "status": "revoked",
+      "basis": "spouse-grant",
+      "consent_id": null,
+      "created_at": "2026-09-01T09:00:00-04:00"
+    }
+  ],
+  "consents": [
+    {
+      "id": "c-daniel-benefits",
+      "member_id": "daniel",
+      "kind": "grant-accept",
+      "target_id": "g-daniel-ama-benefits",
+      "at": "2026-09-01T09:05:00-04:00",
+      "channel": "ui",
+      "proof": "33c4ea9e6a561dcc6a26a7ca7b45655d7d660d7b433881c2b5f30fad183e08ed"
+    },
+    {
+      "id": "c-daniel-payments",
+      "member_id": "daniel",
+      "kind": "grant-accept",
+      "target_id": "g-daniel-ama-payments",
+      "at": "2026-09-01T09:06:00-04:00",
+      "channel": "ui",
+      "proof": "8d423a6938427c322b11a0057a2f2b40002bb60b289ac396af9a60bc0e135b61"
+    }
+  ],
+  "actions": [],
+  "receipts": [],
+  "accounts": [
+    {
+      "id": "hh-main",
+      "owner_member_id": "ama",
+      "kind": "household",
+      "balance": "2400.00",
+      "currency": "CAD",
+      "rules": {}
+    },
+    {
+      "id": "allow-kofi",
+      "owner_member_id": "kofi",
+      "kind": "allowance",
+      "balance": "42.00",
+      "currency": "CAD",
+      "rules": {
+        "auto_limit": "10.00",
+        "weekly": "15.00"
+      }
+    },
+    {
+      "id": "allow-mei",
+      "owner_member_id": "mei",
+      "kind": "allowance",
+      "balance": "18.00",
+      "currency": "CAD",
+      "rules": {
+        "auto_limit": "5.00",
+        "weekly": "8.00"
+      }
+    }
+  ],
+  "ledger": [],
+  "products": [],
+  "plans": [
+    {
+      "member": "ama",
+      "insurer": "Sun Life",
+      "plan_id": "SL-1",
+      "birthday": "1984-03-14"
+    },
+    {
+      "member": "daniel",
+      "insurer": "Manulife",
+      "plan_id": "ML-7",
+      "birthday": "1982-11-02"
+    }
+  ],
+  "tuition": [
+    {
+      "member": "kofi",
+      "institution": "Toronto District School Board — band program",
+      "amount": "180.00",
+      "due": "2026-09-30"
+    }
+  ]
+}

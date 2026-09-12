@@ -28,6 +28,7 @@ packages = [{ include = "household" }]
 include = [
   { path = "fixtures/documents/*.json", format = ["sdist", "wheel"] },
   { path = "fixtures/canned/*.json", format = ["sdist", "wheel"] },
+  { path = "fixtures/households/*.json", format = ["sdist", "wheel"] },
 ]
 
 [tool.poetry.group.dev.dependencies]
