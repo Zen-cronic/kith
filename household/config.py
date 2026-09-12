@@ -13,6 +13,7 @@ PROVIDERS: tuple[str, ...] = ("fake", "anthropic", "openai", "bedrock")
 SELECTABLE: tuple[str, ...] = ("auto", *PROVIDERS)
 EXECUTION_MODES: tuple[str, ...] = ("simulated", "live")
 SPEECH_MODES: tuple[str, ...] = ("on", "off")
+SMS_PROVIDERS: tuple[str, ...] = ("none", "sns", "twilio")
 DEFAULT_SONIC_MODEL_ID = "amazon.nova-2-sonic-v1:0"
 DEFAULT_SONIC_VOICE = "matthew"
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,6 +46,11 @@ class Settings:
     sonic_model_id: str = DEFAULT_SONIC_MODEL_ID
     sonic_voice: str = DEFAULT_SONIC_VOICE
     speech: str = "on"
+    # Channels (CH0+): presence flags only; the secrets themselves stay in the environment for the SDK clients.
+    telegram_token_present: bool = False
+    sms_provider: str = "none"
+    mcp_enabled: bool = False
+    public_base_url: str | None = None
 
     def __post_init__(self) -> None:
         if self.execution_mode not in EXECUTION_MODES:
@@ -55,6 +61,8 @@ class Settings:
             raise ValueError(f"EXECUTION_MODE must be one of {EXECUTION_MODES}, got {self.execution_mode!r}")
         if self.speech not in SPEECH_MODES:
             raise ValueError(f"SPEECH must be one of {SPEECH_MODES}, got {self.speech!r}")
+        if self.sms_provider not in SMS_PROVIDERS:
+            raise ValueError(f"SMS_PROVIDER must be one of {SMS_PROVIDERS}, got {self.sms_provider!r}")
         for node_id, spec in self.node_models.items():
             if ":" not in spec or spec.split(":", 1)[0] not in PROVIDERS:
                 raise ValueError(f"NODE_MODELS entry for {node_id!r} must look like provider:model_id, got {spec!r}")
@@ -117,6 +125,10 @@ def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: o
         "sonic_model_id": os.environ.get("SONIC_MODEL_ID", "").strip() or DEFAULT_SONIC_MODEL_ID,
         "sonic_voice": os.environ.get("SONIC_VOICE", "").strip() or DEFAULT_SONIC_VOICE,
         "speech": os.environ.get("SPEECH", "on").strip().lower() or "on",
+        "telegram_token_present": bool(os.environ.get("TELEGRAM_BOT_TOKEN")),
+        "sms_provider": os.environ.get("SMS_PROVIDER", "none").strip().lower() or "none",
+        "mcp_enabled": os.environ.get("MCP_ENABLED", "").strip() == "1",
+        "public_base_url": os.environ.get("PUBLIC_BASE_URL", "").strip() or None,
     }
     values.update({k: v for k, v in overrides.items() if v is not None})
     return Settings(**values)  # type: ignore[arg-type]

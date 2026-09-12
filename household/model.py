@@ -102,6 +102,15 @@ def consent_proof(member_id: str, target_id: str, at: str, pin_hash: str | None)
     return hashlib.sha256("|".join([member_id, target_id, at, pin_hash or ""]).encode("utf-8")).hexdigest()
 
 
+# Channel handles: sms numbers and emails match case-insensitively (and trimmed); anything else matches exactly.
+CASE_INSENSITIVE_CHANNELS = {"sms", "email"}
+
+
+def normalize_native_id(channel: str, native_id: str) -> str:
+    value = native_id.strip()
+    return value.lower() if channel in CASE_INSENSITIVE_CHANNELS else value
+
+
 # Ledger models
 
 
@@ -120,6 +129,9 @@ class Member(LedgerModel):
     pin_hash: str | None = None
     pin_salt: str | None = None
     memory_actor_id: str = Field(description="AgentCore Memory actor id, f'{household_id}.{member_id}'")
+    handles: dict[str, str] = Field(
+        default_factory=dict, description="Channel name -> native id, e.g. {'telegram': '8675309', 'sms': '+16475551234'}"
+    )
 
     def set_pin(self, pin: str) -> None:
         """Identification, not biometrics: PBKDF2-HMAC-SHA256 with a fresh 16-byte salt."""
@@ -250,11 +262,23 @@ class Household(LedgerModel):
     products: list[dict[str, str]] = Field(default_factory=list)
     plans: list[dict[str, str]] = Field(default_factory=list)
     tuition: list[dict[str, str]] = Field(default_factory=list)
+    redeemed_enrollment_nonces: set[str] = Field(
+        default_factory=set, description="Enrollment-code nonces already redeemed; a code cannot be replayed"
+    )
 
     # Lookups
 
     def member(self, member_id: str) -> Member | None:
         return next((m for m in self.members if m.id == member_id), None)
+
+    def member_by_handle(self, channel: str, native_id: str) -> Member | None:
+        """The member whose handle for `channel` matches `native_id` (case-insensitive for sms/email), else None."""
+        want = normalize_native_id(channel, native_id)
+        for member in self.members:
+            stored = member.handles.get(channel)
+            if stored is not None and normalize_native_id(channel, stored) == want:
+                return member
+        return None
 
     def grant(self, grant_id: str) -> AuthorityGrant | None:
         return next((g for g in self.grants if g.id == grant_id), None)

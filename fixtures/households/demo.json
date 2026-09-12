@@ -15,7 +15,10 @@
       "language": "en",
       "pin_hash": "388f4200697f9d85b5bb8ad2c2a768a6fa31cb54583f195fd611a29962b2ef31",
       "pin_salt": "e234937a1062c030152b69b5bd28f01b",
-      "memory_actor_id": "demo.ama"
+      "memory_actor_id": "demo.ama",
+      "handles": {
+        "telegram": "8675309"
+      }
     },
     {
       "id": "daniel",
@@ -27,7 +30,10 @@
       "language": "fr",
       "pin_hash": "09bdb86e4be61727d4e5adc737cb4c5c297d770c30fd3f217cc12defdd448e85",
       "pin_salt": "13c4bc0c67b0e50331df298095e450a2",
-      "memory_actor_id": "demo.daniel"
+      "memory_actor_id": "demo.daniel",
+      "handles": {
+        "sms": "+16475551234"
+      }
     },
     {
       "id": "kofi",
@@ -42,7 +48,8 @@
       "language": "en",
       "pin_hash": "1dd75f0a6a110ce361dbcabfef501e12b0b2df2dd490308caebfbe0c0159bd82",
       "pin_salt": "407be81a884d109a8bc4b16b56556a08",
-      "memory_actor_id": "demo.kofi"
+      "memory_actor_id": "demo.kofi",
+      "handles": {}
     },
     {
       "id": "mei",
@@ -57,7 +64,8 @@
       "language": "en",
       "pin_hash": "e8b30b9e9040135b29f4d1b7b1bfc9234cf96ae3fcdf955ff87760bdd1418978",
       "pin_salt": "bc0e4b15e9f018316d2d536766c35a54",
-      "memory_actor_id": "demo.mei"
+      "memory_actor_id": "demo.mei",
+      "handles": {}
     }
   ],
   "grants": [
@@ -227,5 +235,6 @@
       "amount": "180.00",
       "due": "2026-09-30"
     }
-  ]
+  ],
+  "redeemed_enrollment_nonces": []
 }
