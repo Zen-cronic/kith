@@ -214,7 +214,7 @@ def test_photo_of_the_dental_eob_prepares_the_claim_on_the_printed_balance() -> 
     [decision] = r.plans[-1].decisions
     assert (decision.outcome, decision.grant_id) == ("allow", "g-daniel-ama-benefits")
     [receipt] = r.receipts
-    assert receipt.rail == "official-form" and receipt.mode == "SIMULATED" and r.guard.dropped_proposals == 0
+    assert receipt.rail == "official-form" and receipt.mode == "PREPARE-ONLY" and r.guard.dropped_proposals == 0
 
 
 class UnverifiedPlanStore(FixtureStore):
