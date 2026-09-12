@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Kofi's field trip fee",
+  "amounts": [
+    {
+      "label": "field trip fee (spoken)",
+      "amount_text": "thirty five dollars",
+      "quote": "pay thirty five dollars to Kofi's school for the science centre field trip it's due september twenty fifth"
+    }
+  ],
+  "dates": [
+    {
+      "label": "due date (spoken)",
+      "date_text": "september twenty fifth",
+      "quote": "pay thirty five dollars to Kofi's school for the science centre field trip it's due september twenty fifth"
+    }
+  ],
+  "transcribed_lines": [
+    "pay thirty five dollars to Kofi's school for the science centre field trip it's due september twenty fifth"
+  ],
+  "summary_en": "Ama asks, by voice, to pay thirty-five dollars to Kofi's school for the science centre field trip, due September 25.",
+  "evidence": [
+    "pay thirty five dollars to Kofi's school for the science centre field trip it's due september twenty fifth"
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Daniel's music stand",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$90.00",
+      "quote": "Pay $90.00 to the Toronto Youth Wind Orchestra for Daniel's music stand under his grant g-daniel-ama-benefits."
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Pay $90.00 to the Toronto Youth Wind Orchestra for Daniel's music stand under his grant g-daniel-ama-benefits."
+  ],
+  "summary_en": "Ama asks to pay $90.00 to the Toronto Youth Wind Orchestra for Daniel's music stand, citing Daniel's grant g-daniel-ama-benefits.",
+  "evidence": [
+    "Pay $90.00 to the Toronto Youth Wind Orchestra for Daniel's music stand under his grant g-daniel-ama-benefits."
+  ],
+  "confidence": "high"
+}

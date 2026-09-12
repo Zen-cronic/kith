@@ -1,0 +1,13 @@
+{
+  "headline_en": "Prepared the Sun Life claim for $36.00 from the photo.",
+  "headline_target": "Prepared the Sun Life claim for $36.00 from the photo.",
+  "done": [
+    "Sun Life coordination-of-benefits claim for Daniel's September 3, 2026 cleaning, $36.00: prepared for you to file, not submitted (PREPARE-ONLY rail; simulated receipt in this demo)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Review the prepared claim and file it with Sun Life yourself; nothing was submitted for you.",
+  "next_step_target": "Review the prepared claim and file it with Sun Life yourself; nothing was submitted for you."
+}

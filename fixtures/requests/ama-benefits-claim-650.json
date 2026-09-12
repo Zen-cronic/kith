@@ -1,0 +1,23 @@
+{
+  "id": "ama-benefits-claim-650",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Daniel's Manulife statement: crown at Bloor West Dental on September 8, 2026, billed $1,300.00, Manulife paid $650.00.\nPrepare the Sun Life claim for the rest; I will file it myself.",
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "benefits",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "daniel"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "over-limit",
+    "benefits",
+    "cob"
+  ],
+  "notes": "The 650.00 residual exceeds the 500.00 per-action limit of g-daniel-ama-benefits; code refuses the grant and asks Daniel. The claim is not prepared."
+}

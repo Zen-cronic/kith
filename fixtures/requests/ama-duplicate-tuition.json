@@ -1,0 +1,27 @@
+{
+  "id": "ama-duplicate-tuition",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay Kofi's $180.00 band program fee to the Toronto District School Board before September 30, 2026.",
+  "overrides": {
+    "replay": "2"
+  },
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "household",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "out-of-scope",
+    "duplicate",
+    "parent-for-minor",
+    "payment",
+    "model-attempts"
+  ],
+  "notes": "The same request submitted twice (a double tap). Run 1 pays as Kofi's guardian. On run 2 the model proposes and the executor calls execute_action again; the idempotency key (household, action, subject, recipient, amount, evidence, day) returns the receipt already issued and no second payment exists."
+}

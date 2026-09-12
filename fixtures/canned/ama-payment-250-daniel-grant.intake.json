@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Daniel's concert uniform",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$250.00",
+      "quote": "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's concert uniform, due September 22, 2026, under his payments grant g-daniel-ama-payments."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 22, 2026",
+      "quote": "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's concert uniform, due September 22, 2026, under his payments grant g-daniel-ama-payments."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's concert uniform, due September 22, 2026, under his payments grant g-daniel-ama-payments."
+  ],
+  "summary_en": "Ama asks to pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's concert uniform by September 22, 2026, citing Daniel's payments grant g-daniel-ama-payments.",
+  "evidence": [
+    "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's concert uniform, due September 22, 2026, under his payments grant g-daniel-ama-payments."
+  ],
+  "confidence": "high"
+}

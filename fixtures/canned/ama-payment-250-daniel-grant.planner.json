@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "daniel",
+      "recipient": "Toronto Youth Wind Orchestra",
+      "amount_text": "250.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Toronto Youth Wind Orchestra"
+        },
+        {
+          "key": "purpose",
+          "value": "Daniel's concert uniform"
+        },
+        {
+          "key": "due",
+          "value": "September 22, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's concert uniform, due September 22, 2026, under his payments grant g-daniel-ama-payments."
+      ],
+      "rationale": "Ama pays Daniel's uniform as he asked, under his payments grant g-daniel-ama-payments.",
+      "claimed_grant_id": "g-daniel-ama-payments"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

@@ -1,0 +1,26 @@
+{
+  "id": "daniel-voice-benefits-claim",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "voice-transcript",
+  "request": "peux-tu préparer la réclamation Sun Life pour mon nettoyage dentaire chez Bloor West Dental le trois septembre deux mille vingt-six, facturé cent quatre-vingts dollars, Manulife a payé cent quarante-quatre dollars",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "benefits",
+    "allow": [
+      "benefits:claim"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "voice",
+    "self",
+    "benefits",
+    "cob",
+    "allow",
+    "french"
+  ],
+  "notes": "A French spoken request; the intake is described in English and every amount is quoted as spoken. Daniel acts for himself within the self-confirm limit."
+}

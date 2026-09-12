@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "daniel",
+      "recipient": "Roncesvalles Physio",
+      "amount_text": "120.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Roncesvalles Physio"
+        },
+        {
+          "key": "purpose",
+          "value": "Daniel's physiotherapy session"
+        },
+        {
+          "key": "due",
+          "value": ""
+        }
+      ],
+      "evidence_refs": [
+        "Pay $120.00 to Roncesvalles Physio for Daniel's session on September 11, 2026 under grant g-ama-self-issued."
+      ],
+      "rationale": "Ama pays Daniel's session under the grant she cites, g-ama-self-issued.",
+      "claimed_grant_id": "g-ama-self-issued"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

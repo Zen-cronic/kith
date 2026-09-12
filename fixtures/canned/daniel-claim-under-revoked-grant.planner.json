@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "ama",
+      "recipient": "Manulife",
+      "amount_text": "36.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Manulife"
+        },
+        {
+          "key": "plan_id",
+          "value": "ML-7"
+        },
+        {
+          "key": "service_date",
+          "value": "September 10, 2026"
+        },
+        {
+          "key": "billed",
+          "value": "$180.00"
+        },
+        {
+          "key": "primary_paid",
+          "value": "$144.00"
+        },
+        {
+          "key": "claim_amount",
+          "value": "36.00"
+        },
+        {
+          "key": "provider",
+          "value": "Bloor West Dental"
+        }
+      ],
+      "evidence_refs": [
+        "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00."
+      ],
+      "rationale": "Ama's own Sun Life plan SL-1 paid first; the residual 36.00 goes to Daniel's Manulife plan ML-7, under the grant Daniel cites.",
+      "claimed_grant_id": "g-revoked"
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: SL-1 primary because Ama is the claimant; ML-7 secondary.",
+    "residual: 180.00 - 144.00 = 36.00."
+  ]
+}

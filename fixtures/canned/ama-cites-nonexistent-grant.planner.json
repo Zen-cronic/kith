@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "daniel",
+      "recipient": "Toronto Youth Wind Orchestra",
+      "amount_text": "250.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Toronto Youth Wind Orchestra"
+        },
+        {
+          "key": "purpose",
+          "value": "Daniel's band trip"
+        },
+        {
+          "key": "due",
+          "value": ""
+        }
+      ],
+      "evidence_refs": [
+        "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's band trip under his grant g-daniel-ama-everything."
+      ],
+      "rationale": "Ama pays Daniel's band trip under the grant she cites, g-daniel-ama-everything.",
+      "claimed_grant_id": "g-daniel-ama-everything"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

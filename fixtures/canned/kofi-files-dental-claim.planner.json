@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "kofi",
+      "recipient": "Manulife",
+      "amount_text": "30.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Manulife"
+        },
+        {
+          "key": "plan_id",
+          "value": "ML-7"
+        },
+        {
+          "key": "service_date",
+          "value": "September 4, 2026"
+        },
+        {
+          "key": "billed",
+          "value": "$150.00"
+        },
+        {
+          "key": "primary_paid",
+          "value": "$120.00"
+        },
+        {
+          "key": "claim_amount",
+          "value": "30.00"
+        },
+        {
+          "key": "provider",
+          "value": "Bloor West Dental"
+        }
+      ],
+      "evidence_refs": [
+        "Here's my dental statement from Sun Life: cleaning at Bloor West Dental on September 4, 2026, billed $150.00, Sun Life paid $120.00."
+      ],
+      "rationale": "For a dependent child the parent with the earlier birthday pays first: Ama's Sun Life SL-1 (March 14) paid; the residual 30.00 goes to Daniel's Manulife ML-7.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: SL-1 primary (Ama's birthday March 14 is earlier in the year), ML-7 secondary.",
+    "residual: 150.00 - 120.00 = 30.00."
+  ]
+}

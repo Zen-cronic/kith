@@ -1,0 +1,34 @@
+{
+  "document_class": "text-request",
+  "issuer": "Manulife (statement relayed by Ama Okafor-Lim)",
+  "subject_hint": "Daniel's physiotherapy claim",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$95.00",
+      "quote": "Daniel's Manulife statement: physiotherapy at Roncesvalles Physio on September 9, 2026, billed $95.00, Manulife paid $76.00."
+    },
+    {
+      "label": "amount as written",
+      "amount_text": "$76.00",
+      "quote": "Daniel's Manulife statement: physiotherapy at Roncesvalles Physio on September 9, 2026, billed $95.00, Manulife paid $76.00."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 9, 2026",
+      "quote": "Daniel's Manulife statement: physiotherapy at Roncesvalles Physio on September 9, 2026, billed $95.00, Manulife paid $76.00."
+    }
+  ],
+  "transcribed_lines": [
+    "Daniel's Manulife statement: physiotherapy at Roncesvalles Physio on September 9, 2026, billed $95.00, Manulife paid $76.00.",
+    "Prepare the Sun Life coordination-of-benefits claim for the rest; no need to email it."
+  ],
+  "summary_en": "Ama relays Daniel's Manulife statement for physiotherapy on September 9, 2026 ($95.00 billed, $76.00 paid) and asks for the Sun Life coordination-of-benefits claim to be prepared for the rest, without an email.",
+  "evidence": [
+    "Daniel's Manulife statement: physiotherapy at Roncesvalles Physio on September 9, 2026, billed $95.00, Manulife paid $76.00.",
+    "Prepare the Sun Life coordination-of-benefits claim for the rest; no need to email it."
+  ],
+  "confidence": "high"
+}

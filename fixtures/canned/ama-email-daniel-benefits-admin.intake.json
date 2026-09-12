@@ -1,0 +1,15 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Daniel's benefits plan booklet",
+  "amounts": [],
+  "dates": [],
+  "transcribed_lines": [
+    "Email Daniel's benefits administrator at benefits@northshore.example.test to ask for the 2026 dental plan booklet for plan ML-7, under his benefits grant g-daniel-ama-benefits."
+  ],
+  "summary_en": "Ama asks to email Daniel's benefits administrator at benefits@northshore.example.test for the 2026 dental plan booklet for plan ML-7, citing Daniel's benefits grant g-daniel-ama-benefits.",
+  "evidence": [
+    "Email Daniel's benefits administrator at benefits@northshore.example.test to ask for the 2026 dental plan booklet for plan ML-7, under his benefits grant g-daniel-ama-benefits."
+  ],
+  "confidence": "high"
+}

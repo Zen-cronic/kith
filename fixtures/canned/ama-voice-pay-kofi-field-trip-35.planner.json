@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "Toronto District School Board",
+      "amount_text": "35.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Toronto District School Board"
+        },
+        {
+          "key": "purpose",
+          "value": "Kofi's science centre field trip"
+        },
+        {
+          "key": "due",
+          "value": "september twenty fifth"
+        }
+      ],
+      "evidence_refs": [
+        "pay thirty five dollars to Kofi's school for the science centre field trip it's due september twenty fifth"
+      ],
+      "rationale": "Ama pays her son's field trip fee; thirty five dollars is proposed as 35.00.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

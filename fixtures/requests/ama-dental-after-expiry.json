@@ -1,0 +1,27 @@
+{
+  "id": "ama-dental-after-expiry",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Daniel's Manulife statement: filling at Bloor West Dental on September 10, 2026, billed $240.00, Manulife paid $192.00.\nPrepare the Sun Life claim for the rest and email me the packet at ama@example.test.",
+  "overrides": {
+    "expire_grant": "g-daniel-ama-benefits"
+  },
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "benefits",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "daniel"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "expired-grant",
+    "benefits",
+    "cob",
+    "email"
+  ],
+  "notes": "The same hero request as ama-dental-cob, but the ledger override expires g-daniel-ama-benefits before the run: both actions are refused (rule grant-refused) and wait for Daniel."
+}

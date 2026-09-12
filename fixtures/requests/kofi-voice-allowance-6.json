@@ -1,0 +1,24 @@
+{
+  "id": "kofi-voice-allowance-6",
+  "household_id": "demo",
+  "actor_member_id": "kofi",
+  "channel": "voice-transcript",
+  "request": "hey can I take six dollars from my allowance for the book fair on friday september eighteenth",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "allowance",
+    "allow": [
+      "allowance:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "voice",
+    "minor",
+    "allowance",
+    "allow"
+  ],
+  "notes": "A spoken request transcribed as words; the amount is quoted as spoken and proposed as 6.00, within the auto-approve limit."
+}

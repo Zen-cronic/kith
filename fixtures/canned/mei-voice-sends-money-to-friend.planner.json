@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "mei",
+      "recipient": "Zoe (friend)",
+      "amount_text": "50.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Zoe (friend)"
+        },
+        {
+          "key": "purpose",
+          "value": "concert tickets for Mei's friend Zoe"
+        },
+        {
+          "key": "due",
+          "value": ""
+        }
+      ],
+      "evidence_refs": [
+        "send fifty dollars from the family account to my friend Zoe for the concert tickets"
+      ],
+      "rationale": "Mei asked to send fifty dollars (50.00) to her friend Zoe.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ama-voice-pay-kofi-field-trip-35",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "voice-transcript",
+  "request": "pay thirty five dollars to Kofi's school for the science centre field trip it's due september twenty fifth",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "household",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "voice",
+    "parent-for-minor",
+    "payment",
+    "allow"
+  ],
+  "notes": "A guardian's spoken payment for her child; rule:parent-for-minor allows and the executor runs."
+}

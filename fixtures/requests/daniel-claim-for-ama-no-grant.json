@@ -1,0 +1,24 @@
+{
+  "id": "daniel-claim-for-ama-no-grant",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "text",
+  "request": "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00.\nPrepare the Manulife claim for the rest.",
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "benefits",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "cross-spouse-without-scope",
+    "benefits",
+    "cob",
+    "french"
+  ],
+  "notes": "Daniel prepares a claim for Ama without citing a grant. The only benefits grant from Ama to Daniel on file is revoked, so code refuses (rule grant-refused) and asks Ama."
+}

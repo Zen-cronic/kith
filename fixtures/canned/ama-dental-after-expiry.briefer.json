@@ -1,0 +1,11 @@
+{
+  "headline_en": "Both steps are waiting for Daniel: his benefits grant to you has expired.",
+  "headline_target": "Both steps are waiting for Daniel: his benefits grant to you has expired.",
+  "done": [],
+  "waiting_on": [
+    "The Sun Life claim for $48.00 and the packet email: waiting for Daniel, because his benefits grant to you has expired."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Daniel to approve them in the app, or to renew the grant.",
+  "next_step_target": "Ask Daniel to approve them in the app, or to renew the grant."
+}

@@ -1,0 +1,11 @@
+{
+  "headline_en": "The Manulife claim for Ama is waiting for Ama.",
+  "headline_target": "La réclamation Manulife pour Ama attend Ama.",
+  "done": [],
+  "waiting_on": [
+    "The Manulife claim for $36.00 for Ama's cleaning: waiting for Ama, because her benefits grant to you was revoked."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Ama to approve it in the app, or to set up a new grant.",
+  "next_step_target": "Demandez à Ama de l'approuver dans l'application, ou de créer une nouvelle autorisation."
+}

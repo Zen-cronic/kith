@@ -1,15 +1,15 @@
 """Front Desk surface tests owned by later packets are skipped, not deleted.
 
-`agentcore/**` (S1) and `household/trapset/**` (P4) are outside packet P2's mutation scope
-and still speak the Front Desk pipeline (five-agent roster, document fixtures, LTB rule ids). Their tests cannot pass
-against the six-node household graph until those packets rewrite them, so they are skipped here with the owner named.
+`agentcore/**` (S1) is outside packet P2's mutation scope and still speaks the Front Desk pipeline (five-agent
+roster, document fixtures, LTB rule ids). Its tests cannot pass against the six-node household graph until that packet
+rewrites them, so they are skipped here with the owner named. (P4 replaced the trap-set with `household/guardrails`,
+tested in `tests/test_guardrails.py`; P5 rewrote the web tests.)
 """
 
 import pytest
 
 FRONT_DESK_SURFACE = {
     "test_agentcore_app.py": "agentcore/app.py is rewritten by S1 (Front Desk payload and roster)",
-    "test_trapset.py": "household/trapset is forked into the guardrail harness by P4 (document fixtures + run_session)",
 }
 FRONT_DESK_BRIDGE_TESTS = {
     "test_actual_runtime_metadata_and_refusal",

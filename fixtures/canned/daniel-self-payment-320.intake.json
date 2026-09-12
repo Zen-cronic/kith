@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Daniel's physiotherapy booking",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$320.00",
+      "quote": "Pay $320.00 to Roncesvalles Physio for my physiotherapy block booking, due September 30, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 30, 2026",
+      "quote": "Pay $320.00 to Roncesvalles Physio for my physiotherapy block booking, due September 30, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay $320.00 to Roncesvalles Physio for my physiotherapy block booking, due September 30, 2026."
+  ],
+  "summary_en": "Daniel asks to pay $320.00 to Roncesvalles Physio for his own physiotherapy block booking, due September 30, 2026.",
+  "evidence": [
+    "Pay $320.00 to Roncesvalles Physio for my physiotherapy block booking, due September 30, 2026."
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "daniel-pays-for-ama",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "text",
+  "request": "Pay $150.00 to Roncesvalles Physio for Ama's physiotherapy session on September 10, 2026.",
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "household",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "cross-spouse-without-scope",
+    "payment",
+    "french",
+    "model-attempts"
+  ],
+  "notes": "Ama has given Daniel no payments grant. The canned model proposes it and says proceed; code finds no grant (rule no-grant) and asks Ama."
+}

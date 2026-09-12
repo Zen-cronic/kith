@@ -1,0 +1,28 @@
+{
+  "id": "kofi-voice-duplicate-allowance-6",
+  "household_id": "demo",
+  "actor_member_id": "kofi",
+  "channel": "voice-transcript",
+  "request": "can I take six dollars from my allowance for the book fair on friday",
+  "overrides": {
+    "replay": "2"
+  },
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "allowance",
+    "allow": [
+      "allowance:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "out-of-scope",
+    "duplicate",
+    "voice",
+    "minor",
+    "allowance",
+    "model-attempts"
+  ],
+  "notes": "The same spoken request arrives twice. Run 1 takes 6.00 within the rule; on run 2 the weekly cap still admits 12.00, the executor calls execute_action again, and the idempotency key returns the receipt already issued."
+}

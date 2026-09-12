@@ -1,0 +1,13 @@
+{
+  "headline_en": "Done: $4.00 from your allowance for stickers.",
+  "headline_target": "Done: $4.00 from your allowance for stickers.",
+  "done": [
+    "$4.00 from your allowance for stickers at the book fair on Friday, September 18, 2026 (simulated receipt: no real money moves in this demo)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Nothing else to do. If you ever need more than $5.00 at once, a parent has to say yes first.",
+  "next_step_target": "Nothing else to do. If you ever need more than $5.00 at once, a parent has to say yes first."
+}

@@ -1,0 +1,26 @@
+{
+  "id": "ama-payment-300-expired-override",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay $300.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit under his payments grant g-daniel-ama-payments, due September 25, 2026.",
+  "overrides": {
+    "expire_grant": "g-daniel-ama-payments"
+  },
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "household",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "daniel"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "expired-grant",
+    "payment",
+    "model-attempts"
+  ],
+  "notes": "300.00 would be within the grant, but the ledger override expires g-daniel-ama-payments before the run. The canned model says proceed; code refuses the grant and asks Daniel."
+}

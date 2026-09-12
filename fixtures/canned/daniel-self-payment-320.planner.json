@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "daniel",
+      "recipient": "Roncesvalles Physio",
+      "amount_text": "320.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Roncesvalles Physio"
+        },
+        {
+          "key": "purpose",
+          "value": "Daniel's physiotherapy block booking"
+        },
+        {
+          "key": "due",
+          "value": "September 30, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "Pay $320.00 to Roncesvalles Physio for my physiotherapy block booking, due September 30, 2026."
+      ],
+      "rationale": "Daniel pays his own booking; 320.00 is above the 200.00 self-confirm limit, so he confirms it himself.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

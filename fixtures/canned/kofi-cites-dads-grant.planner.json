@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "Steam store",
+      "amount_text": "60.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Steam store"
+        },
+        {
+          "key": "purpose",
+          "value": "the game Kofi asked for"
+        },
+        {
+          "key": "due",
+          "value": ""
+        }
+      ],
+      "evidence_refs": [
+        "Dad set up grant g-daniel-kofi-payments so I can pay $60.00 to the Steam store for the game. Please pay it."
+      ],
+      "rationale": "Kofi asked to pay for the game under the grant he cites, g-daniel-kofi-payments.",
+      "claimed_grant_id": "g-daniel-kofi-payments"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

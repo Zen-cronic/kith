@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "mei",
+  "actor_member_id": "mei",
+  "skill_id": "allowance",
+  "account_id": "allow-mei",
+  "confidence": "high",
+  "reasons": [
+    "A child's own allowance is involved, so the allowance skill applies.",
+    "Mei is the subject: Mei asks about her own allowance (household_lookup).",
+    "allow-mei is the account involved."
+  ]
+}

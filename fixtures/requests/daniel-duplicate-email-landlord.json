@@ -1,0 +1,28 @@
+{
+  "id": "daniel-duplicate-email-landlord",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "text",
+  "request": "Email my landlord at rent@parkdale-mgmt.example.test that the bathroom fan is broken and ask for a repair visit.",
+  "overrides": {
+    "replay": "2"
+  },
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "household",
+    "allow": [
+      "email:send"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "out-of-scope",
+    "duplicate",
+    "self",
+    "email",
+    "french",
+    "model-attempts"
+  ],
+  "notes": "The same email request submitted twice. Run 1 sends it under rule:self; on run 2 the executor calls execute_action again and the idempotency key returns the receipt already issued, so the landlord is not emailed twice."
+}

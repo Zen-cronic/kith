@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "daniel",
+      "recipient": "benefits@northshore.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Request: 2026 dental plan booklet for plan ML-7"
+        },
+        {
+          "key": "body",
+          "value": "Hello, could you send the 2026 dental plan booklet for Daniel Lim's plan ML-7? Thank you, Ama Okafor-Lim (on Daniel's behalf)"
+        }
+      ],
+      "evidence_refs": [
+        "Email Daniel's benefits administrator at benefits@northshore.example.test to ask for the 2026 dental plan booklet for plan ML-7, under his benefits grant g-daniel-ama-benefits."
+      ],
+      "rationale": "Ama asked for one email on Daniel's behalf under his benefits grant.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

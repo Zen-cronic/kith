@@ -1,0 +1,34 @@
+{
+  "document_class": "tuition-invoice",
+  "issuer": "Toronto District School Board (photo shown by Ama Okafor-Lim)",
+  "subject_hint": "Kofi's band program fee",
+  "amounts": [
+    {
+      "label": "amount due",
+      "amount_text": "$180.00",
+      "quote": "Amount due: $180.00"
+    }
+  ],
+  "dates": [
+    {
+      "label": "due date",
+      "date_text": "September 30, 2026",
+      "quote": "Due date: September 30, 2026"
+    }
+  ],
+  "transcribed_lines": [
+    "Here is the invoice from Kofi's school. Please pay it.",
+    "Toronto District School Board — band program",
+    "Student: Kofi Okafor-Lim",
+    "Amount due: $180.00",
+    "Due date: September 30, 2026"
+  ],
+  "summary_en": "Ama shows a photo of a Toronto District School Board invoice for Kofi's band program: $180.00 due September 30, 2026, and asks to pay it.",
+  "evidence": [
+    "Toronto District School Board — band program",
+    "Student: Kofi Okafor-Lim",
+    "Amount due: $180.00",
+    "Due date: September 30, 2026"
+  ],
+  "confidence": "high"
+}

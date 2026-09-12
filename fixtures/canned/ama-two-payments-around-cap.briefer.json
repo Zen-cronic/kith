@@ -1,0 +1,15 @@
+{
+  "headline_en": "Paid the first $200.00; the second $200.00 is waiting for Daniel.",
+  "headline_target": "Paid the first $200.00; the second $200.00 is waiting for Daniel.",
+  "done": [
+    "$200.00 to the Toronto Youth Wind Orchestra for Daniel's band trip, under Daniel's payments grant to you (simulated receipt: no real money moves in this demo)."
+  ],
+  "waiting_on": [
+    "The second $200.00: waiting for Daniel, because his grant to you covers $300.00 per month and $200.00 of it is now used."
+  ],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Ask Daniel to approve the second payment in the app.",
+  "next_step_target": "Ask Daniel to approve the second payment in the app."
+}

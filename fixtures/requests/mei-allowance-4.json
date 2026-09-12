@@ -1,0 +1,23 @@
+{
+  "id": "mei-allowance-4",
+  "household_id": "demo",
+  "actor_member_id": "mei",
+  "channel": "text",
+  "request": "Can I have $4.00 from my allowance for stickers at the book fair on Friday, September 18, 2026?",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "allowance",
+    "allow": [
+      "allowance:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "minor",
+    "allowance",
+    "allow"
+  ],
+  "notes": "A minor spends within her own allowance rule (auto_limit 5.00, weekly 8.00); rule:minor-allowance allows and the executor runs."
+}

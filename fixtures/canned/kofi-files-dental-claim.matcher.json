@@ -1,0 +1,11 @@
+{
+  "subject_member_id": "kofi",
+  "actor_member_id": "kofi",
+  "skill_id": "benefits",
+  "account_id": "",
+  "confidence": "high",
+  "reasons": [
+    "A benefits statement with an explanation of benefits: the benefits skill applies.",
+    "Kofi is the subject: the cleaning was Kofi's own (household_lookup)."
+  ]
+}

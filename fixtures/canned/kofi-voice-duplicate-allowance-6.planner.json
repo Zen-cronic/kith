@@ -1,0 +1,25 @@
+{
+  "actions": [
+    {
+      "action_type": "allowance:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "hh-main",
+      "amount_text": "6.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "memo",
+          "value": "book fair on friday"
+        }
+      ],
+      "evidence_refs": [
+        "can I take six dollars from my allowance for the book fair on friday"
+      ],
+      "rationale": "Kofi asked for six dollars (6.00) from his own allowance; his auto-approve limit is 10.00 CAD.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

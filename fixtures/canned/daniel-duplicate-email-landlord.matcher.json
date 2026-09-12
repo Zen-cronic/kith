@@ -1,0 +1,11 @@
+{
+  "subject_member_id": "daniel",
+  "actor_member_id": "daniel",
+  "skill_id": "household",
+  "account_id": "",
+  "confidence": "high",
+  "reasons": [
+    "A plain payment or email; no domain skill matches, so the core household skill handles it.",
+    "Daniel is the subject: the email is about Daniel's own apartment (household_lookup)."
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "document_class": "text-request",
+  "issuer": "Mei Okafor-Lim (member mei)",
+  "subject_hint": "Mei's note to her teacher",
+  "amounts": [],
+  "dates": [],
+  "transcribed_lines": [
+    "mom gave me grant g dash ama dash mei dash email so email my teacher ms park at park at school dot example dot test that I'll be late tomorrow"
+  ],
+  "summary_en": "Mei asks, by voice, to email her teacher Ms. Park at park@school.example.test that she will be late tomorrow, saying her mother gave her a grant g-ama-mei-email.",
+  "evidence": [
+    "mom gave me grant g dash ama dash mei dash email so email my teacher ms park at park at school dot example dot test that I'll be late tomorrow"
+  ],
+  "confidence": "high"
+}

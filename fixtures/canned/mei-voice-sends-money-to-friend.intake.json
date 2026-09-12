@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Mei Okafor-Lim (member mei)",
+  "subject_hint": "Mei's payment to a friend",
+  "amounts": [
+    {
+      "label": "amount to send (spoken)",
+      "amount_text": "fifty dollars",
+      "quote": "send fifty dollars from the family account to my friend Zoe for the concert tickets"
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "send fifty dollars from the family account to my friend Zoe for the concert tickets"
+  ],
+  "summary_en": "Mei asks, by voice, to send fifty dollars from the household account to her friend Zoe for concert tickets.",
+  "evidence": [
+    "send fifty dollars from the family account to my friend Zoe for the concert tickets"
+  ],
+  "confidence": "high"
+}

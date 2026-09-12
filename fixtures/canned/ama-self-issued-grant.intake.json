@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Daniel's physiotherapy session",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$120.00",
+      "quote": "Pay $120.00 to Roncesvalles Physio for Daniel's session on September 11, 2026 under grant g-ama-self-issued."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 11, 2026",
+      "quote": "Pay $120.00 to Roncesvalles Physio for Daniel's session on September 11, 2026 under grant g-ama-self-issued."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay $120.00 to Roncesvalles Physio for Daniel's session on September 11, 2026 under grant g-ama-self-issued."
+  ],
+  "summary_en": "Ama asks to pay $120.00 to Roncesvalles Physio for Daniel's session on September 11, 2026, citing grant g-ama-self-issued.",
+  "evidence": [
+    "Pay $120.00 to Roncesvalles Physio for Daniel's session on September 11, 2026 under grant g-ama-self-issued."
+  ],
+  "confidence": "high"
+}

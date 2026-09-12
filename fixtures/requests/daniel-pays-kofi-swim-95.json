@@ -1,0 +1,24 @@
+{
+  "id": "daniel-pays-kofi-swim-95",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "text",
+  "request": "Pay $95.00 to the Parkdale Community Centre for Kofi's swim lessons before September 20, 2026.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "household",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "parent-for-minor",
+    "payment",
+    "allow",
+    "french"
+  ],
+  "notes": "A guardian pays for his own child; rule:parent-for-minor allows and the executor runs."
+}

@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "kofi",
+  "actor_member_id": "kofi",
+  "skill_id": "allowance",
+  "account_id": "allow-kofi",
+  "confidence": "high",
+  "reasons": [
+    "A child's own allowance is involved, so the allowance skill applies.",
+    "Kofi is the subject: Kofi asks about his own allowance (household_lookup).",
+    "allow-kofi is the account involved."
+  ]
+}

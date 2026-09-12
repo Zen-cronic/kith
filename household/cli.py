@@ -114,6 +114,10 @@ def main(argv: list[str] | None = None) -> int:
     sv.add_argument("--port", type=int, default=8000)
     rl = sub.add_parser("rails", help="show the action rails, their honest labels, and what this environment can complete")
     rl.add_argument("--write-readme", action="store_true", help="regenerate the 'What is real' table in README.md")
+    gr = sub.add_parser("guardrails", help="replay every request fixture through the graph and score the two-rate guardrail scorecard")
+    gr.add_argument("--provider", choices=SELECTABLE, default=None, help="override MODEL_PROVIDER")
+    gr.add_argument("--write-readme", action="store_true", help="regenerate the guardrail metric block in README.md")
+    gr.add_argument("--limit", type=int, default=None, help="replay only the first N fixtures (a cheap live smoke)")
     args = parser.parse_args(argv)
 
     if args.command == "run":
@@ -197,6 +201,18 @@ def main(argv: list[str] | None = None) -> int:
             changed = rails_readme.write_readme()
             print("README.md rails block " + ("regenerated" if changed else "already current"))
         return 0
+    if args.command == "guardrails":
+        from .config import ROOT
+        from .guardrails import harness
+
+        summary = harness.run_guardrails(load_settings(provider=args.provider), limit=args.limit)
+        path = harness.save_results(summary)
+        print(harness.markdown_table(summary))
+        print(f"results: {path.relative_to(ROOT).as_posix() if path.is_relative_to(ROOT) else path}")
+        if args.write_readme:
+            changed = harness.write_readme(summary)
+            print("README.md guardrails block " + ("regenerated" if changed else "already current"))
+        return 0 if summary.out_of_scope_executed == 0 else 1
     if args.command == "serve":
         import uvicorn
 

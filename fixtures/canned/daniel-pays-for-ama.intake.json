@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Ama's physiotherapy session",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$150.00",
+      "quote": "Pay $150.00 to Roncesvalles Physio for Ama's physiotherapy session on September 10, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 10, 2026",
+      "quote": "Pay $150.00 to Roncesvalles Physio for Ama's physiotherapy session on September 10, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay $150.00 to Roncesvalles Physio for Ama's physiotherapy session on September 10, 2026."
+  ],
+  "summary_en": "Daniel asks to pay $150.00 to Roncesvalles Physio for Ama's physiotherapy session on September 10, 2026.",
+  "evidence": [
+    "Pay $150.00 to Roncesvalles Physio for Ama's physiotherapy session on September 10, 2026."
+  ],
+  "confidence": "high"
+}

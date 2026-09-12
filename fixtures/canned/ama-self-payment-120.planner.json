@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "ama",
+      "recipient": "Bloor West Dental",
+      "amount_text": "120.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Bloor West Dental"
+        },
+        {
+          "key": "purpose",
+          "value": "Ama's dental cleaning"
+        },
+        {
+          "key": "due",
+          "value": ""
+        }
+      ],
+      "evidence_refs": [
+        "Pay $120.00 from the household account to Bloor West Dental for my cleaning on September 8, 2026."
+      ],
+      "rationale": "Ama pays her own dental bill; the amount is quoted from the request.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

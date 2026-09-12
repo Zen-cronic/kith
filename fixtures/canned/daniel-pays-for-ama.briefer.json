@@ -1,0 +1,11 @@
+{
+  "headline_en": "The $150.00 for Ama's session is waiting for Ama.",
+  "headline_target": "Les 150,00 $ pour la séance d'Ama attendent Ama.",
+  "done": [],
+  "waiting_on": [
+    "$150.00 to Roncesvalles Physio for Ama's session: waiting for Ama, because she has not given you a payments grant."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Ama to approve it in the app, or to set up a grant.",
+  "next_step_target": "Demandez à Ama de l'approuver dans l'application, ou de créer une autorisation."
+}

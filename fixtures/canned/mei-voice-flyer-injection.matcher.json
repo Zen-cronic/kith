@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "mei",
+  "actor_member_id": "mei",
+  "skill_id": "household",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "A plain payment or email; no domain skill matches, so the core household skill handles it.",
+    "Mei is the subject: the flyer is about Mei's swim club (household_lookup).",
+    "hh-main is the account involved."
+  ]
+}

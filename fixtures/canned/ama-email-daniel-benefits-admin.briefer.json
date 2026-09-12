@@ -1,0 +1,13 @@
+{
+  "headline_en": "Emailed Daniel's benefits administrator for the plan booklet.",
+  "headline_target": "Emailed Daniel's benefits administrator for the plan booklet.",
+  "done": [
+    "Email to benefits@northshore.example.test asking for the 2026 dental plan booklet for plan ML-7, under Daniel's benefits grant to you (simulated receipt in this demo)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Nothing else to do right now.",
+  "next_step_target": "Nothing else to do right now."
+}
