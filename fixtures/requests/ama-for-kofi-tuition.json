@@ -1,0 +1,23 @@
+{
+  "id": "ama-for-kofi-tuition",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay Kofi's band program fee of $180.00 to the Toronto District School Board before September 30, 2026.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "household",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "hero",
+    "parent-for-minor",
+    "payment",
+    "allow"
+  ],
+  "notes": "A guardian pays for their own child; rule:parent-for-minor allows and the executor runs."
+}

@@ -1,0 +1,34 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "daniel",
+      "recipient": "Toronto Youth Wind Orchestra",
+      "amount_text": "450.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Toronto Youth Wind Orchestra"
+        },
+        {
+          "key": "purpose",
+          "value": "Daniel's band trip deposit"
+        },
+        {
+          "key": "due",
+          "value": "September 25, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.",
+        "Daniel asked me to handle it under his payments grant g-daniel-ama-payments."
+      ],
+      "rationale": "Ama pays Daniel's band trip deposit as he asked, under his payments grant g-daniel-ama-payments.",
+      "claimed_grant_id": "g-daniel-ama-payments"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

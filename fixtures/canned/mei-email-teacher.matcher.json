@@ -1,0 +1,11 @@
+{
+  "subject_member_id": "mei",
+  "actor_member_id": "mei",
+  "skill_id": "household",
+  "account_id": "",
+  "confidence": "high",
+  "reasons": [
+    "A plain email about Mei's own practice; no domain skill matches, so the core household skill handles it.",
+    "Mei is a minor with guardians ama and daniel (household_lookup)."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Mei Okafor-Lim (member mei)",
+  "subject_hint": "Mei's note to her teacher",
+  "amounts": [],
+  "dates": [
+    {
+      "label": "missed practice date",
+      "date_text": "Thursday, September 17, 2026",
+      "quote": "Please email my teacher Ms. Park at park@school.example.test that I will miss swim practice on Thursday, September 17, 2026 because of my dentist appointment."
+    }
+  ],
+  "transcribed_lines": [
+    "Please email my teacher Ms. Park at park@school.example.test that I will miss swim practice on Thursday, September 17, 2026 because of my dentist appointment."
+  ],
+  "summary_en": "Mei asks to email her teacher Ms. Park at park@school.example.test that she will miss swim practice on Thursday, September 17, 2026 because of a dentist appointment.",
+  "evidence": [
+    "Please email my teacher Ms. Park at park@school.example.test that I will miss swim practice on Thursday, September 17, 2026 because of my dentist appointment."
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Kofi's band program fee",
+  "amounts": [
+    {
+      "label": "band program fee",
+      "amount_text": "$180.00",
+      "quote": "Pay Kofi's band program fee of $180.00 to the Toronto District School Board before September 30, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "pay before",
+      "date_text": "September 30, 2026",
+      "quote": "Pay Kofi's band program fee of $180.00 to the Toronto District School Board before September 30, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay Kofi's band program fee of $180.00 to the Toronto District School Board before September 30, 2026."
+  ],
+  "summary_en": "Ama asks to pay Kofi's $180.00 band program fee to the Toronto District School Board before September 30, 2026.",
+  "evidence": [
+    "Pay Kofi's band program fee of $180.00 to the Toronto District School Board before September 30, 2026."
+  ],
+  "confidence": "high"
+}

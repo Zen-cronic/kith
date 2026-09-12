@@ -2,23 +2,15 @@
 
 from __future__ import annotations
 
+import json
 from typing import Any, TypeVar
 
 from pydantic import BaseModel
 
-from ..schemas import CriticVerdict, DocumentReading, Draft, Interpretation, NextStepCard
+from ..model import Household
+from ..schemas import ActionPlan, AuthorityVerdict, Briefing, CaseAssignment, ExecutionReport, IntakeReading
 
 T = TypeVar("T", bound=BaseModel)
-
-
-def reading_text(reading: DocumentReading) -> str:
-    """The exact English text the interpreter renders and the fidelity score compares against."""
-    parts = [reading.title.rstrip(".") + ".", reading.what_it_is.strip(), reading.what_it_asks.strip()]
-    if reading.deadlines:
-        parts.append("Dates: " + "; ".join(f"{d.label}: {d.date_text}" for d in reading.deadlines) + ".")
-    if reading.amounts:
-        parts.append("Amounts: " + ", ".join(reading.amounts) + ".")
-    return " ".join(p for p in parts if p)
 
 
 def structured_from_node(node_result: Any, schema: type[T]) -> T | None:
@@ -38,21 +30,63 @@ def state_output(state: Any, node_id: str, schema: type[T]) -> T | None:
     return structured_from_node(state.results.get(node_id), schema)
 
 
-def reading_of(state: Any) -> DocumentReading | None:
-    return state_output(state, "reader", DocumentReading)
+def reading_of(state: Any) -> IntakeReading | None:
+    return state_output(state, "intake", IntakeReading)
 
 
-def interpretation_of(state: Any) -> Interpretation | None:
-    return state_output(state, "interpreter", Interpretation)
+def assignment_of(state: Any) -> CaseAssignment | None:
+    return state_output(state, "matcher", CaseAssignment)
 
 
-def draft_of(state: Any) -> Draft | None:
-    return state_output(state, "drafter", Draft)
+def plan_of(state: Any) -> ActionPlan | None:
+    return state_output(state, "planner", ActionPlan)
 
 
-def verdict_of(state: Any) -> CriticVerdict | None:
-    return state_output(state, "critic", CriticVerdict)
+def verdict_of(state: Any) -> AuthorityVerdict | None:
+    return state_output(state, "authority", AuthorityVerdict)
 
 
-def card_of(state: Any) -> NextStepCard | None:
-    return state_output(state, "router", NextStepCard)
+def report_of(state: Any) -> ExecutionReport | None:
+    return state_output(state, "executor", ExecutionReport)
+
+
+def briefing_of(state: Any) -> Briefing | None:
+    return state_output(state, "briefer", Briefing)
+
+
+def snapshot_for(household: Household, subject_id: str) -> dict[str, Any]:
+    """What the planner may see about the subject: their grants (as grantor and grantee), accounts, plans, tuition.
+    PIN material and other members' private data never leave the ledger."""
+    subject = household.member(subject_id)
+    return {
+        "household_id": household.id,
+        "currency": household.currency,
+        "self_confirm_limit": household.self_confirm_limit,
+        "subject": None if subject is None else {
+            "id": subject.id, "name": subject.name, "role": subject.role, "guardians": list(subject.guardians),
+            "email": subject.email, "language": subject.language,
+        },
+        "grants": [
+            g.model_dump(mode="json", exclude={"consent_id"})
+            for g in household.grants
+            if (g.subject_id == subject_id or g.grantee_id == subject_id) and g.status == "active"
+        ],
+        "accounts": [a.model_dump(mode="json") for a in household.accounts if a.owner_member_id == subject_id or a.kind == "household"],
+        "plans": [p for p in household.plans if p.get("member") == subject_id],
+        "tuition": [t for t in household.tuition if t.get("member") == subject_id],
+    }
+
+
+def roster_summary(household: Household) -> list[dict[str, Any]]:
+    """Members without secrets, for the matcher's input."""
+    return [
+        {"id": m.id, "name": m.name, "role": m.role, "guardians": list(m.guardians), "language": m.language,
+         "email": m.email}
+        for m in household.members
+    ]
+
+
+def dumps(value: Any) -> str:
+    if isinstance(value, BaseModel):
+        return value.model_dump_json()
+    return json.dumps(value, ensure_ascii=False, default=str)

@@ -1,0 +1,23 @@
+{
+  "id": "kofi-allowance-8",
+  "household_id": "demo",
+  "actor_member_id": "kofi",
+  "channel": "text",
+  "request": "Can I take $8.00 from my allowance for the book fair on Friday, September 18, 2026?",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "allowance",
+    "allow": [
+      "allowance:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "hero",
+    "minor",
+    "allowance",
+    "allow"
+  ],
+  "notes": "Route (a): a minor spends within their own allowance rule; rule:minor-allowance allows and the executor runs."
+}

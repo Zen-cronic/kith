@@ -1,0 +1,15 @@
+{
+  "headline_en": "Paid $300.00 of the $450.00 deposit; $150.00 is waiting for Daniel.",
+  "headline_target": "Paid $300.00 of the $450.00 deposit; $150.00 is waiting for Daniel.",
+  "done": [
+    "$300.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, under Daniel's payments grant to you (simulated receipt: no real money moves in this demo)."
+  ],
+  "waiting_on": [
+    "$150.00 more for the same deposit: waiting for Daniel, because his grant to you covers $300.00 per month."
+  ],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Ask Daniel to approve the remaining $150.00 in the app before September 25, 2026.",
+  "next_step_target": "Ask Daniel to approve the remaining $150.00 in the app before September 25, 2026."
+}

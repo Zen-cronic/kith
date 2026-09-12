@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "mei",
+      "recipient": "park@school.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Mei will miss swim practice on Thursday, September 17, 2026"
+        },
+        {
+          "key": "body",
+          "value": "Dear Ms. Park, I will miss swim practice on Thursday, September 17, 2026 because of my dentist appointment. Thank you, Mei"
+        }
+      ],
+      "evidence_refs": [
+        "Please email my teacher Ms. Park at park@school.example.test that I will miss swim practice on Thursday, September 17, 2026 because of my dentist appointment."
+      ],
+      "rationale": "Mei asked for one email to her teacher with the date and reason she gave.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

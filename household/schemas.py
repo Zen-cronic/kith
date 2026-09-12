@@ -1,12 +1,15 @@
-"""Typed contracts between the five agents. Each agent returns exactly one of these through Strands structured output."""
+"""Typed contracts between the six agents. Each agent returns exactly one of these through Strands structured output.
+
+Every output is flat: lists are non-null, nested items are small flat records, and there are no Literal unions inside
+lists (Nova rejects them). Anything that must be *true* (an action type, a rail, an outcome) is validated in code
+after the model returns it; the schema only guarantees shape.
+"""
 
 from __future__ import annotations
 
-from typing import Literal
-
 from pydantic import BaseModel, ConfigDict, Field
 
-Stakes = Literal["high", "medium", "low"]
+from .model import Receipt
 
 
 def _require_nonnullable_output_fields(schema: dict) -> None:
@@ -14,7 +17,7 @@ def _require_nonnullable_output_fields(schema: dict) -> None:
 
     Its converter marks omitted/defaulted fields nullable. Require explicit values
     in model output, including [] for empty lists, while retaining Python defaults
-    for local callers. Actually nullable fields such as rule_id remain optional.
+    for local callers. Actually nullable fields remain optional.
     """
     required = list(schema.get("required", []))
     for name, prop in schema.get("properties", {}).items():
@@ -30,101 +33,117 @@ class AgentOutput(BaseModel):
     model_config = ConfigDict(json_schema_extra=_require_nonnullable_output_fields)
 
 
-class Deadline(AgentOutput):
-    label: str = Field(description="What the date is, in plain words, e.g. 'termination date stated in the notice'")
-    date_text: str = Field(description="The date exactly as written in the document. Never computed or reformatted.")
-    quote: str = Field(description="Verbatim quote from the document containing this date")
+# Intake
 
 
-class DocumentReading(AgentOutput):
-    """What the document-reader says the document is. Every claim must be backed by a quote."""
-
-    document_class: str = Field(
-        description="Catalogue id such as 'ltb-n4', 'ltb-n1', 'cra-rc66', 'school-letter', 'ircc-letter', "
-        "'court-notice', 'benefits-appointment', 'utility-bill', 'clinic-letter', 'community-notice', 'unknown'"
-    )
-    title: str = Field(description="Plain title of the document, naming the official form if it is one")
-    issuer: str = Field(description="Who sent it")
-    what_it_is: str = Field(description="One or two plain-English sentences a visitor with no legal background understands")
-    what_it_asks: str = Field(description="What the visitor is being asked to do, or 'nothing'")
-    deadlines: list[Deadline] = Field(default_factory=list)
-    amounts: list[str] = Field(default_factory=list, description="Money amounts exactly as written")
-    stakes: Stakes = Field(description="high = legal notice that can lead to eviction, removal, loss of status, court or child protection; "
-                           "medium = money, benefits or an appointment at stake; low = informational or routine")
-    stakes_reason: str
-    evidence: list[str] = Field(description="Verbatim quotes from the document that support the classification")
-    confidence: float = Field(ge=0, le=1)
+class AmountItem(AgentOutput):
+    label: str = Field(description="What the amount is, in plain words, e.g. 'billed by the dentist'")
+    amount_text: str = Field(description="The amount exactly as written, e.g. '$180.00'. Never computed or reformatted.")
+    quote: str = Field(description="Verbatim line from the request or document containing this amount")
 
 
-class FlaggedTerm(AgentOutput):
-    term: str
-    note: str = Field(description="Why it does not map cleanly and how it was rendered")
+class DateItem(AgentOutput):
+    label: str = Field(description="What the date is, e.g. 'service date' or 'due date'")
+    date_text: str = Field(description="The date exactly as written. Never computed or reformatted.")
+    quote: str = Field(description="Verbatim line from the request or document containing this date")
 
 
-class Interpretation(AgentOutput):
-    """The reading, rendered in the visitor's language, plus an independent back-translation for verification."""
+class IntakeReading(AgentOutput):
+    """What came in: a typed request, a photo, a PDF. Every amount and date is quoted, never inferred."""
 
-    language: str = Field(description="Target language code, e.g. 'es'")
-    target_text: str = Field(description="The reading text in the visitor's language, plain and spoken-register")
-    back_translation: str = Field(
-        description="English back-translation of target_text produced WITHOUT looking at the English source "
-        "(use the back_translate tool and copy its output verbatim)"
-    )
-    flagged_terms: list[FlaggedTerm] = Field(default_factory=list)
-
-
-class PreparationStep(AgentOutput):
-    instruction_en: str = Field(description="One short instruction for completing the ORIGINAL document. No blank form fields, salutation, signature or claim of completed action.")
-    instruction_target: str = Field(description="The same instruction in the visitor language. Keep payee names unchanged.")
-    source_quote: str = Field(description="Verbatim source excerpt supporting this instruction")
+    document_class: str = Field(description="'text-request', 'dental-eob', 'tuition-invoice', 'allowance-note', 'recall-notice', 'unknown'")
+    issuer: str = Field(description="Who wrote it: the member speaking, or the institution on the document")
+    subject_hint: str = Field(description="Who it seems to be about, in plain words, or '' when unclear")
+    amounts: list[AmountItem] = Field(default_factory=list)
+    dates: list[DateItem] = Field(default_factory=list)
+    transcribed_lines: list[str] = Field(default_factory=list, description="Lines copied verbatim from the input")
+    summary_en: str = Field(description="One or two plain-English sentences saying what is being asked")
+    evidence: list[str] = Field(default_factory=list, description="Verbatim quotes supporting the classification")
+    confidence: str = Field(description="'high', 'medium' or 'low'")
 
 
-class Draft(AgentOutput):
-    kind: Literal["reply-letter", "form-checklist", "note-for-staff", "none"]
-    title: str
-    body_en: str
-    body_target: str = Field(description="The same draft in the visitor's language")
-    preparation_steps: list[PreparationStep] = Field(default_factory=list, description="For form-checklist: concrete steps for the original form, covering its fields, visitor choices, return instructions and support options. The app renders these steps as the takeaway. For other kinds: [].")
-    facts_used: list[str] = Field(description="Facts taken from the document, quoted")
-    assumptions: list[str] = Field(
-        default_factory=list,
-        description="Anything stated that is NOT in the document and was not supplied by the visitor. Must be empty for an approvable draft.",
-    )
-    revision: int = 1
+# Matcher
 
 
-class CriticCheck(AgentOutput):
-    name: str
-    passed: bool
-    detail: str
+class CaseAssignment(AgentOutput):
+    """Who this is about, who is asking, which skill handles it, and which account is involved."""
 
-
-class CriticVerdict(AgentOutput):
-    """The confidence/refusal critic's decision. 'revise' sends the draft back to the drafter; 'refuse' ends drafting and escalates."""
-
-    decision: Literal["approve", "revise", "refuse"]
-    rule_id: str | None = Field(default=None, description="Rule id from lookup_rule, when the decision rests on a rule")
-    checks: list[CriticCheck] = Field(default_factory=list)
+    subject_member_id: str = Field(description="Member id whose affairs this concerns")
+    actor_member_id: str = Field(description="Member id who is asking (the session actor)")
+    skill_id: str = Field(description="Skill id from the list given, or 'household' for a plain payment or email")
+    account_id: str = Field(description="Household account id involved, or '' when none")
+    confidence: str = Field(description="'high', 'medium' or 'low'")
     reasons: list[str] = Field(default_factory=list)
-    revision_notes: list[str] = Field(default_factory=list, description="Concrete fixes for the drafter when decision is 'revise'")
 
 
-class NextStepCard(AgentOutput):
-    """What the visitor leaves with. Both languages, always. Printable as a one-page summary."""
+# Planner
 
-    outcome: Literal["proceed", "escalate"]
+
+class PayloadField(AgentOutput):
+    key: str
+    value: str
+
+
+class ProposedAction(AgentOutput):
+    """One action the planner proposes. It is a proposal only: code assigns the id, the actor and the idempotency key,
+    and code decides whether it may run."""
+
+    action_type: str = Field(description="One of the action types listed in the skill block, e.g. 'allowance:transfer'")
+    rail: str = Field(description="The rail named by the template, e.g. 'internal-ledger'")
+    subject_member_id: str = Field(description="Member id whose affairs the action concerns")
+    recipient: str = Field(description="Email address, account id or payee exactly as given, or '' when none")
+    amount_text: str = Field(description="Decimal amount as a plain number string such as '8.00', or '' when no money moves")
+    currency: str = Field(description="Currency code, normally 'CAD'")
+    payload: list[PayloadField] = Field(default_factory=list, description="Template fields, e.g. memo, subject, body")
+    evidence_refs: list[str] = Field(default_factory=list, description="Verbatim quotes from the intake that justify the action")
+    rationale: str = Field(description="One sentence saying why this action follows from the request and the rules")
+    claimed_grant_id: str = Field(description="Grant id the requester cites, or '' when none is cited")
+
+
+class ActionPlan(AgentOutput):
+    actions: list[ProposedAction] = Field(default_factory=list)
+    needs: list[str] = Field(default_factory=list, description="Facts still missing or unverified; nothing is proposed on them")
+    notes: list[str] = Field(default_factory=list)
+
+
+# Authority
+
+
+class DecisionEcho(AgentOutput):
+    """The check_authority result, echoed exactly. The code recomputes it afterwards; a mismatch is recorded."""
+
+    action_id: str
+    outcome: str = Field(description="'allow', 'block' or 'needs-approval', exactly as the tool returned it")
+    rule_id: str = Field(description="The rule id the tool returned")
+    grant_id: str = Field(description="The grant or rule the tool cited, or '' when none")
+    approver_ids: list[str] = Field(default_factory=list)
+    reasons: list[str] = Field(default_factory=list)
+
+
+class AuthorityVerdict(AgentOutput):
+    decisions: list[DecisionEcho] = Field(default_factory=list)
+    verdict: str = Field(description="'proceed' when at least one action is allowed and no revision is needed; "
+                         "'revise' to send the plan back once with the reasons; 'stop' when nothing may proceed")
+
+
+# Executor
+
+
+class ExecutionReport(AgentOutput):
+    receipts: list[Receipt] = Field(default_factory=list, description="Receipts exactly as execute_action returned them")
+    skipped: list[str] = Field(default_factory=list, description="Action ids that were not executed, with no receipt")
+
+
+# Briefer
+
+
+class Briefing(AgentOutput):
+    """What the member hears at the end, in English and in their own language."""
+
     headline_en: str
-    headline_target: str
-    statement_en: str = Field(description="For escalate: the refusal statement with the rule named. For proceed: what was done.")
-    statement_target: str
-    rule_citation: str | None = None
-    who: str = Field(description="The named human role the visitor is handed to, or who acts next")
-    who_target: str = Field(min_length=1, description="Who acts next, in the visitor's language; same role as who")
+    headline_target: str = Field(min_length=1, description="The headline in the member's language")
+    done: list[str] = Field(default_factory=list, description="One line per completed action, naming its receipt label")
+    waiting_on: list[str] = Field(default_factory=list, description="One line per action waiting on a named approver")
+    labels: list[str] = Field(default_factory=list, description="Receipt modes shown, e.g. 'SIMULATED', 'PREPARE-ONLY'")
     next_step_en: str
-    next_step_target: str
-    when: str = Field(description="Document deadline verbatim, or state that staff availability is not confirmed. Never invent a service time.")
-    when_target: str = Field(min_length=1, description="The same deadline or unconfirmed availability in the visitor's language; preserve source date characters")
-    safe_today_en: str = Field(description="The one safe thing the visitor can do today, taken from the document itself")
-    safe_today_target: str
-    summary_en: str = Field(description="One-page printable summary: what the letter is, its deadline, the safe thing, who to see")
-    summary_target: str
+    next_step_target: str = Field(min_length=1)

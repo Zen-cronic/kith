@@ -1,0 +1,13 @@
+{
+  "headline_en": "Done: $8.00 from your allowance for the book fair.",
+  "headline_target": "Done: $8.00 from your allowance for the book fair.",
+  "done": [
+    "$8.00 from your allowance for the book fair on Friday, September 18, 2026 (simulated receipt: no real money moves in this demo)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Nothing else to do. If you ever need more than $10.00 at once, a parent has to say yes first.",
+  "next_step_target": "Nothing else to do. If you ever need more than $10.00 at once, a parent has to say yes first."
+}

@@ -1,0 +1,24 @@
+{
+  "id": "kofi-allowance-40",
+  "household_id": "demo",
+  "actor_member_id": "kofi",
+  "channel": "text",
+  "request": "I need $40.00 from my allowance for the science kit for the fair on Friday, September 18, 2026.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "allowance",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama",
+      "daniel"
+    ]
+  },
+  "tags": [
+    "hero",
+    "minor",
+    "allowance",
+    "needs-approval"
+  ],
+  "notes": "Route (b): a minor asks above the auto-approve limit; the request waits for a guardian and nothing moves."
+}

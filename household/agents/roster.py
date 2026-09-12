@@ -1,16 +1,19 @@
-"""The roster: five named Strands agents with one job each. Shown on one screen in the UI and in `household run`."""
+"""The roster: six named Strands agents with one job each. Shown on one screen in the UI and in `household run`."""
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import datetime
 
 from pydantic import BaseModel
 from strands import Agent
 from strands.models import Model
 
 from ..config import Settings
-from ..languages import Language
-from ..schemas import CriticVerdict, DocumentReading, Draft, Interpretation, NextStepCard
+from ..model import Household, Member
+from ..schemas import ActionPlan, AuthorityVerdict, Briefing, CaseAssignment, ExecutionReport, IntakeReading
+from ..skills import SKILL_TOOL_NAMES
 from . import prompts
 from .tools import SessionRecord, make_tools
 
@@ -26,33 +29,45 @@ class AgentSpec:
 
 
 ROSTER: tuple[AgentSpec, ...] = (
-    AgentSpec("reader", "Document reader", "Reads the letter, quotes every date and amount, names the form", DocumentReading, False, ()),
-    AgentSpec("interpreter", "Interpreter", "Says it in the visitor's language, then back-translates it with a fresh agent", Interpretation, False, ("back_translate",)),
-    AgentSpec("drafter", "Form drafter", "Drafts the reply or checklist from quoted facts only; blanks, never guesses", Draft, False, ()),
-    AgentSpec("critic", "Confidence / refusal critic", "Looks up the rule and the fidelity score; approves, sends the draft back, or refuses", CriticVerdict, True, ("lookup_rule", "score_fidelity")),
-    AgentSpec("router", "Escalation router", "Writes the bilingual card: who, what next, when, the one safe thing today", NextStepCard, False, ("rule_text",)),
+    AgentSpec("intake", "Intake reader", "Reads the photo, PDF or typed request; quotes every amount and date; names the document", IntakeReading, False, ()),
+    AgentSpec("matcher", "Case matcher", "Says who this is about and which skill applies, looking the household up", CaseAssignment, False, ("household_lookup",)),
+    AgentSpec("planner", "Planner", "Proposes actions from the matched skill's rules; never sends, pays or files", ActionPlan, False, SKILL_TOOL_NAMES),
+    AgentSpec("authority", "Authority", "Checks every proposal against the ledger in code; can send the plan back", AuthorityVerdict, True, ("check_authority",)),
+    AgentSpec("executor", "Executor", "Runs only allowed actions through the rails and returns receipts", ExecutionReport, False, ("execute_action",)),
+    AgentSpec("briefer", "Briefer", "Tells the member what happened and what is waiting on whom, in their language", Briefing, False, ("grant_text",)),
 )
 
 SPEC_BY_ID = {spec.id: spec for spec in ROSTER}
 
 
-def system_prompt_for(spec: AgentSpec, language: Language) -> str:
+def system_prompt_for(spec: AgentSpec, actor: Member) -> str:
     return {
-        "reader": prompts.READER,
-        "interpreter": prompts.interpreter(language),
-        "drafter": prompts.drafter(language),
-        "critic": prompts.CRITIC,
-        "router": prompts.router(language),
+        "intake": prompts.INTAKE,
+        "matcher": prompts.matcher(),
+        "planner": prompts.PLANNER,
+        "authority": prompts.AUTHORITY,
+        "executor": prompts.EXECUTOR,
+        "briefer": prompts.briefer(actor.language),
     }[spec.id]
 
 
-def build_agents(model: Model, settings: Settings, language: Language, record: SessionRecord) -> dict[str, Agent]:
-    tools = make_tools(model, settings, record)
+def build_agents(
+    model_for: Callable[[str], Model] | Model,
+    settings: Settings,
+    household: Household,
+    actor: Member,
+    record: SessionRecord,
+    now: datetime | None = None,
+) -> dict[str, Agent]:
+    """One Agent per roster spec. `model_for(node_id)` returns that node's (budgeted) model; a bare Model is used
+    for every node."""
+    tools = make_tools(household, actor, settings, record, now)
     agents: dict[str, Agent] = {}
     for spec in ROSTER:
+        model = model_for(spec.id) if callable(model_for) else model_for
         agents[spec.id] = Agent(
             model=model,
-            system_prompt=system_prompt_for(spec, language),
+            system_prompt=system_prompt_for(spec, actor),
             structured_output_model=spec.schema,
             tools=[tools[name] for name in spec.tools],
             callback_handler=None,

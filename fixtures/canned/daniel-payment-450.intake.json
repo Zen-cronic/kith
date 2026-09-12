@@ -1,0 +1,29 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Daniel's band trip deposit",
+  "amounts": [
+    {
+      "label": "deposit to pay",
+      "amount_text": "$450.00",
+      "quote": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "deposit due date",
+      "date_text": "September 25, 2026",
+      "quote": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.",
+    "Daniel asked me to handle it under his payments grant g-daniel-ama-payments."
+  ],
+  "summary_en": "Ama asks to pay a $450.00 band trip deposit for Daniel to the Toronto Youth Wind Orchestra by September 25, 2026, citing Daniel's payments grant g-daniel-ama-payments.",
+  "evidence": [
+    "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.",
+    "Daniel asked me to handle it under his payments grant g-daniel-ama-payments."
+  ],
+  "confidence": "high"
+}
