@@ -151,8 +151,19 @@ def raw_fixture(store: FixtureStore, fixture_id: str) -> dict[str, Any]:
 
 
 def image_path(store: FixtureStore, fixture: RequestFixture) -> Path | None:
+    """Either fixture shape: the loader's `image_id` (fixtures/images/<id>.png, attached by the pipeline itself) or a
+    top-level `image` path that the harness must attach as the upload."""
+    if fixture.image_id:
+        return store.images_dir() / f"{fixture.image_id}.png"
     image = raw_fixture(store, fixture.id).get("image")
     return ROOT / str(image) if image else None
+
+
+def upload_for(store: FixtureStore, fixture: RequestFixture) -> Path | None:
+    """The upload the pipeline should read for a photo fixture that names an image path; `image_id` fixtures need none."""
+    if fixture.channel != "photo" or fixture.image_id:
+        return None
+    return image_path(store, fixture)
 
 
 def classes_of(fixture: RequestFixture) -> list[str]:
@@ -394,7 +405,10 @@ def score_one(fixture: RequestFixture, settings: Settings, store: FixtureStore) 
         try:
             household = store.household(fixture.household_id)
             apply_overrides(household, fixture.overrides, CLOCK)
-            results = [run_session(fixture, settings=settings, store=store, household=household, now=CLOCK) for _ in range(replay_count(fixture))]
+            results = [
+                run_session(fixture, settings=settings, store=store, household=household, now=CLOCK, upload=upload_for(store, fixture))
+                for _ in range(replay_count(fixture))
+            ]
             return score(fixture, results, settings)
         except Exception as exc:  # noqa: BLE001 - a live sweep must survive any single provider hiccup
             last = exc
