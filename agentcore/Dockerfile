@@ -16,8 +16,15 @@ RUN poetry install --only main --no-interaction --no-ansi \
     && rm -rf /tmp/poetry-cache \
     && useradd --uid 10001 --create-home household
 
-# Safe local/container default. Set the chosen provider explicitly on deployment.
-ENV MODEL_PROVIDER=fake MAX_MODEL_CALLS=20 OTEL_SDK_DISABLED=true
+# Live household defaults; the deploy plan sets the same values on the Runtime, and the local image verifier
+# overrides MODEL_PROVIDER=fake / EXECUTION_MODE=simulated so its fixture proof stays offline and deterministic.
+ENV MODEL_PROVIDER=bedrock \
+    BEDROCK_MODEL_ID=us.amazon.nova-2-lite-v1:0 \
+    NODE_MODELS=intake=bedrock:us.amazon.nova-pro-v1:0 \
+    SONIC_MODEL_ID=amazon.nova-2-sonic-v1:0 \
+    EXECUTION_MODE=live \
+    MAX_MODEL_CALLS=30 \
+    OTEL_SDK_DISABLED=true
 USER household
 EXPOSE 8080
 CMD ["python", "agentcore/app.py"]

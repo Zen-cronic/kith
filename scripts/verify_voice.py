@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import os
 import sys
 import threading
 import time
@@ -175,10 +176,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--receipt", default=str(RECEIPT))
     parser.add_argument("--docs-copy", default=None, help="also write the receipt here (e.g. docs/receipts/voice-<date>.json)")
     parser.add_argument("--timeout", type=float, default=60.0, help="seconds to wait for each turn to settle")
+    parser.add_argument("--backend", default=os.environ.get("SESSION_BACKEND", "local"), choices=["local", "agentcore", "runtime-http"],
+                        help="the session backend the target web server is configured with; the relay is transparent, so this only labels the receipt")
     args = parser.parse_args(argv)
 
     receipt: dict[str, Any] = {
-        "status": "failed", "at": datetime.now(UTC).isoformat(), "url": args.url, "member": args.member,
+        "status": "failed", "at": datetime.now(UTC).isoformat(), "url": args.url, "backend": args.backend, "member": args.member,
         "text_only": args.text_only, "wav": None if args.text_only else str(Path(args.wav).relative_to(ROOT) if Path(args.wav).is_relative_to(ROOT) else args.wav),
         "checks": [], "turns": [], "fallback": None, "frame_counts": {}, "max_frame_bytes": 0, "closed": None,
     }

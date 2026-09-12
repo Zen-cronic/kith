@@ -51,7 +51,30 @@ def build_router(store: LedgerStore | None = None, settings: Settings | None = N
             await ws.accept()
             await ws.close(code=1008, reason="unknown household")
             return
-        await handle_voice_session(ws, household, ledger, resolved, uploads_dir=uploads_dir)
+        from ..web.runtime import RuntimeFailure, runtime_target
+        try:
+            target = runtime_target()
+        except RuntimeFailure as exc:
+            await ws.accept()
+            await ws.close(code=1011, reason=exc.detail[:120])
+            return
+        if target.backend == "local":
+            await handle_voice_session(ws, household, ledger, resolved, uploads_dir=uploads_dir)
+            return
+        # Non-local backend: identify web-side (the ledger and PINs never leave this tier), then relay the socket to
+        # the Runtime /ws. The Runtime sends the `identified` frame back through the relay once it has the actor.
+        from ..voice.identify import IdentificationFailed, identify
+        from ..web.voice_relay import relay_voice_session
+
+        async def _close(code: int, reason: str) -> None:
+            await ws.close(code=code, reason=reason)
+
+        await ws.accept()
+        try:
+            member = await identify(ws.receive_text, ws.send_json, _close, household)
+        except IdentificationFailed:
+            return
+        await relay_voice_session(ws, target, household, member)
 
     return router
 

@@ -1,0 +1,135 @@
+{
+  "at": "2026-09-12",
+  "summary": "Household AgentCore Runtime deploy PLAN, paused at human gate H6 (awaiting_approval). No AWS resource created/modified/deleted.",
+  "region": "us-east-1",
+  "sourceCommit": "d3dd863ca40fdfcd1bd545631ef19392c3a096f5",
+  "imageId": "sha256:569c1c6339ffddd1d4bd4100fe2357e247284193f3efc6e8c0ba8279a08af58c",
+  "imageBytes": 179361470,
+  "platform": "linux/arm64",
+  "resources": {
+    "ecrRepository": "bedrock-agentcore-household-preview",
+    "iamRole": "AmazonBedrockAgentCoreHouseholdPreview",
+    "iamPolicyName": "HouseholdRuntime",
+    "agentRuntimeName": "household_preview"
+  },
+  "iamPolicy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "PullImage",
+        "Effect": "Allow",
+        "Action": [
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer"
+        ],
+        "Resource": "arn:aws:ecr:us-east-1:ACCOUNT_ID:repository/bedrock-agentcore-household-preview"
+      },
+      {
+        "Sid": "EcrAuth",
+        "Effect": "Allow",
+        "Action": "ecr:GetAuthorizationToken",
+        "Resource": "*"
+      },
+      {
+        "Sid": "LogGroup",
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:DescribeLogStreams"
+        ],
+        "Resource": "arn:aws:logs:us-east-1:ACCOUNT_ID:log-group:/aws/bedrock-agentcore/runtimes/household_preview-*"
+      },
+      {
+        "Sid": "LogStream",
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource": "arn:aws:logs:us-east-1:ACCOUNT_ID:log-group:/aws/bedrock-agentcore/runtimes/household_preview-*:log-stream:*"
+      },
+      {
+        "Sid": "InvokeModels",
+        "Effect": "Allow",
+        "Action": [
+          "bedrock:InvokeModel",
+          "bedrock:InvokeModelWithResponseStream",
+          "bedrock:InvokeModelWithBidirectionalStream"
+        ],
+        "Resource": [
+          "arn:aws:bedrock:us-east-1:ACCOUNT_ID:inference-profile/us.amazon.nova-pro-v1:0",
+          "arn:aws:bedrock:us-east-1:ACCOUNT_ID:inference-profile/us.amazon.nova-2-lite-v1:0",
+          "arn:aws:bedrock:*::foundation-model/amazon.nova-pro-v1:0",
+          "arn:aws:bedrock:*::foundation-model/amazon.nova-2-lite-v1:0",
+          "arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-2-sonic-v1:0"
+        ]
+      }
+    ]
+  },
+  "iamTrust": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "bedrock-agentcore.amazonaws.com"
+        },
+        "Action": "sts:AssumeRole",
+        "Condition": {
+          "StringEquals": {
+            "aws:SourceAccount": "ACCOUNT_ID"
+          },
+          "ArnLike": {
+            "aws:SourceArn": "arn:aws:bedrock-agentcore:us-east-1:ACCOUNT_ID:runtime/household_preview-*"
+          }
+        }
+      }
+    ]
+  },
+  "runtimeConfig": {
+    "network": {
+      "networkMode": "PUBLIC"
+    },
+    "protocol": {
+      "serverProtocol": "HTTP"
+    },
+    "lifecycle": {
+      "idleRuntimeSessionTimeout": 300,
+      "maxLifetime": 1800
+    },
+    "environment": {
+      "MODEL_PROVIDER": "bedrock",
+      "BEDROCK_MODEL_ID": "us.amazon.nova-2-lite-v1:0",
+      "NODE_MODELS": "intake=bedrock:us.amazon.nova-pro-v1:0",
+      "SONIC_MODEL_ID": "amazon.nova-2-sonic-v1:0",
+      "EXECUTION_MODE": "live",
+      "MAX_MODEL_CALLS": "30",
+      "OTEL_SDK_DISABLED": "true",
+      "AWS_REGION": "us-east-1"
+    }
+  },
+  "readOnlyAwsChecks": {
+    "callerIdentity": "sts get-caller-identity: account ACCOUNT_ID, user hackathon-deploy",
+    "iamSimulate": {
+      "bedrock-agentcore:InvokeAgentRuntimeWithWebSocketStream": "allowed",
+      "bedrock-agentcore:CreateAgentRuntime": "allowed",
+      "iam:CreateRole": "allowed",
+      "iam:PutRolePolicy": "allowed",
+      "ecr:CreateRepository": "allowed"
+    }
+  },
+  "imageVerifierChecks": [
+    "limit30: non-root ARM64 image starts with read-only root and healthy ping",
+    "metadata reports fake provider, Memory off, simulated mode, rails and skills digest",
+    "actual image SSE: kofi-allowance-8 => executed",
+    "actual image SSE: kofi-allowance-40 => needs-approval",
+    "actual image SSE: daniel-payment-450 => partial",
+    "ad-hoc typed request accepted by installed image",
+    "missing request returns an explicit error",
+    "exact source/static/fixture allowlist present; no history, credentials or harness files",
+    "installed main dependency versions match lock; voice/Bedrock ARM64 wheels and 46 fixtures present",
+    "limit3: non-root ARM64 image starts with read-only root and healthy ping",
+    "typed call-limit exhaustion with no result; payload cannot raise server limit"
+  ],
+  "imageVerifierElapsedSeconds": 109.4
+}

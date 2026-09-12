@@ -316,18 +316,26 @@ async def handle_voice_session(
     uploads_dir: Path | None = None,
     session_seconds: float = MAX_SESSION_SECONDS,
     now: datetime | None = None,
+    accepted: bool = False,
+    member: Member | None = None,
 ) -> None:
-    """Accept the socket, identify the member, run Sonic (or the text fallback) until stop, disconnect or timeout."""
-    await ws.accept()
+    """Accept the socket, identify the member, run Sonic (or the text fallback) until stop, disconnect or timeout.
+
+    `accepted` skips `ws.accept()` when the caller already accepted the socket (the AgentCore `/ws` handler reads a
+    `session_open` frame first). `member`, when given, is an actor the caller already authenticated (PIN checks stay
+    on the web tier that holds the ledger), so the on-socket PIN identify step is skipped."""
+    if not accepted:
+        await ws.accept()
     session = VoiceSession(ws=ws, household=household, ledger=store, settings=settings)
     session.start_sender()
     closed = False
     try:
-        try:
-            member = await identify(ws.receive_text, session.send, session.close, household)
-        except IdentificationFailed:
-            closed = True
-            return
+        if member is None:
+            try:
+                member = await identify(ws.receive_text, session.send, session.close, household)
+            except IdentificationFailed:
+                closed = True
+                return
         session.member = member
         record = VoiceRecord(session_id=session.session_id)
         hook = AuthorityHook(VOICE_TOOL_NAMES, guard=voice_guard(member), on_veto=lambda veto: session.emit(veto_frame(veto)))
