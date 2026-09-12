@@ -1,0 +1,19 @@
+{
+  "id": "ltb-brochure-hearing-info",
+  "title": "LTB brochure - what to expect at your hearing (information sheet)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard negative: mentions the LTB, hearings and interpreters but is an information sheet, not a notice. Wording of the interpreter sentence follows the LTB brochure.",
+  "summary_en": "An information sheet from the Landlord and Tenant Board describing how hearings work, mediation, and interpreters; it is not a notice about this person.",
+  "text": "Landlord and Tenant Board - Information for parties\nWhat to expect at your hearing\nMost LTB hearings are held by video. A Notice of Hearing tells you the date, time and how to join. Before the hearing you may be offered mediation with a Board mediator; you do not have to agree to anything.\nInterpreters: The LTB does not usually provide interpreters for languages other than French or English. If you want an interpreter with you at the hearing, then you are expected to arrange for someone to interpret for you.\nLegal help: Tenants may be eligible for free help from a community legal clinic through Legal Aid Ontario.\nThis sheet is general information, not legal advice.\n",
+  "expected": {
+    "document_class": "community-notice",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "hard-negative",
+    "synthetic",
+    "trapset"
+  ]
+}

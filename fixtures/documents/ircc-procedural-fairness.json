@@ -1,0 +1,18 @@
+{
+  "id": "ircc-procedural-fairness",
+  "title": "IRCC procedural fairness letter - concern about misrepresentation",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of a procedural fairness letter for test purposes only.",
+  "summary_en": "IRCC says it has concerns about employment letters in a permanent residence application and gives 30 days to respond before a decision; a finding of misrepresentation could mean a five-year ban.",
+  "text": "Immigration, Refugees and Citizenship Canada\nRe: Application for permanent residence - Procedural Fairness\nDate: September 1, 2026\nDear Applicant,\nThis letter is to advise you of concerns regarding your application. Verification of the employment reference letter submitted from your former employer could not confirm the position or the dates of employment stated.\nUnder section 40 of the Immigration and Refugee Protection Act, a foreign national is inadmissible for misrepresentation if they directly or indirectly misrepresent or withhold material facts. A finding of misrepresentation would render you inadmissible to Canada for a period of five years.\nBefore a decision is made, you have 30 days from the date of this letter to provide any additional information or documents that address these concerns.\nOfficer (fictional case)\n",
+  "expected": {
+    "document_class": "ircc-procedural-fairness",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

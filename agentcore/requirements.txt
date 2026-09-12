@@ -1,0 +1,8 @@
+# Legacy toolkit input only. The maintained Dockerfile installs the root Poetry lock.
+# Use pyproject.toml/poetry.lock for the verified container dependency set.
+strands-agents[anthropic,openai]==1.54.0
+strands-agents-tools>=0.8.8,<0.9
+bedrock-agentcore>=1.22,<2
+pydantic>=2.7,<3
+python-dotenv>=1.0,<2
+pypdf>=5,<7

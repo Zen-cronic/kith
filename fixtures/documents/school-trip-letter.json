@@ -1,0 +1,20 @@
+{
+  "id": "school-trip-letter",
+  "title": "School field-trip permission letter (Grade 4, Royal Ontario Museum)",
+  "source": "synthetic (fictional school; written for this project)",
+  "source_url": null,
+  "notes": "Danforth Park Public School and its staff are fictional. Exercises the drafter -> critic -> drafter revision loop in demo mode.",
+  "summary_en": "A school letter about a Grade 4 trip on Thursday, October 15, 2026 costing $12.00; the signed permission form and payment are due to the teacher by Friday, October 9, 2026.",
+  "text": "Danforth Park Public School\n41 Hillside Road, Toronto, Ontario\nSeptember 8, 2026\n\nDear Parent or Guardian,\n\nOur Grade 4 classes will visit the Royal Ontario Museum on Thursday, October 15, 2026. Students will travel by school bus, leaving the school at 9:15 a.m. and returning by 2:30 p.m.\n\nThe cost of the trip is $12.00 per student, which covers admission and the bus. Please return the permission form below, with payment, to your child's teacher by Friday, October 9, 2026. Cash or a cheque payable to Danforth Park Public School is accepted. No student will be excluded for financial reasons - please speak with the office if the cost is a difficulty.\n\nStudents should bring a packed lunch and wear comfortable shoes.\n\nPERMISSION FORM (please detach and return)\nI give permission for my child, ____________________ (student name), in Class ______, to attend the Grade 4 trip to the Royal Ontario Museum on Thursday, October 15, 2026.\nEmergency contact name: ____________________   Phone: ____________________\nParent/Guardian signature: ____________________   Date: ____________\n\nSincerely,\nM. Osei, Principal\n",
+  "expected": {
+    "document_class": "school-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "demo-revise-loop",
+    "hero",
+    "synthetic",
+    "trapset"
+  ]
+}

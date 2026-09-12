@@ -1,0 +1,18 @@
+{
+  "id": "irb-notice-to-appear",
+  "title": "Immigration and Refugee Board - notice to appear for a refugee hearing",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of an IRB notice for test purposes only.",
+  "summary_en": "The Refugee Protection Division has scheduled the claimant's hearing for Wednesday, November 18, 2026 at 1:00 p.m. by videoconference; documents must be provided at least 10 days before.",
+  "text": "Immigration and Refugee Board of Canada\nRefugee Protection Division\nNOTICE TO APPEAR FOR A HEARING\nFile number: TC0-00000\nClaimant: [name]\nYour hearing has been scheduled: Wednesday, November 18, 2026 at 1:00 p.m., by videoconference.\nYou must provide any documents you want the Division to consider at least 10 days before the hearing. If you do not appear, your claim may be declared abandoned.\nAn interpreter in the language you indicated on your Basis of Claim form will be provided by the Division.\n",
+  "expected": {
+    "document_class": "irb-notice",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "court-family-application",
+  "title": "Family court application served",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; follows the structure of a family court application for test purposes only.",
+  "summary_en": "A family court application about decision-making responsibility and child support has been served; an answer must be filed within 30 days or the case may proceed without the respondent.",
+  "text": "ONTARIO COURT OF JUSTICE - FAMILY COURT\nCourt file number: FC-26-0000\nAPPLICATION (General) - Form 8\nApplicant: [name]\nRespondent: Joseph Mensah\nThe applicant asks the court for: decision-making responsibility and parenting time for the children; child support under the Child Support Guidelines.\nTO THE RESPONDENT: If you want to oppose any claim in this case, you or your lawyer must prepare an Answer (Form 10), serve a copy on the applicant and file a copy in the court office with an Affidavit of Service, within 30 days after this application is served on you. If you do not, the case will go ahead without you and the court may make an order against you.\nDate of service: September 10, 2026\n",
+  "expected": {
+    "document_class": "court-form",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

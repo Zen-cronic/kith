@@ -1,0 +1,18 @@
+{
+  "id": "cra-ccb-notice",
+  "title": "Canada child benefit notice",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of a CRA benefit notice for test purposes only.",
+  "summary_en": "A CRA notice stating the monthly Canada child benefit amount ($619.75) and the next payment date, September 18, 2026; no action is needed.",
+  "text": "Canada Revenue Agency\nCanada child benefit notice\nDate: September 4, 2026\nBenefit year: July 2026 to June 2027\nBased on your 2025 income tax return, your Canada child benefit is $619.75 per month for one child.\nYour next payment will be deposited on September 18, 2026.\nYou do not need to do anything. Keep this notice for your records. If your marital status, number of children or address changes, tell us right away.\n",
+  "expected": {
+    "document_class": "cra-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

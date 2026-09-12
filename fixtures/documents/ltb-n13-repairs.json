@@ -1,0 +1,19 @@
+{
+  "id": "ltb-n13-repairs",
+  "title": "Ontario LTB Form N13 - Notice to End your Tenancy Because the Landlord Wants to Demolish, Repair or Convert the Unit",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; follows the structure of the N13 form but is not the official text.",
+  "summary_en": "An official notice to end the tenancy for major repairs; termination date 31/01/2027; the tenant has a right of first refusal to return after repairs.",
+  "text": "Notice to End your Tenancy Because the Landlord Wants to Demolish the Rental Unit, Repair it or Convert it to Another Use\nN13\nTo: (Tenant's name): Nguyen Thi Hoa\nFrom: (Landlord's name): Danforth Lofts Inc. (fictional)\nAddress of the Rental Unit: Unit 2, 1330 Danforth Avenue, Toronto, Ontario\nThis is a legal notice that could lead to you being evicted from your home.\nI am giving you this notice because I want to end your tenancy. I want you to move out of your rental unit by the following termination date: 31/01/2027.\nReason 2: I intend to do extensive repairs or renovations to the rental unit that require a building permit and vacant possession.\nImportant information: You have the right to move back into the rental unit when the repairs are complete if you give the landlord written notice before you move out.\nSignature: Landlord  Signature Date: 20/09/2026\n",
+  "expected": {
+    "document_class": "ltb-n13",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "synthetic-form",
+    "trapset"
+  ]
+}

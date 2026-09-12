@@ -1,0 +1,19 @@
+{
+  "id": "ltb-l1-application",
+  "title": "Landlord and Tenant Board - Form L1 application served on the tenant",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; follows the structure of the L1 form but is not the official text.",
+  "summary_en": "A copy of the landlord's L1 application to the Board to evict the tenant for non-payment and collect $3,700.00 in rent owing; the tenant may file a response before the hearing.",
+  "text": "Landlord and Tenant Board\nApplication to Evict a Tenant for Non-payment of Rent and to Collect Rent the Tenant Owes\nForm L1\nApplicant (Landlord): Northview Property Management Inc.\nRespondent (Tenant): Mariana Reyes\nRental unit: Unit 3, 128 Danforth Avenue, Toronto, Ontario M4K 1N1\nThe landlord gave the tenant a Form N4 notice with a termination date of 21/09/2026. The tenant did not pay the rent owing by the termination date.\nThe landlord asks the Board to: order the tenant to pay $3,700.00 in rent owing as of the date of this application; order the tenant to pay the filing fee of $186.00; terminate the tenancy and evict the tenant.\nTenant's Information: You will receive a Notice of Hearing. You may file a written response and any documents you want the Board to consider before the hearing.\n",
+  "expected": {
+    "document_class": "ltb-application",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "synthetic-form",
+    "trapset"
+  ]
+}

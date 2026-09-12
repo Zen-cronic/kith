@@ -1,0 +1,18 @@
+{
+  "id": "ircc-document-request",
+  "title": "IRCC letter - request for additional documents",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of an IRCC request letter for test purposes only.",
+  "summary_en": "IRCC asks for proof of funds and a police certificate within 30 days of the letter for a permanent residence application; the application may be refused if they are not received.",
+  "text": "Immigration, Refugees and Citizenship Canada\nApplication: Permanent residence\nDate: September 5, 2026\nDear Applicant,\nIn order to continue processing your application, we require the following documents:\n1. Proof of funds: bank statements for the last six months.\n2. Police certificate from every country where you have lived for six months or more since the age of 18.\nPlease submit the documents within 30 days of the date of this letter. If we do not receive them, your application may be refused on the basis of the information on file.\n",
+  "expected": {
+    "document_class": "ircc-letter",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

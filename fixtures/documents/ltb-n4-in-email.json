@@ -1,0 +1,19 @@
+{
+  "id": "ltb-n4-in-email",
+  "title": "Email from a landlord with an N4 notice attached",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard positive: the official form arrives as an email attachment described in prose. Synthetic.",
+  "summary_en": "A landlord's email saying an N4 notice is attached: the tenant owes $2,300.00 and must pay by 25/09/2026 or move out, or the landlord will apply to the Landlord and Tenant Board.",
+  "text": "From: Property Manager <manager@fictional-parkside-rentals.example>\nTo: Tenant, Apt 12\nSubject: N4 notice - 44 Parkside Drive Apt 12\n\nHi,\n\nPlease find attached Form N4 (Notice to End your Tenancy Early for Non-payment of Rent) for your unit. As of today the rent owing is $2,300.00 (August and September). The termination date on the notice is 25/09/2026. If the full amount is paid by that date the notice is void; otherwise we will file an L1 application with the Landlord and Tenant Board to end the tenancy and collect the rent owing.\n\nA paper copy was also placed in your mailbox today.\n\nRegards,\nParkside Rentals (fictional)\nAttachment: N4_Apt12.pdf\n",
+  "expected": {
+    "document_class": "ltb-n4",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "hard-positive",
+    "synthetic",
+    "trapset"
+  ]
+}

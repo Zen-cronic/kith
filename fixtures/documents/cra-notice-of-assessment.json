@@ -1,0 +1,18 @@
+{
+  "id": "cra-notice-of-assessment",
+  "title": "Notice of assessment summary",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of a CRA notice for test purposes only.",
+  "summary_en": "The CRA assessed the 2025 return: a refund of $412.60 was deposited on August 28, 2026; the letter lists RRSP contribution room and says no action is required unless the person disagrees within 90 days.",
+  "text": "Canada Revenue Agency\nNotice of assessment\nTax year: 2025\nDate issued: August 28, 2026\nWe assessed your 2025 income tax and benefit return. Your refund of $412.60 was deposited to your bank account on August 28, 2026.\nRRSP deduction limit for 2026: $3,150.\nIf you disagree with this assessment, you can file an objection within 90 days of the date of this notice. Otherwise, no action is required.\n",
+  "expected": {
+    "document_class": "cra-letter",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "phone-bill-overdue",
+  "title": "Mobile phone bill - overdue reminder",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "An overdue mobile phone balance of $86.40 must be paid by September 20, 2026 or service may be suspended; payment can be made in the app or by phone.",
+  "text": "Brightline Mobile (fictional)\nPayment reminder\nAccount: 555-0101\nYour balance of $86.40 is past due. Please pay by September 20, 2026 to avoid a service suspension and a $10 reconnection fee.\nPay in the app, online, or call 1-877-555-0101.\n",
+  "expected": {
+    "document_class": "utility-bill",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

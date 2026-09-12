@@ -1,0 +1,19 @@
+{
+  "id": "ltb-n12-filled",
+  "title": "Ontario LTB Form N12 - Notice to End your Tenancy Because the Landlord Requires the Unit (filled)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Official N12 wording with fictional fill-in values.",
+  "summary_en": "An official N12 notice: the landlord's child intends to move into the unit; the termination date is 30/11/2026; the landlord must pay one month's rent as compensation or offer another unit.",
+  "text": "Notice to End your Tenancy\nBecause the Landlord, a Purchaser or a Family Member Requires the Rental Unit\nN12\nTo: (Tenant's name): Fatima Al-Sayed\nFrom: (Landlord's name): Peter Lindqvist\nAddress of the Rental Unit: Basement apartment, 15 Woodbine Crescent, Toronto, Ontario\nThis is a legal notice that could lead to you being evicted from your home.\nThe following information is from your landlord\nI am giving you this notice because I want to end your tenancy. I want you to move out of your rental unit by the following termination date: 30/11/2026.\nReason 1: The following person intends to move into the rental unit and occupy it for at least one year: My child.\nImportant Information from the Landlord and Tenant Board (LTB)\nThe termination date the landlord sets out in this notice must be at least 60 days after the landlord gives you this notice. Also, the termination date must be the last day of the rental period.\nThe landlord must: Pay you an amount equal to one month's rent by the termination date in this notice, or Offer you another rental unit that is acceptable to you.\nSignature: Landlord  Signature Date: 15/09/2026\nv. 01/04/2022\n",
+  "expected": {
+    "document_class": "ltb-n12",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "real-form-wording",
+    "synthetic",
+    "trapset"
+  ]
+}

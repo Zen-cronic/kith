@@ -1,0 +1,19 @@
+{
+  "id": "ltb-hearing-notice",
+  "title": "Landlord and Tenant Board - Notice of Hearing (L1 application)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard positive: reads like an appointment letter but is a hearing notice. Synthetic; the interpreter sentence follows the LTB brochure wording.",
+  "summary_en": "A notice that the Landlord and Tenant Board will hear the landlord's application to evict for non-payment of rent by video on Thursday, October 22, 2026 at 9:00 a.m.; file number TEL-00000-26.",
+  "text": "Landlord and Tenant Board\nTribunals Ontario\nNOTICE OF HEARING\nFile Number: TEL-00000-26\nApplication: L1 - Application to Evict a Tenant for Non-payment of Rent and to Collect Rent the Tenant Owes\nApplicant (Landlord): Northview Property Management Inc.\nRespondent (Tenant): Mariana Reyes\nRental Unit: Unit 3, 128 Danforth Avenue, Toronto, Ontario M4K 1N1\n\nA hearing has been scheduled for this application.\nDate: Thursday, October 22, 2026\nTime: 9:00 a.m.\nFormat: Video hearing (a link and telephone number are on page 2)\n\nYou should attend the hearing. If you do not attend, the hearing may proceed without you and an order may be made against you, including an order evicting you from the rental unit.\nIf you need a disability-related accommodation, or a French-language hearing, contact the Board as soon as possible. The LTB does not usually provide interpreters for languages other than French or English; if you want an interpreter at the hearing you are expected to arrange for one.\nTelephone: 416-645-8080 or 1-888-332-3234\n",
+  "expected": {
+    "document_class": "ltb-hearing-notice",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "hard-positive",
+    "synthetic",
+    "trapset"
+  ]
+}

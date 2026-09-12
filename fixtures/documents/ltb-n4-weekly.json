@@ -1,0 +1,19 @@
+{
+  "id": "ltb-n4-weekly",
+  "title": "Ontario LTB Form N4 - Notice to End your Tenancy Early for Non-payment of Rent (filled, weekly rent)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Official N4 wording (Tribunals Ontario, v. 01/04/2022) with fictional fill-in values for a weekly tenancy.",
+  "summary_en": "A landlord's official N4 notice for a room rented by the week: the tenant owes $560.00 and must pay by the termination date, 14/09/2026, or the landlord may apply to evict.",
+  "text": "Notice to End your Tenancy\nFor Non-payment of Rent\nN4\nTo: (Tenant's name) include all tenant names: Tesfay Ghebre\nFrom: (Landlord's name): Ada Okafor\nAddress of the Rental Unit: Room 2, 77 Coxwell Avenue, Toronto, Ontario M4L 3A8\nThis is a legal notice that could lead to you being evicted from your home.\nThe following information is from your landlord\nI am giving you this notice because I believe you owe me $560.00 in rent.\nI can apply to the Board to have you evicted if you do not:\n• pay this amount by 14/09/2026. This is called the termination date.\nOr\n• move out by the termination date.\nWHAT YOU NEED TO KNOW\nThe following information is provided by the Landlord and Tenant Board\nThe termination date: The date that the landlord gives you in this notice to pay or move out must be at least: 14 days after the landlord gives you the notice, if you rent by the month or year, or 7 days after the landlord gives you the notice, if you rent by the day or week.\nWhat if you agree with the notice? If you agree that you owe the amount that the landlord is claiming, you should pay this amount by the termination date in this notice. If you do so, the landlord cannot apply to the Board to evict you based on this notice.\nWhat if you disagree with the notice? You do not have to move out if you disagree with this notice. You may also want to get legal advice.\nRent Period From: 24/08/2026 To: 30/08/2026 Rent Charged $280.00 Rent Paid $0.00 Rent Owing $280.00\nRent Period From: 31/08/2026 To: 06/09/2026 Rent Charged $280.00 Rent Paid $0.00 Rent Owing $280.00\nTotal Rent Owing $560.00\nSignature: Landlord  Signature Date: 07/09/2026\nv. 01/04/2022\n",
+  "expected": {
+    "document_class": "ltb-n4",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "real-form-wording",
+    "synthetic",
+    "trapset"
+  ]
+}

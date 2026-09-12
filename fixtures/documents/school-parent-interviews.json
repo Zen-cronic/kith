@@ -1,0 +1,18 @@
+{
+  "id": "school-parent-interviews",
+  "title": "School letter - parent-teacher interview sign-up",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "Parent-teacher interviews are on Thursday, October 22, 2026 from 4:00 to 7:00 p.m.; return the slip with a preferred time by Friday, October 16, 2026; interpreters can be requested.",
+  "text": "Danforth Park Public School (fictional)\nOctober 5, 2026\nDear Parent or Guardian,\nParent-teacher interviews will be held on Thursday, October 22, 2026 from 4:00 p.m. to 7:00 p.m. Interviews are 10 minutes long.\nPlease return the slip below with your preferred time by Friday, October 16, 2026. If you would like an interpreter, check the box and write the language, and we will do our best to arrange one.\nPreferred time: ______   Interpreter needed: [ ] Language: __________\nParent/Guardian name: ____________________  Student: ____________________\n",
+  "expected": {
+    "document_class": "school-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

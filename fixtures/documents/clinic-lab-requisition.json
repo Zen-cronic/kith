@@ -1,0 +1,18 @@
+{
+  "id": "clinic-lab-requisition",
+  "title": "Laboratory requisition instructions",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "Instructions for blood tests: do not eat for 12 hours before, bring the requisition and health card; the lab is open Monday to Saturday from 7:30 a.m.",
+  "text": "Riverdale Family Health Team (fictional)\nLaboratory test instructions\nYour doctor has ordered blood tests. Please take the attached requisition to any community laboratory.\n- Do not eat or drink anything except water for 12 hours before the test (fasting).\n- Bring the requisition form and your Ontario health card.\n- The lab at 555 Broadview Avenue (fictional) is open Monday to Saturday from 7:30 a.m. No appointment is needed.\nResults are sent to your doctor within 3 to 5 days.\n",
+  "expected": {
+    "document_class": "clinic-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

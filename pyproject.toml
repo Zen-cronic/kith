@@ -1,0 +1,58 @@
+[project]
+name = "household"
+version = "0.1.0"
+description = "A Strands Agents household agent: every member talks to it or shows it a photo; it knows who may decide what for whom, completes what it is allowed to (with receipts), routes the rest to the right parent, and publishes its own guardrail metric."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.12,<3.13"
+authors = [{ name = "Kaung Zin Hein" }]
+dependencies = [
+  "strands-agents[anthropic,openai,bidi]==1.54.0",
+  "strands-agents-tools>=0.8.8,<0.9",
+  "pydantic>=2.7,<3",
+  "python-dotenv>=1.0,<2",
+  "pypdf>=5,<7",
+  "fastapi>=0.115,<1",
+  "uvicorn[standard]>=0.30,<1",
+  "bedrock-agentcore>=1.22,<2",
+  "httpx>=0.28.1,<1",
+  "websockets>=14,<16",
+  "boto3>=1.40,<2",
+]
+
+[project.scripts]
+household = "household.cli:main"
+
+[tool.poetry]
+packages = [{ include = "household" }]
+include = [
+  { path = "fixtures/documents/*.json", format = ["sdist", "wheel"] },
+  { path = "fixtures/canned/*.json", format = ["sdist", "wheel"] },
+]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3"
+ruff = "^0.6"
+httpx = ">=0.28.1,<1"
+
+[tool.poetry.group.browser]
+optional = true
+
+[tool.poetry.group.browser.dependencies]
+playwright = "1.62.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]  # long literal strings (prompts, verbatim rule quotes, fixtures) are expected here
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

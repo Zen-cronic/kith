@@ -1,0 +1,18 @@
+{
+  "id": "library-esl-circle",
+  "title": "Public library - English conversation circle registration",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "A free English conversation circle meets Wednesdays at 6:30 p.m. starting September 16, 2026; register at the desk or online; a library card is free with proof of address.",
+  "text": "Riverdale Branch Library (fictional)\nENGLISH CONVERSATION CIRCLE\nPractise speaking English in a friendly group led by volunteers. All levels welcome.\nWhen: Wednesdays, 6:30 p.m. to 8:00 p.m., starting September 16, 2026\nWhere: Community room, 2nd floor\nCost: Free. Register at the information desk or online.\nDon't have a library card? Bring proof of your address and we will make one for free.\n",
+  "expected": {
+    "document_class": "community-notice",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

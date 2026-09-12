@@ -1,0 +1,18 @@
+{
+  "id": "utility-hydro-bill",
+  "title": "Electricity bill",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "An electricity bill of $142.37 due on October 2, 2026, with the account number and payment options.",
+  "text": "Lakeshore Hydro (fictional)\nAccount number: 00-1234-5678\nStatement date: September 10, 2026\nService address: Unit 3, 128 Danforth Avenue, Toronto\nAmount due: $142.37\nDue date: October 2, 2026\nElectricity used: 412 kWh (August 8 - September 8, 2026)\nWays to pay: online banking, pre-authorized payment, or in person at any bank. A late payment charge of 1.5% per month applies to overdue balances.\nQuestions? Call 1-800-555-0100 or visit our website.\n",
+  "expected": {
+    "document_class": "utility-bill",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

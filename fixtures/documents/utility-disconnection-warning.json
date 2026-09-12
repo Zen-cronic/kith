@@ -1,0 +1,19 @@
+{
+  "id": "utility-disconnection-warning",
+  "title": "Electricity account - overdue notice with disconnection warning",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard negative: alarming wording ('disconnection', 'collection action') but a bill the desk may help with. Synthetic.",
+  "summary_en": "An overdue balance of $310.55 must be paid or a payment arrangement made by September 25, 2026 to avoid a disconnection notice; the letter offers an arrangement plan by phone.",
+  "text": "Lakeshore Hydro (fictional)\nOVERDUE NOTICE\nAccount number: 00-1234-5678\nDate: September 11, 2026\nYour account has an overdue balance of $310.55. To avoid further collection action, including a disconnection notice, please pay the overdue amount or call us to set up a payment arrangement by September 25, 2026.\nIf you are having difficulty paying, ask about the Low-income Energy Assistance Program and equal billing. Call 1-800-555-0100, Monday to Friday, 8 a.m. to 6 p.m.\n",
+  "expected": {
+    "document_class": "utility-bill",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "hard-negative",
+    "synthetic",
+    "trapset"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "employer-schedule-change",
+  "title": "Employer letter - change of shift schedule",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "From October 5, 2026 the employee's shifts move to Tuesday-Saturday, 6:00 a.m. to 2:30 p.m.; the employee is asked to confirm by September 25 or speak with the manager.",
+  "text": "Maple Foods Distribution (fictional)\nSeptember 12, 2026\nDear Joseph Mensah,\nBeginning Monday, October 5, 2026, your regular schedule will change to Tuesday to Saturday, 6:00 a.m. to 2:30 p.m. Your hourly rate and benefits are unchanged.\nPlease confirm that you accept the new schedule by September 25, 2026, or speak with your manager if the change creates a problem for you.\nHuman Resources\n",
+  "expected": {
+    "document_class": "employer-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

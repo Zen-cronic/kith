@@ -1,0 +1,18 @@
+{
+  "id": "benefits-document-request",
+  "title": "Social-assistance office - request for documents",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "The office asks for bank statements for the last three months and the current lease by September 30, 2026 to continue assistance; documents can be dropped off or uploaded.",
+  "text": "Eastside Community Assistance Office (fictional)\nSeptember 9, 2026\nRe: Documents needed\nTo continue your assistance, please provide the following by September 30, 2026:\n- Bank statements for the last three months, for every account\n- A copy of your current lease\nYou can drop the documents off at 700 Queen Street East, 2nd floor, or upload them through the online portal. If you have questions, call your caseworker at (416) 555-0188.\n",
+  "expected": {
+    "document_class": "benefits-appointment",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

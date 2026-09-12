@@ -1,0 +1,18 @@
+{
+  "id": "community-centre-swim",
+  "title": "Community centre - swim lesson registration with fee subsidy",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "Registration for fall swim lessons opens September 14, 2026 at 7:00 a.m.; lessons cost $68 per session and a fee subsidy is available to low-income residents on application.",
+  "text": "Eastside Community Centre (fictional)\nFALL SWIM LESSONS\nRegistration opens Monday, September 14, 2026 at 7:00 a.m. (online or in person).\nChildren's lessons (ages 4-12): Saturdays 10:00 a.m., 8 weeks, $68.00 per session.\nFee subsidy: Residents with a low income can apply for the recreation fee subsidy, which covers the full cost of most programs. Ask at the front desk for the application form.\n",
+  "expected": {
+    "document_class": "community-notice",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

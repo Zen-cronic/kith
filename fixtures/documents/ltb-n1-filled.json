@@ -1,0 +1,19 @@
+{
+  "id": "ltb-n1-filled",
+  "title": "Ontario LTB Form N1 - Notice of Rent Increase (filled)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Official N1 wording with fictional fill-in values.",
+  "summary_en": "The landlord gives 90 days' notice that rent rises from $1,850.00 to $1,896.25 per month on 01/01/2027; the increase is within the provincial guideline and needs no Board approval.",
+  "text": "Notice of Rent Increase\nN1\nTo: (Tenant's name and address): Mariana Reyes, Unit 3, 128 Danforth Avenue, Toronto, Ontario M4K 1N1\nFrom: (Landlord's name and address): Northview Property Management Inc.\nAddress of the Rental Unit: Unit 3, 128 Danforth Avenue, Toronto, Ontario M4K 1N1\nYour New Rent: On 01/01/2027, your rent will increase to $1,896.25 per month.\nExplanation of the Rent Increase: This is a rent increase of $46.25 per month, or 2.5%.\nThis rent increase is less than or equal to the rent increase guideline and does not need approval by an order under the Residential Tenancies Act, 2006.\nImportant Information About the Law: The landlord must give the tenant this notice at least 90 days before the date of the rent increase.\nSignature: Landlord  Signature Date: 15/09/2026\nv. 01/04/2022\n",
+  "expected": {
+    "document_class": "ltb-n1",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "real-form-wording",
+    "synthetic",
+    "trapset"
+  ]
+}

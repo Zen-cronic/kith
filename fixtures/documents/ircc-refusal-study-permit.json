@@ -1,0 +1,18 @@
+{
+  "id": "ircc-refusal-study-permit",
+  "title": "IRCC letter - study permit extension refused",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of an IRCC refusal letter for test purposes only.",
+  "summary_en": "A letter refusing an application to extend a study permit: the applicant's status expires and they must leave Canada or apply for restoration within 90 days.",
+  "text": "Immigration, Refugees and Citizenship Canada\nApplication number: S000000000\nDate: September 3, 2026\nDear Applicant,\nThis refers to your application to extend your study permit.\nI have now completed the assessment of your application and I have determined that it does not meet the requirements of the Immigration and Refugee Protection Act and Regulations. Your application is refused because you have not established that you are enrolled at a designated learning institution.\nAs your temporary resident status has expired, you must leave Canada immediately. You may apply for restoration of your status within 90 days of the date of this letter, if you meet the requirements.\nOfficer, Case Processing Centre (fictional case)\n",
+  "expected": {
+    "document_class": "ircc-refusal",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

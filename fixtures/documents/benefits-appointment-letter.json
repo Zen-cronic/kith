@@ -1,0 +1,19 @@
+{
+  "id": "benefits-appointment-letter",
+  "title": "Social-assistance case appointment letter",
+  "source": "synthetic (fictional office; written for this project)",
+  "source_url": null,
+  "notes": "Eastside Community Assistance Office is fictional. In demo mode its canned Spanish back-translation drops the date and time on purpose, to show the fidelity gauge falling and the desk stopping. Excluded from the trap-set on purpose: its canned interpretation is designed to fail, so scoring it would measure the demo data, not the desk.",
+  "summary_en": "An appointment letter: see your caseworker on Tuesday, September 22, 2026 at 10:30 a.m. at 700 Queen Street East, 2nd floor; bring photo ID and proof of rent; call (416) 555-0188 if you cannot attend.",
+  "text": "Eastside Community Assistance Office\n700 Queen Street East, 2nd floor, Toronto, Ontario\nSeptember 4, 2026\n\nRe: Your case appointment\n\nYour appointment with your caseworker is on Tuesday, September 22, 2026 at 10:30 a.m., at 700 Queen Street East, 2nd floor.\n\nPlease bring:\n- photo identification\n- proof of your rent (your lease or a rent receipt)\n\nIf you cannot attend, call (416) 555-0188 before the appointment to reschedule. Missing the appointment without notice may delay your assistance.\n\nEastside Community Assistance Office\n",
+  "expected": {
+    "document_class": "benefits-appointment",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "demo-fidelity-drop",
+    "hero",
+    "synthetic"
+  ]
+}

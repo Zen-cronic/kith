@@ -1,0 +1,18 @@
+{
+  "id": "clinic-appointment-reminder",
+  "title": "Family health team - appointment reminder",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "A reminder of an appointment with Dr. Patel on Monday, September 21, 2026 at 3:15 p.m.; bring your health card; call to cancel at least 24 hours ahead.",
+  "text": "Riverdale Family Health Team (fictional)\nAppointment reminder\nPatient: Fatima Al-Sayed\nYour appointment with Dr. Patel is on Monday, September 21, 2026 at 3:15 p.m.\nPlease arrive 10 minutes early and bring your Ontario health card. If you need to cancel, call (416) 555-0120 at least 24 hours before your appointment.\n",
+  "expected": {
+    "document_class": "clinic-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

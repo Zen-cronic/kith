@@ -1,0 +1,18 @@
+{
+  "id": "court-small-claims",
+  "title": "Small Claims Court - plaintiff's claim served",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; follows the structure of a Small Claims Court claim for test purposes only.",
+  "summary_en": "A former landlord is suing for $4,250.00 in Small Claims Court; a defence must be filed within 20 days of being served or judgment may be given without notice.",
+  "text": "ONTARIO SUPERIOR COURT OF JUSTICE - SMALL CLAIMS COURT\nToronto Small Claims Court\nClaim No. SC-26-000000\nPLAINTIFF'S CLAIM (Form 7A)\nPlaintiff: Greenline Holdings (fictional)\nDefendant: Luz Marina Castillo\nThe plaintiff claims $4,250.00 for unpaid rent and damage to the rental unit at Apt 401, 210 Sherbourne Street, plus costs.\nTO THE DEFENDANT: If you wish to dispute this claim, you must file a Defence (Form 9A) with the court within 20 calendar days after you were served with this claim. If you do not, judgment may be obtained against you without further notice.\nDate served: September 8, 2026\n",
+  "expected": {
+    "document_class": "court-summons",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

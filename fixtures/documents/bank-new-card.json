@@ -1,0 +1,18 @@
+{
+  "id": "bank-new-card",
+  "title": "Bank letter - new debit card",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "The bank has mailed a new debit card that must be activated by phone before use; the old card stops working on October 15, 2026.",
+  "text": "Harbour Credit Union (fictional)\nYour new debit card is enclosed.\nBefore using it, activate the card by calling 1-800-555-0160 from your home phone number. Your old card will stop working on October 15, 2026.\nNever share your PIN. We will never call or text you to ask for it.\n",
+  "expected": {
+    "document_class": "community-notice",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

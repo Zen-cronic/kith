@@ -1,0 +1,172 @@
+{
+  "_note": "Canned demo outputs for school-trip-letter in Spanish. Draft v1 deliberately contains an invented phone number and an invented allergy statement so the critic sends it back; v2 is the corrected draft.",
+  "reader": {
+    "document_class": "school-letter",
+    "title": "School letter: Grade 4 field trip to the Royal Ontario Museum, with a permission form",
+    "issuer": "Danforth Park Public School (M. Osei, Principal)",
+    "what_it_is": "A letter from your child's school about a class trip to the Royal Ontario Museum on Thursday, October 15, 2026. It includes a permission form for you to sign.",
+    "what_it_asks": "Sign the permission form and return it to your child's teacher with $12.00 by Friday, October 9, 2026. Cash or a cheque to the school is accepted, and the letter says no student is excluded if the cost is a difficulty. Your child should bring a packed lunch and wear comfortable shoes.",
+    "deadlines": [
+      {
+        "label": "return the signed form and payment by",
+        "date_text": "Friday, October 9, 2026",
+        "quote": "Please return the permission form below, with payment, to your child's teacher by Friday, October 9, 2026."
+      },
+      {
+        "label": "trip date",
+        "date_text": "Thursday, October 15, 2026",
+        "quote": "Our Grade 4 classes will visit the Royal Ontario Museum on Thursday, October 15, 2026."
+      }
+    ],
+    "amounts": [
+      "$12.00"
+    ],
+    "stakes": "low",
+    "stakes_reason": "A routine school permission form; the only cost is $12.00 and the letter says no student is excluded for financial reasons.",
+    "evidence": [
+      "Our Grade 4 classes will visit the Royal Ontario Museum on Thursday, October 15, 2026.",
+      "The cost of the trip is $12.00 per student",
+      "Please return the permission form below, with payment, to your child's teacher by Friday, October 9, 2026.",
+      "No student will be excluded for financial reasons"
+    ],
+    "confidence": 0.95
+  },
+  "interpreter": {
+    "language": "es",
+    "target_text": "Esta es una carta de la escuela de su hijo o hija sobre una excursión de la clase de 4.º grado (Grade 4) al Royal Ontario Museum el jueves 15 de octubre de 2026 (Thursday, October 15, 2026). Incluye un formulario de permiso para que usted lo firme. Le piden que firme el formulario y lo devuelva al maestro o maestra de su hijo con $12.00 antes del viernes 9 de octubre de 2026 (Friday, October 9, 2026). Aceptan efectivo o un cheque a nombre de la escuela, y la carta dice que ningún estudiante queda excluido si el costo es una dificultad. Su hijo debe llevar almuerzo y zapatos cómodos. Fechas: entregar el formulario firmado y el pago antes de: Friday, October 9, 2026; fecha de la excursión: Thursday, October 15, 2026. Cantidad: $12.00.",
+    "back_translation": "This is a letter from your child's school about a Grade 4 class trip to the Royal Ontario Museum on Thursday, October 15, 2026. It includes a permission form for you to sign. They ask you to sign the form and return it to your child's teacher with $12.00 by Friday, October 9, 2026. They accept cash or a cheque made out to the school, and the letter says no student is excluded if the cost is a difficulty. Your child should bring lunch and comfortable shoes. Dates: return the signed form and payment by: Friday, October 9, 2026; trip date: Thursday, October 15, 2026. Amount: $12.00.",
+    "flagged_terms": [
+      {
+        "term": "permission form",
+        "note": "'formulario de permiso'; the visitor signs it, they do not write a letter."
+      }
+    ]
+  },
+  "drafter": {
+    "kind": "reply-letter",
+    "title": "Completed permission form and short note to the teacher",
+    "body_en": "PERMISSION FORM\nI give permission for my child, ____________________ (student name), in Class ______, to attend the Grade 4 trip to the Royal Ontario Museum on Thursday, October 15, 2026.\nEmergency contact name: ____________________   Phone: 416-555-0199\nParent/Guardian signature: ____________________   Date: ____________\n\nNote to the teacher: Enclosed is $12.00 in cash for the trip. My child has no allergies and no medical conditions.",
+    "body_target": "FORMULARIO DE PERMISO\nDoy permiso para que mi hijo/a, ____________________ (nombre del estudiante), de la clase ______, asista a la excursión de 4.º grado al Royal Ontario Museum el jueves 15 de octubre de 2026.\nContacto de emergencia: ____________________   Teléfono: 416-555-0199\nFirma del padre, madre o tutor: ____________________   Fecha: ____________\n\nNota para el maestro/a: Adjunto $12.00 en efectivo para la excursión. Mi hijo/a no tiene alergias ni condiciones médicas.",
+    "facts_used": [
+      "trip to the Royal Ontario Museum on Thursday, October 15, 2026",
+      "The cost of the trip is $12.00 per student",
+      "Cash or a cheque payable to Danforth Park Public School is accepted"
+    ],
+    "assumptions": [],
+    "revision": 1
+  },
+  "drafter_revised": {
+    "kind": "form-checklist",
+    "title": "Preparation checklist for the original permission form",
+    "body_en": "Complete the original permission form if you choose to give permission. Add the student's name and class, emergency contact name and phone, and parent/guardian signature and date. Return the original form and $12.00 to your child's teacher by Friday, October 9, 2026. Cash or a cheque payable to Danforth Park Public School is accepted. If the cost is a difficulty, speak with the office; no student will be excluded for financial reasons. For Thursday, October 15, 2026, bring a packed lunch and wear comfortable shoes.",
+    "body_target": "Complete el formulario original si decide dar permiso. Añada el nombre y la clase del estudiante, el nombre y teléfono del contacto de emergencia, y la firma y fecha del padre, madre o tutor. Entregue el formulario original y $12.00 al maestro de su hijo antes de Friday, October 9, 2026. Se acepta efectivo o cheque a nombre de Danforth Park Public School. Si tiene dificultades con el costo, hable con la oficina; ningún estudiante quedará excluido por motivos económicos. Para Thursday, October 15, 2026, lleve un almuerzo y use zapatos cómodos.",
+    "facts_used": [
+      "The cost of the trip is $12.00 per student, which covers admission and the bus. Please return the permission form below, with payment, to your child's teacher by Friday, October 9, 2026. Cash or a cheque payable to Danforth Park Public School is accepted. No student will be excluded for financial reasons - please speak with the office if the cost is a difficulty.",
+      "Students should bring a packed lunch and wear comfortable shoes.",
+      "I give permission for my child, ____________________ (student name), in Class ______, to attend the Grade 4 trip to the Royal Ontario Museum on Thursday, October 15, 2026.",
+      "Emergency contact name: ____________________   Phone: ____________________",
+      "Parent/Guardian signature: ____________________   Date: ____________"
+    ],
+    "assumptions": [],
+    "revision": 2,
+    "preparation_steps": [
+      {
+        "instruction_en": "Complete the original permission form if you choose to give permission. Add the student's name and class, emergency contact name and phone, and parent/guardian signature and date.",
+        "instruction_target": "Complete el formulario original si decide dar permiso. Añada el nombre y la clase del estudiante, el nombre y teléfono del contacto de emergencia, y la firma y fecha del padre, madre o tutor.",
+        "source_quote": "I give permission for my child, ____________________ (student name), in Class ______, to attend the Grade 4 trip to the Royal Ontario Museum on Thursday, October 15, 2026.\nEmergency contact name: ____________________   Phone: ____________________\nParent/Guardian signature: ____________________   Date: ____________"
+      },
+      {
+        "instruction_en": "Return the original form and $12.00 to your child's teacher by Friday, October 9, 2026. Cash or a cheque payable to Danforth Park Public School is accepted. If the cost is a difficulty, speak with the office; no student will be excluded for financial reasons.",
+        "instruction_target": "Entregue el formulario original y $12.00 al maestro de su hijo antes de Friday, October 9, 2026. Se acepta efectivo o cheque a nombre de Danforth Park Public School. Si tiene dificultades con el costo, hable con la oficina; ningún estudiante quedará excluido por motivos económicos.",
+        "source_quote": "The cost of the trip is $12.00 per student, which covers admission and the bus. Please return the permission form below, with payment, to your child's teacher by Friday, October 9, 2026. Cash or a cheque payable to Danforth Park Public School is accepted. No student will be excluded for financial reasons - please speak with the office if the cost is a difficulty."
+      },
+      {
+        "instruction_en": "Bring a packed lunch and wear comfortable shoes for the trip.",
+        "instruction_target": "Lleve un almuerzo y use zapatos cómodos para la excursión.",
+        "source_quote": "Students should bring a packed lunch and wear comfortable shoes."
+      }
+    ]
+  },
+  "critic": {
+    "decision": "revise",
+    "rule_id": null,
+    "checks": [
+      {
+        "name": "rule-catalogue",
+        "passed": true,
+        "detail": "school-letter: no read-only rule; the desk may draft"
+      },
+      {
+        "name": "fidelity",
+        "passed": true,
+        "detail": "back-translation keeps $12.00, October 9 and October 15; band reliable"
+      },
+      {
+        "name": "draft-facts",
+        "passed": false,
+        "detail": "The phone number 416-555-0199 is not in the document and was not supplied by the visitor."
+      },
+      {
+        "name": "draft-assumptions",
+        "passed": false,
+        "detail": "'My child has no allergies and no medical conditions' is not in the document and was not supplied by the visitor."
+      }
+    ],
+    "reasons": [
+      "The draft states two things nobody told us. A form the visitor signs must contain only what they know to be true."
+    ],
+    "revision_notes": [
+      "Replace the phone number 416-555-0199 with a blank ____________________ for the parent to fill in.",
+      "Remove the sentence 'My child has no allergies and no medical conditions.' entirely.",
+      "Leave the payment method as a blank (cash / cheque: ______) rather than stating cash."
+    ]
+  },
+  "critic_final": {
+    "decision": "approve",
+    "rule_id": null,
+    "checks": [
+      {
+        "name": "rule-catalogue",
+        "passed": true,
+        "detail": "school-letter: no read-only rule; the desk may draft"
+      },
+      {
+        "name": "fidelity",
+        "passed": true,
+        "detail": "back-translation keeps $12.00, October 9 and October 15; band reliable"
+      },
+      {
+        "name": "draft-facts",
+        "passed": true,
+        "detail": "Every date and amount in the draft is quoted from the letter."
+      },
+      {
+        "name": "draft-assumptions",
+        "passed": true,
+        "detail": "Revision 2 contains only blanks where the letter needs the parent's information."
+      }
+    ],
+    "reasons": [
+      "Revision 2 applied all three notes; nothing in the draft goes beyond the document."
+    ],
+    "revision_notes": []
+  },
+  "router": {
+    "outcome": "proceed",
+    "headline_en": "A school trip form. Sign it, add $12.00, and return it by Friday, October 9, 2026.",
+    "headline_target": "Un formulario de excursión escolar. Fírmelo, añada $12.00 y devuélvalo antes del viernes 9 de octubre de 2026.",
+    "statement_en": "I read the letter and prepared the permission form with blanks for your child's name, class, your emergency contact and your signature. Nothing was added that the letter does not say.",
+    "statement_target": "Leí la carta y preparé el formulario de permiso con espacios en blanco para el nombre y la clase de su hijo/a, su contacto de emergencia y su firma. No se añadió nada que la carta no diga.",
+    "rule_citation": null,
+    "who": "you; ask staff if you want help filling in the blanks",
+    "next_step_en": "Fill in the blanks, sign, and give the form with $12.00 (cash or a cheque to the school) to your child's teacher.",
+    "next_step_target": "Complete los espacios en blanco, firme y entregue el formulario con $12.00 (efectivo o cheque a nombre de la escuela) al maestro o maestra de su hijo/a.",
+    "when": "By Friday, October 9, 2026. The trip is Thursday, October 15, 2026.",
+    "safe_today_en": "Sign the form today and put $12.00 with it. If the cost is a difficulty, the letter says to speak with the school office - no student is excluded for financial reasons.",
+    "safe_today_target": "Firme el formulario hoy y ponga los $12.00 con él. Si el costo es una dificultad, la carta dice que hable con la oficina de la escuela: ningún estudiante queda excluido por razones económicas.",
+    "summary_en": "WHAT THIS IS: a letter from Danforth Park Public School about a Grade 4 trip to the Royal Ontario Museum on Thursday, October 15, 2026, with a permission form. THE DATE: return the signed form and $12.00 to your child's teacher by Friday, October 9, 2026. THE ONE SAFE THING: sign today; if the cost is a difficulty, speak with the office. WHAT YOU LEAVE WITH: the completed form with blanks for your child's name, class, emergency contact and your signature.",
+    "summary_target": "QUÉ ES: una carta de Danforth Park Public School sobre una excursión de 4.º grado al Royal Ontario Museum el jueves 15 de octubre de 2026 (Thursday, October 15, 2026), con un formulario de permiso. LA FECHA: devuelva el formulario firmado y $12.00 al maestro/a de su hijo/a antes del viernes 9 de octubre de 2026 (Friday, October 9, 2026). LO ÚNICO SEGURO HOY: firme hoy; si el costo es una dificultad, hable con la oficina. CON QUÉ SE VA: el formulario completado con espacios para el nombre y la clase de su hijo/a, el contacto de emergencia y su firma.",
+    "who_target": "usted; pida ayuda al personal si la necesita para completar los espacios en blanco",
+    "when_target": "Entregue el formulario antes de: Friday, October 9, 2026 (viernes 9 de octubre de 2026). La excursión es el Thursday, October 15, 2026 (jueves 15 de octubre de 2026)."
+  }
+}

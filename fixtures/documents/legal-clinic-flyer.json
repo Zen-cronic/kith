@@ -1,0 +1,19 @@
+{
+  "id": "legal-clinic-flyer",
+  "title": "Community legal clinic flyer - tenant rights workshop",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard negative: contains the word N4 but is a workshop flyer. Synthetic.",
+  "summary_en": "A flyer for a free tenant rights workshop on Saturday, September 26, 2026 at 10:00 a.m.; it mentions N4 notices as a topic and offers interpretation in several languages.",
+  "text": "Eastside Community Legal Clinic (fictional)\nFREE TENANT RIGHTS WORKSHOP\nGot an N4? Rent increase? Repairs not done? Come learn what your landlord can and cannot do.\nSaturday, September 26, 2026, 10:00 a.m. to 12:00 p.m.\nEastside Community Centre, Room B\nInterpretation available in Spanish, Tigrinya, Tagalog and Farsi - tell us when you register.\nRegister: (416) 555-0180\n",
+  "expected": {
+    "document_class": "community-notice",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "hard-negative",
+    "synthetic",
+    "trapset"
+  ]
+}

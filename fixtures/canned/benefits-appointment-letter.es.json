@@ -1,0 +1,82 @@
+{
+  "_note": "Canned demo outputs for benefits-appointment-letter in Spanish. The back-translation is DELIBERATELY lossy (drops the date, time, floor and phone number) so the fidelity gauge falls and the critic refuses on FIDELITY-FLOOR.",
+  "reader": {
+    "document_class": "benefits-appointment",
+    "title": "Case appointment letter from a social-assistance office",
+    "issuer": "Eastside Community Assistance Office",
+    "what_it_is": "A letter setting an appointment with your caseworker. Missing it without notice may delay your assistance.",
+    "what_it_asks": "Go to 700 Queen Street East, 2nd floor, on Tuesday, September 22, 2026 at 10:30 a.m. Bring photo identification and proof of your rent (your lease or a rent receipt). If you cannot attend, call (416) 555-0188 before the appointment to reschedule.",
+    "deadlines": [
+      {
+        "label": "appointment",
+        "date_text": "Tuesday, September 22, 2026 at 10:30 a.m.",
+        "quote": "Your appointment with your caseworker is on Tuesday, September 22, 2026 at 10:30 a.m., at 700 Queen Street East, 2nd floor."
+      }
+    ],
+    "amounts": [],
+    "stakes": "medium",
+    "stakes_reason": "The letter says: 'Missing the appointment without notice may delay your assistance.'",
+    "evidence": [
+      "Your appointment with your caseworker is on Tuesday, September 22, 2026 at 10:30 a.m., at 700 Queen Street East, 2nd floor.",
+      "Missing the appointment without notice may delay your assistance."
+    ],
+    "confidence": 0.93
+  },
+  "interpreter": {
+    "language": "es",
+    "target_text": "Esta carta le da una cita con su trabajador o trabajadora de caso en la oficina de Queen Street East. Si falta sin avisar, su ayuda podría retrasarse. Lleve identificación con foto y prueba de su alquiler. Si no puede ir, llame antes para cambiar la cita.",
+    "back_translation": "This letter gives you an appointment with your caseworker at the office on Queen Street East. If you miss it without notice, your assistance could be delayed. Bring photo ID and proof of your rent. If you cannot go, call ahead to change the appointment.",
+    "flagged_terms": []
+  },
+  "drafter": {
+    "kind": "note-for-staff",
+    "title": "Reminder card: case appointment",
+    "body_en": "APPOINTMENT: Tuesday, September 22, 2026 at 10:30 a.m.\nWHERE: 700 Queen Street East, 2nd floor\nBRING: photo identification; proof of your rent (your lease or a rent receipt)\nIF YOU CANNOT ATTEND: call (416) 555-0188 before the appointment to reschedule.",
+    "body_target": "CITA: martes 22 de septiembre de 2026 (Tuesday, September 22, 2026) a las 10:30 a.m.\nDÓNDE: 700 Queen Street East, 2.º piso\nLLEVE: identificación con foto; prueba de su alquiler (su contrato o un recibo de alquiler)\nSI NO PUEDE IR: llame al (416) 555-0188 antes de la cita para cambiarla.",
+    "facts_used": [
+      "Your appointment with your caseworker is on Tuesday, September 22, 2026 at 10:30 a.m., at 700 Queen Street East, 2nd floor.",
+      "Please bring: photo identification; proof of your rent (your lease or a rent receipt)",
+      "If you cannot attend, call (416) 555-0188 before the appointment to reschedule."
+    ],
+    "assumptions": [],
+    "revision": 1
+  },
+  "critic": {
+    "decision": "refuse",
+    "rule_id": "FIDELITY-FLOOR",
+    "checks": [
+      {
+        "name": "rule-catalogue",
+        "passed": true,
+        "detail": "benefits-appointment: no read-only rule; the desk may assist"
+      },
+      {
+        "name": "fidelity",
+        "passed": false,
+        "detail": "The back-translation lost the appointment date (September 22, 2026), the time (10:30 a.m.), the floor and the phone number; band unreliable."
+      }
+    ],
+    "reasons": [
+      "An appointment letter whose date and time did not survive the round trip cannot be delivered as an interpretation. A person must confirm it with the visitor."
+    ],
+    "revision_notes": []
+  },
+  "router": {
+    "outcome": "escalate",
+    "headline_en": "The translation needs review. Ask staff for reading help.",
+    "headline_target": "La traducción necesita revisión. Pida al personal ayuda para leer la carta.",
+    "statement_en": "I am not confident I said that correctly in your language: when I translated my own words back to English, something important was lost. I will not guess. Ask staff for help finding a person to read this letter with you.",
+    "statement_target": "No estoy seguro de haberlo dicho bien en su idioma: al traducir mis propias palabras de vuelta al inglés, se perdió algo importante. No voy a adivinar. Pida al personal ayuda para encontrar a una persona que lea esta carta con usted.",
+    "rule_citation": "FIDELITY-FLOOR (organisation policy: interpretation is only delivered when its back-translation checks out)",
+    "who": "ask staff about help from a human interpreter",
+    "next_step_en": "Ask staff to review the letter and help you find the appropriate person.",
+    "next_step_target": "Pida al personal que revise la carta y le ayude a encontrar a la persona adecuada.",
+    "when": "Ask staff about availability. No appointment or response time has been confirmed.",
+    "safe_today_en": "The letter says the appointment is Tuesday, September 22, 2026 at 10:30 a.m., 700 Queen Street East, 2nd floor; bring photo ID and proof of rent. If you cannot go, the letter says to call (416) 555-0188 before the appointment.",
+    "safe_today_target": "La carta dice que la cita es el martes 22 de septiembre de 2026 (Tuesday, September 22, 2026) a las 10:30 a.m., en 700 Queen Street East, 2.º piso; lleve identificación con foto y prueba de su alquiler. Si no puede ir, la carta dice que llame al (416) 555-0188 antes de la cita.",
+    "summary_en": "WHAT THIS IS: an appointment letter from the Eastside Community Assistance Office. THE DATE: Tuesday, September 22, 2026 at 10:30 a.m., 700 Queen Street East, 2nd floor. BRING: photo ID and proof of rent. IF YOU CANNOT GO: call (416) 555-0188 before the appointment. SUGGESTED CONTACT: ask staff for help confirming the date and time with a human interpreter; availability is unconfirmed.",
+    "summary_target": "QUÉ ES: una carta de cita de la Eastside Community Assistance Office. LA FECHA: martes 22 de septiembre de 2026 (Tuesday, September 22, 2026) a las 10:30 a.m., 700 Queen Street East, 2.º piso. LLEVE: identificación con foto y prueba de alquiler. SI NO PUEDE IR: llame al (416) 555-0188 antes de la cita. CONTACTO SUGERIDO: pida al personal ayuda para confirmar la fecha y la hora con un intérprete humano; la disponibilidad no está confirmada.",
+    "who_target": "un miembro del personal; pida ayuda para contactar a un intérprete humano",
+    "when_target": "Pregunte al personal por la disponibilidad. No se ha confirmado ninguna cita ni plazo de respuesta."
+  }
+}

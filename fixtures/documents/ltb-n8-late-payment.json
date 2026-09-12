@@ -1,0 +1,19 @@
+{
+  "id": "ltb-n8-late-payment",
+  "title": "Ontario LTB Form N8 - Notice to End your Tenancy at the End of the Term (persistent late payment)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; follows the structure of the N8 form but is not the official text.",
+  "summary_en": "An official notice to end the tenancy at the end of the term because rent was persistently paid late; termination date 31/12/2026.",
+  "text": "Notice to End your Tenancy at the End of the Term\nN8\nTo: (Tenant's name): Joseph Mensah\nFrom: (Landlord's name): Bayview Court Apartments (fictional)\nAddress of the Rental Unit: Apt 7, 900 Bayview Avenue, Toronto, Ontario\nThis is a legal notice that could lead to you being evicted from your home.\nI am giving you this notice because I want to end your tenancy. I want you to move out of your rental unit by the following termination date: 31/12/2026.\nReason 1: You have persistently paid your rent late.\nDetails: Rent due on the 1st of the month was paid on 09/03/2026, 12/04/2026, 15/05/2026, 11/06/2026, 14/07/2026 and 10/08/2026.\nSignature: Landlord  Signature Date: 12/09/2026\n",
+  "expected": {
+    "document_class": "ltb-n8",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "synthetic-form",
+    "trapset"
+  ]
+}

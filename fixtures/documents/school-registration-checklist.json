@@ -1,0 +1,18 @@
+{
+  "id": "school-registration-checklist",
+  "title": "School registration - documents checklist",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "To register a child the school needs proof of address, the child's birth certificate or passport, immunization record and immigration documents if applicable; registration is by appointment.",
+  "text": "Danforth Park Public School (fictional)\nRegistering your child\nPlease bring the following documents to your registration appointment:\n1. Proof of address (a lease, utility bill or bank statement dated within the last 60 days)\n2. Your child's birth certificate or passport\n3. Your child's immunization record\n4. Immigration documents, if applicable (permanent resident card, study permit, or refugee claimant document)\nTo book a registration appointment, call the office at (416) 555-0130. Children can start school within a few days of registration.\n",
+  "expected": {
+    "document_class": "school-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "scam-cra-text",
+  "title": "Text message claiming to be from the CRA demanding payment",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard negative: mentions the CRA, arrest and a deadline; it is a scam and the desk should say so and help the visitor not pay. Synthetic.",
+  "summary_en": "A scam text message claiming the person owes the CRA $1,240 and must pay by gift card within 24 hours or face arrest; the CRA does not do this.",
+  "text": "SMS from +1 (000) 555-0199:\nCANADA REVENUE AGENCY: Our records show you owe $1,240.00 in unpaid taxes. Pay within 24 hours using Google Play gift cards and text the codes to this number, or a warrant will be issued for your arrest. Do not ignore this message. Ref: CRA-88231.\n",
+  "expected": {
+    "document_class": "scam-or-phishing",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "hard-negative",
+    "synthetic",
+    "trapset"
+  ]
+}

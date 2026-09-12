@@ -1,0 +1,19 @@
+{
+  "id": "landlord-informal-note",
+  "title": "Handwritten note from a landlord about late rent",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard negative: mentions eviction and rent but is not an LTB notice; the desk may read it, explain that only an official N4 starts the process, and draft a short reply. Synthetic.",
+  "summary_en": "An informal note from the landlord saying the rent is late, asking for payment by Friday and threatening to 'start eviction' - not an official Landlord and Tenant Board form.",
+  "text": "Mariana -\nYour rent for September is late again. I need the $1,850 by Friday or I will start eviction. Leave a cheque in my mailbox or e-transfer.\n- Dana (landlord)\n",
+  "expected": {
+    "document_class": "landlord-note",
+    "stakes": "medium",
+    "must_escalate": false
+  },
+  "tags": [
+    "hard-negative",
+    "synthetic",
+    "trapset"
+  ]
+}

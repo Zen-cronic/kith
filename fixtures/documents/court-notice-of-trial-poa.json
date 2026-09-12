@@ -1,0 +1,19 @@
+{
+  "id": "court-notice-of-trial-poa",
+  "title": "Ontario Court of Justice - notice of trial (provincial offence)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Hard positive: a modest fine, but a court document under the desk's policy. Synthetic.",
+  "summary_en": "A notice that the trial for a Highway Traffic Act charge (fail to stop at a red light) is set for Tuesday, December 1, 2026 at 9:30 a.m. in courtroom 2; not attending may lead to conviction in absence.",
+  "text": "ONTARIO COURT OF JUSTICE\nProvincial Offences Court - Toronto\nNOTICE OF TRIAL\nDefendant: Tesfay Ghebre\nOffence: Fail to stop at a red light, Highway Traffic Act s. 144(18)\nOffence number: 000-000-000\nYour trial is scheduled for Tuesday, December 1, 2026 at 9:30 a.m., Courtroom 2, 60 Queen Street West, Toronto.\nIf you do not attend, the trial may proceed in your absence and you may be convicted and fined.\nIf you require an interpreter, notify the court office in advance.\n",
+  "expected": {
+    "document_class": "court-notice",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "hard-positive",
+    "synthetic",
+    "trapset"
+  ]
+}

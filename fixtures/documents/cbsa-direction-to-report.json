@@ -1,0 +1,18 @@
+{
+  "id": "cbsa-direction-to-report",
+  "title": "CBSA letter - direction to report for an interview",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of a CBSA direction for test purposes only.",
+  "summary_en": "The Canada Border Services Agency directs the person to report to an office on Monday, September 28, 2026 at 8:30 a.m. with their passport for an interview about their removal order.",
+  "text": "Canada Border Services Agency\nDIRECTION TO REPORT\nClient ID: 0000-0000\nYou are directed to report to the Canada Border Services Agency, Inland Enforcement Office, on Monday, September 28, 2026 at 8:30 a.m. Bring your passport and any travel documents.\nThe purpose of the interview is to discuss the enforcement of the removal order issued against you.\nFailure to report as directed may result in a warrant being issued for your arrest.\n",
+  "expected": {
+    "document_class": "cbsa-notice",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

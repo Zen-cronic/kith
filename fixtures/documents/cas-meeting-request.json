@@ -1,0 +1,18 @@
+{
+  "id": "cas-meeting-request",
+  "title": "Children's aid society - letter requesting a meeting",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic; imitates the structure of a children's aid society letter for test purposes only.",
+  "summary_en": "A children's aid society worker asks the parent to meet on Thursday, September 17, 2026 at 2:00 p.m. about a concern received regarding the children, and says the worker may visit the home if the parent does not respond.",
+  "text": "Metro Children's Aid Society (fictional)\nDate: September 10, 2026\nDear Parent,\nOur agency has received information regarding the care of your children. As required by the Child, Youth and Family Services Act, we must look into this concern.\nI would like to meet with you on Thursday, September 17, 2026 at 2:00 p.m. at our office, or at your home if you prefer. Please call me at (416) 555-0170 to confirm. If I do not hear from you by September 15, 2026, I may attend your home to discuss the concern.\nYou may bring a support person or a lawyer to the meeting.\nChild Protection Worker (fictional)\n",
+  "expected": {
+    "document_class": "cas-letter",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}

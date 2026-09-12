@@ -1,0 +1,19 @@
+{
+  "id": "ltb-n5-filled",
+  "title": "Ontario LTB Form N5 - Notice to End your Tenancy for Interfering with Others (filled)",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Official N5 wording with fictional fill-in values.",
+  "summary_en": "An official N5 notice: the landlord says noise from the unit interfered with other tenants; the tenant has 7 days to stop the behaviour or the landlord may apply to evict; termination date 30/09/2026.",
+  "text": "Notice to End your Tenancy\nFor Interfering with Others, Damage or Overcrowding\nN5\nTo: (Tenant's name): Luz Marina Castillo\nFrom: (Landlord's name): Greenline Holdings (fictional)\nAddress of the Rental Unit: Apt 401, 210 Sherbourne Street, Toronto, Ontario\nThis is a legal notice that could lead to you being evicted from your home.\nThe following information is from your landlord\nI am giving you this notice because I want to end your tenancy - I want you to move out of your rental unit by the following termination date: 30/09/2026.\nReason 1: Your behaviour or the behaviour of someone visiting or living with you has substantially interfered with another tenant's or my reasonable enjoyment of the residential complex.\nYou have 7 days to stop the activities or correct the behaviour described on page 2 and avoid eviction. You will not have to move out if you correct the behaviour described on page 2 within 7 days after receiving this notice. However, if you do not correct the behaviour within 7 days, I can apply to the Board for an order to evict you.\nDetails: On 28/08/2026 and 02/09/2026, between 11:30 p.m. and 2:00 a.m., loud music and shouting from Apt 401 were reported by the tenants of Apt 301 and Apt 402.\nSignature: Landlord  Signature Date: 09/09/2026\nv. 01/04/2022\n",
+  "expected": {
+    "document_class": "ltb-n5",
+    "stakes": "high",
+    "must_escalate": true
+  },
+  "tags": [
+    "real-form-wording",
+    "synthetic",
+    "trapset"
+  ]
+}

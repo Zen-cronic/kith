@@ -1,0 +1,18 @@
+{
+  "id": "insurance-tenant-renewal",
+  "title": "Tenant insurance renewal notice",
+  "source": "synthetic (written for this project; organisations and people are fictional)",
+  "source_url": null,
+  "notes": "Synthetic test document. It follows the structure of the real document type but is not an actual letter from any organisation.",
+  "summary_en": "A tenant insurance policy renews automatically on November 1, 2026 at $24.10 per month unless cancelled; coverage and contact details are listed.",
+  "text": "Northshore Insurance (fictional)\nPolicy renewal notice\nPolicy number: TN-000000\nYour tenant insurance policy will renew automatically on November 1, 2026. Your new monthly premium is $24.10 (previously $22.90).\nCoverage: contents up to $30,000; personal liability up to $1,000,000.\nNo action is needed to renew. To make changes or cancel, call 1-800-555-0150 before October 25, 2026.\n",
+  "expected": {
+    "document_class": "insurance-letter",
+    "stakes": "low",
+    "must_escalate": false
+  },
+  "tags": [
+    "synthetic",
+    "trapset"
+  ]
+}
