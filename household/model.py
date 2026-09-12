@@ -9,11 +9,12 @@ from __future__ import annotations
 import hashlib
 import hmac
 import os
+import re
 from datetime import UTC, datetime
 from decimal import Decimal, InvalidOperation
 from typing import Annotated, Literal
 
-from pydantic import AfterValidator, BaseModel, ConfigDict, Field
+from pydantic import AfterValidator, BaseModel, ConfigDict, Field, model_validator
 
 ActionType = Literal[
     "email:send",
@@ -34,7 +35,7 @@ ConsentKind = Literal["grant-accept", "action-approve", "action-decline", "data-
 ConsentChannel = Literal["ui", "voice-pin"]
 Outcome = Literal["allow", "block", "needs-approval"]
 ReceiptMode = Literal["COMPLETE", "PREPARE-ONLY", "SIMULATED", "SIMULATED-replay"]
-AccountKind = Literal["allowance", "household"]
+AccountKind = Literal["allowance", "household", "external"]  # external = a payee outside the household
 
 AGENT_ACTOR = "agent"  # grantee id (and actor id) for actions the agent takes on its own initiative
 PIN_ITERATIONS = 200_000
@@ -44,13 +45,21 @@ PIN_SALT_BYTES = 16
 # Money and time helpers
 
 
-def money(value: str) -> Decimal:
-    """Parse a money string. Raises ValueError for anything that is not a finite, non-negative decimal."""
+def signed_money(value: str) -> Decimal:
+    """Parse a money string that may be negative (an external counterparty's balance is the outside world)."""
     try:
         amount = Decimal(value)
     except (InvalidOperation, TypeError, ValueError) as exc:
         raise ValueError(f"not a money amount: {value!r}") from exc
-    if not amount.is_finite() or amount < 0:
+    if not amount.is_finite():
+        raise ValueError(f"money must be a finite, non-negative amount, got {value!r}")
+    return amount
+
+
+def money(value: str) -> Decimal:
+    """Parse a money string. Raises ValueError for anything that is not a finite, non-negative decimal."""
+    amount = signed_money(value)
+    if amount < 0:
         raise ValueError(f"money must be a finite, non-negative amount, got {value!r}")
     return amount
 
@@ -60,7 +69,19 @@ def _check_money(value: str) -> str:
     return value
 
 
+def _check_signed_money(value: str) -> str:
+    signed_money(value)
+    return value
+
+
 Money = Annotated[str, AfterValidator(_check_money)]
+SignedMoney = Annotated[str, AfterValidator(_check_signed_money)]
+
+
+def external_account_id(name: str) -> str:
+    """`ext-<slug>` for a payee outside the household: lowercase, every run of other characters becomes one dash."""
+    slug = re.sub(r"[^a-z0-9]+", "-", name.strip().lower()).strip("-")
+    return f"ext-{slug or 'unnamed'}"
 
 
 def parse_iso(value: str) -> datetime:
@@ -188,11 +209,18 @@ class ActionRecord(LedgerModel):
 
 class Account(LedgerModel):
     id: str
-    owner_member_id: str
+    owner_member_id: str = Field(description="The member who owns it; '' for an external counterparty (the outside world)")
     kind: AccountKind
-    balance: Money
+    balance: SignedMoney
     currency: str = "CAD"
     rules: dict[str, str] = Field(default_factory=dict, description="e.g. allowance auto_limit and weekly caps")
+
+    @model_validator(mode="after")
+    def _household_balances_never_go_negative(self) -> Account:
+        """Only an external counterparty may carry a negative balance: it is the outside world, not household money."""
+        if self.kind != "external":
+            money(self.balance)
+        return self
 
 
 class LedgerEntry(LedgerModel):
@@ -236,6 +264,19 @@ class Household(LedgerModel):
 
     def allowance_account(self, member_id: str) -> Account | None:
         return next((a for a in self.accounts if a.owner_member_id == member_id and a.kind == "allowance"), None)
+
+    def counterparty_account(self, name: str, *, attach: bool = True) -> Account:
+        """The outside-world account for a payee named in a proposal: found by `ext-<slug>`, or created with a zero
+        balance in the household currency, no owner, and the payee's name kept under `rules.name`. With attach=False a
+        new account is returned without being added, so a refused or simulated posting leaves no trace."""
+        account_id = external_account_id(name)
+        found = self.account(account_id)
+        if found is None:
+            found = Account(id=account_id, owner_member_id="", kind="external", balance="0.00", currency=self.currency,
+                            rules={"name": name.strip()})
+            if attach:
+                self.accounts.append(found)
+        return found
 
     def action(self, action_id: str) -> ActionRecord | None:
         return next((a for a in self.actions if a.proposal.id == action_id), None)

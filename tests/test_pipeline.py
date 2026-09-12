@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 
 import pytest
 
+from household import config
 from household.config import load_settings
 from household.fixtures import FixtureStore
 from household.model import Receipt
@@ -12,6 +13,7 @@ from household.pipeline import execute_approved, run_session
 from household.providers.fake import FakeModel, _has_tool_result, _last_user_text, json_section
 
 FAKE = load_settings(provider="fake")
+LIVE = load_settings(provider="fake", execution_mode="live", ses_verified_identities=())
 NOW = datetime(2026, 9, 11, 16, 0, tzinfo=UTC)
 PINS = {"ama": "2468", "daniel": "1357", "kofi": "1111", "mei": "2222"}
 
@@ -234,6 +236,22 @@ def test_execute_approved_lets_the_grantor_release_the_remainder_after_the_split
     assert approved.decision.outcome == "allow" and approved.decision.grant_id == "approval:daniel"
     assert "approved by Daniel Lim" in " ".join(approved.decision.reasons)
     assert len(household.receipts) == 2 and {x.action_id for x in household.receipts} == {p.id for p in r.plans[-1].proposals}
+
+
+def test_live_mode_posts_the_split_payment_and_the_approved_remainder_to_the_same_payee(monkeypatch) -> None:
+    monkeypatch.delenv("SES_FROM", raising=False)
+    monkeypatch.setattr(config, "ses_verified_identities", lambda region: pytest.fail("live mode must stay offline without SES_FROM"))
+    household = demo()
+    r = run("daniel-payment-450", household=household, settings=LIVE)
+    [receipt] = r.receipts
+    assert receipt.mode == "COMPLETE" and receipt.label_reason == "internal household ledger (no bank rail)" and r.outcome == "partial"
+    payee = household.account("ext-toronto-youth-wind-orchestra")
+    assert payee is not None and payee.kind == "external" and payee.balance == "300.00" and household.account("hh-main").balance == "2100.00"
+    approved = execute_approved(household, r.approvals_needed[0].action_id, "daniel", PINS["daniel"], settings=LIVE, now=NOW)
+    assert approved.receipt is not None and approved.receipt.mode == "COMPLETE" and approved.receipt.executed_under_grant == "approval:daniel"
+    assert payee.balance == "450.00" and household.account("hh-main").balance == "1950.00"
+    assert [(e.debit_account, e.credit_account, e.amount) for e in household.ledger] == [(payee.id, "hh-main", "300.00"), (payee.id, "hh-main", "150.00")]
+    assert [x.provider_ref for x in household.receipts] == [e.id for e in household.ledger]
 
 
 def test_unknown_actor_is_refused_before_any_model_call() -> None:

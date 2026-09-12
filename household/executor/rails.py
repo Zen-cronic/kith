@@ -19,7 +19,7 @@ import httpx
 
 from .. import config as _config
 from ..config import ROOT, Settings
-from ..model import Account, ActionProposal, Household, LedgerEntry, money
+from ..model import Account, ActionProposal, Household, LedgerEntry, money, signed_money
 from . import forms
 from .receipts import LEDGER_INSUFFICIENT_LABEL, SES_NO_RECIPIENT_LABEL, Label, RailResult, digest, label_for
 
@@ -88,19 +88,28 @@ def ses_email(proposal: ActionProposal, household: Household, settings: Settings
 
 
 def _account_by_ref(household: Household, ref: str) -> Account | None:
+    """An account id, or a member id resolved to that member's allowance account."""
     return household.account(ref) or household.allowance_account(ref)
 
 
+def _destination(household: Household, ref: str) -> Account:
+    """An account id, a member id (their allowance), or a payee outside the household, which is its counterparty
+    account `ext-<slug>`. A new counterparty is attached to the ledger only when a posting actually happens."""
+    return _account_by_ref(household, ref) or household.counterparty_account(ref, attach=False)
+
+
 def ledger_accounts(proposal: ActionProposal, household: Household) -> tuple[Account | None, Account | None]:
-    """(source, destination). Explicit `from_account` / `to_account` payload keys win; otherwise an allowance transfer
-    pays from the household pot into the subject's allowance, and a payment pays from the subject's own allowance
-    (or the pot) to `recipient`, which may name an account or a member."""
+    """(source, destination). An allowance transfer spends from the subject's allowance account and a payment pays
+    from the household account; an explicit `from_account` overrides the source (a top-up is household -> allowance).
+    The destination is `to_account` or `recipient`: an account id, a member id, or a payee name outside the household."""
     pot = next((a for a in household.accounts if a.kind == "household"), None)
     own = household.allowance_account(proposal.subject_member_id)
-    src, dst = proposal.payload.get("from_account"), proposal.payload.get("to_account") or proposal.recipient
-    if proposal.action_type == "allowance:transfer":
-        return (_account_by_ref(household, src) if src else pot, _account_by_ref(household, dst) if dst else own)
-    return (_account_by_ref(household, src) if src else own or pot, _account_by_ref(household, dst) if dst else None)
+    src = (proposal.payload.get("from_account") or "").strip()
+    dst = (proposal.payload.get("to_account") or proposal.recipient or "").strip()
+    default = own if proposal.action_type == "allowance:transfer" else pot
+    source = _account_by_ref(household, src) if src else default
+    dest = _destination(household, dst) if dst else None
+    return source, dest
 
 
 def ledger_problem(proposal: ActionProposal, source: Account | None, dest: Account | None) -> str | None:
@@ -116,8 +125,8 @@ def ledger_problem(proposal: ActionProposal, source: Account | None, dest: Accou
         return "source and destination are the same account"
     if source.currency != proposal.currency or dest.currency != proposal.currency:
         return f"currency mismatch: {source.currency}/{dest.currency} accounts, {proposal.currency} transfer"
-    if money(source.balance) < money(proposal.amount):
-        return LEDGER_INSUFFICIENT_LABEL
+    if source.kind != "external" and signed_money(source.balance) < money(proposal.amount):
+        return LEDGER_INSUFFICIENT_LABEL  # household money never goes negative; the outside world may
     return None
 
 
@@ -128,7 +137,7 @@ def ledger_request(proposal: ActionProposal, source: Account | None, dest: Accou
         "credit_account": source.id if source else "",
         "amount": proposal.amount or "0.00",
         "currency": proposal.currency,
-        "memo": proposal.payload.get("memo") or proposal.rationale or proposal.action_type,
+        "memo": proposal.payload.get("memo") or proposal.payload.get("purpose") or proposal.rationale or proposal.action_type,
         "action_id": proposal.id,
         "at": at.isoformat(),
     }
@@ -146,8 +155,10 @@ def internal_ledger(proposal: ActionProposal, household: Household, settings: Se
         return RailResult(label, request)
     amount = money(proposal.amount or "0")
     entry = LedgerEntry(id=f"le-{digest(request)[:12]}", **request)
-    source.balance = format_money(money(source.balance) - amount)
-    dest.balance = format_money(money(dest.balance) + amount)
+    if household.account(dest.id) is None:  # a payee outside the household joins the ledger with its first posting
+        household.accounts.append(dest)
+    source.balance = format_money(signed_money(source.balance) - amount)
+    dest.balance = format_money(signed_money(dest.balance) + amount)
     household.ledger.append(entry)
     return RailResult(label, request, response=entry.model_dump(mode="json"), provider_ref=entry.id)
 
@@ -190,7 +201,7 @@ def stripe_test(proposal: ActionProposal, household: Household, settings: Settin
 
 def form_render(proposal: ActionProposal, household: Household, settings: Settings, at: datetime, outputs: Outputs = None) -> RailResult:
     try:
-        spec = forms.spec_from_payload(proposal)
+        spec = forms.spec_for(proposal)  # the proposing skill's own schema first, else the payload's
     except ValueError as exc:
         return RailResult(Label("SIMULATED", f"form payload invalid: {exc}"), {"action_id": proposal.id, "payload": proposal.payload})
     text = forms.render(proposal, household, spec, at)

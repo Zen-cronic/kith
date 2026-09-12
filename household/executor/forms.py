@@ -1,46 +1,30 @@
 """Official forms are prepared, never filed: the skill's field schema and verbatim source quotes are rendered to
-`runs/forms/<action_id>.md` for a human to review and file. Writes are atomic (tmp + replace)."""
+`runs/forms/<action_id>.md` for a human to review and file. Writes are atomic (tmp + replace).
+
+The schema comes from the proposing skill (`Skill.form_spec`) when it owns one for the action type; otherwise from
+the proposal payload (`fields` / `quotes` JSON lists, or one `field:<name>` / `quote:<n>` key per item).
+"""
 
 from __future__ import annotations
 
 import json
 import re
-from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from ..config import ROOT
 from ..model import ActionProposal, Household
+from ..skills import skill_for
+from ..skills.base import FormField, FormSpec, SourceQuote
+
+__all__ = ["BANNER", "FORMS_DIR", "FormField", "FormSpec", "SourceQuote", "render", "safe_name", "spec_for",
+           "spec_from_payload", "spec_from_skill", "write"]
 
 FORMS_DIR = ROOT / "runs" / "forms"
 BANNER = "PREPARED, NOT FILED. A human reviews this and files it; the agent never submits an official form."
 _UNSAFE = re.compile(r"[^A-Za-z0-9._-]+")
-
-
-@dataclass(frozen=True)
-class FormField:
-    name: str
-    value: str = ""
-    quote: str = ""  # the verbatim source text the value was taken from, if any
-
-
-@dataclass(frozen=True)
-class SourceQuote:
-    text: str
-    source: str = ""
-
-
-@dataclass(frozen=True)
-class FormSpec:
-    form_id: str
-    title: str
-    source: str = ""
-    fields: tuple[FormField, ...] = ()
-    quotes: tuple[SourceQuote, ...] = ()
-
-    def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+NO_FIELDS = "no form fields: a prepared form needs the skill's field schema"
 
 
 def safe_name(action_id: str) -> str:
@@ -83,8 +67,25 @@ def spec_from_payload(proposal: ActionProposal) -> FormSpec:
     else:
         quotes = [SourceQuote(value) for key, value in sorted(payload.items()) if key.startswith("quote:")]
     if not any(field.name for field in fields):
-        raise ValueError("no form fields: a prepared form needs the skill's field schema")
+        raise ValueError(NO_FIELDS)
     return FormSpec(form_id, payload.get("form_title") or form_id, payload.get("form_source", ""), tuple(fields), tuple(quotes))
+
+
+def spec_from_skill(proposal: ActionProposal) -> FormSpec | None:
+    """The form the proposing skill owns for this action type, if any (unknown skill ids fall back to the core skill,
+    which owns no forms)."""
+    return skill_for(proposal.skill_id).form_spec(proposal)
+
+
+def spec_for(proposal: ActionProposal) -> FormSpec:
+    """The form to render: the skill's own schema first, else the one carried in the payload. Raises ValueError when
+    neither yields a named field."""
+    spec = spec_from_skill(proposal)
+    if spec is None:
+        return spec_from_payload(proposal)
+    if not any(field.name for field in spec.fields):
+        raise ValueError(NO_FIELDS)
+    return spec
 
 
 def _cell(text: str) -> str:

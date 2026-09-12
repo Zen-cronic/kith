@@ -8,6 +8,7 @@ from pydantic import Field
 from ...config import ROOT
 from ...schemas import AgentOutput
 from ..base import Skill
+from .form import FORMS
 from .rules import RULES
 from .templates import TEMPLATES
 from .tools import TOOLS
@@ -39,4 +40,5 @@ BENEFITS = Skill(
         "packet to the requester's own email when they asked for it. Quote every amount and date from the intake."
     ),
     matcher_hints=("EOB", "dental", "benefits", "Sun Life", "Manulife", "claim"),
+    form_builders=FORMS,
 )

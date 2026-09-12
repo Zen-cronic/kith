@@ -36,6 +36,7 @@ def test_skill_contract_is_frozen_and_ordered():
     assert ALLOWANCE.matcher_hints == ("allowance", "pocket money", "book fair", "chores")
     assert len(ALLOWANCE.prompt_block.splitlines()) <= 25 and "allowance_balance" in ALLOWANCE.prompt()
     assert set(ALLOWANCE.evidence_schema.model_fields) == {"member_id", "amount_text", "purpose", "when_text"}
+    assert ALLOWANCE.form_builders == {}  # the allowance skill owns no official form
 
 
 def test_rules_come_from_the_childs_account_and_count_this_weeks_receipts():

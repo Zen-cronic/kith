@@ -1,5 +1,6 @@
 """The skill contract. A skill is a frozen bundle of rules with citations, read-only or proposal-only tools, action
-templates naming the rail and its label rule, an evidence schema, a prompt block for the planner, and matcher hints.
+templates naming the rail and its label rule, an evidence schema, a prompt block for the planner, matcher hints, and
+the form schema it owns for actions on the official-form rail (labelled fields plus verbatim source quotes).
 
 Skills propose; they never decide (authority.py) and never execute (executor/). The `SKILLS` tuple in
 `household.skills` is the order parameter: matcher tie-break, /api/meta, README and harness grouping all follow it.
@@ -9,14 +10,14 @@ from __future__ import annotations
 
 import json
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel
 
-from ..model import Household, Member, money
+from ..model import ActionProposal, Household, Member, money
 
 
 @dataclass(frozen=True)
@@ -54,6 +55,37 @@ class ActionTemplate:
         return f"- {self.action_type} on rail {self.rail} (label: {self.label}); payload fields: {fields}. {self.description}".rstrip()
 
 
+# Official forms: the skill owns the schema; the official-form rail only renders it (prepared, never filed)
+
+
+@dataclass(frozen=True)
+class FormField:
+    name: str
+    value: str = ""
+    quote: str = ""  # the verbatim source text the value was taken from, if any
+
+
+@dataclass(frozen=True)
+class SourceQuote:
+    text: str
+    source: str = ""
+
+
+@dataclass(frozen=True)
+class FormSpec:
+    form_id: str
+    title: str
+    source: str = ""
+    fields: tuple[FormField, ...] = ()
+    quotes: tuple[SourceQuote, ...] = ()
+
+    def as_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+FormBuilder = Callable[[ActionProposal], FormSpec]
+
+
 @dataclass(frozen=True)
 class ToolContext:
     """What a skill tool may see. Tools are closures over one session; they never reach the store or a rail."""
@@ -85,9 +117,16 @@ class Skill:
     fixtures_dir: Path
     prompt_block: str
     matcher_hints: tuple[str, ...]
+    form_builders: Mapping[str, FormBuilder] = field(default_factory=dict)  # action_type -> the form the skill owns
 
     def build_tools(self, ctx: ToolContext) -> dict[str, Any]:
         return {tool.name: tool.build(ctx) for tool in self.tools}
+
+    def form_spec(self, proposal: ActionProposal) -> FormSpec | None:
+        """The form this skill owns for a proposal on the official-form rail: labelled fields with values from the
+        proposal payload and the verbatim quotes from its rules. None when the skill declares no form for the action."""
+        build = self.form_builders.get(proposal.action_type)
+        return build(proposal) if build is not None else None
 
     def template(self, action_type: str) -> ActionTemplate:
         return self.action_templates[action_type]

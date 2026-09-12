@@ -83,9 +83,12 @@ def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: o
     provider = resolve_auto() if requested == "auto" else requested
     execution_mode = str(overrides.pop("execution_mode", None) or os.environ.get("EXECUTION_MODE", "simulated")).strip().lower()
     region = str(overrides.get("aws_region") or os.environ.get("AWS_REGION", "us-east-1"))
+    ses_from = str(overrides.pop("ses_from", None) or os.environ.get("SES_FROM", "")).strip() or None
     identities = overrides.pop("ses_verified_identities", None)
-    if identities is None:  # the SES identity list is fetched once, at startup, and only when a real send is possible
-        identities = ses_verified_identities(region) if execution_mode == "live" else ()
+    if identities is None:
+        # The SES identity list is fetched once, at startup, and only when a real send is possible: live mode with a
+        # sender set. Without SES_FROM nothing could be sent, so EXECUTION_MODE=live stays fully offline.
+        identities = ses_verified_identities(region) if execution_mode == "live" and ses_from else ()
     values = {
         "provider": provider,
         "requested_provider": requested,
@@ -97,7 +100,7 @@ def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: o
         "max_model_calls": overrides.get("max_model_calls") if overrides.get("max_model_calls") is not None else int(os.environ.get("MAX_MODEL_CALLS", "20")),
         "node_models": parse_node_models(os.environ.get("NODE_MODELS")),
         "execution_mode": execution_mode,
-        "ses_from": os.environ.get("SES_FROM", "").strip() or None,
+        "ses_from": ses_from,
         "ses_verified_identities": tuple(identities),
         "stripe_secret_key_present": bool(os.environ.get("STRIPE_SECRET_KEY")),
         "aeroapi_key_present": bool(os.environ.get("AEROAPI_KEY")),

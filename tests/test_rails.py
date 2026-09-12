@@ -15,6 +15,7 @@ import httpx
 import pytest
 from botocore.exceptions import NoCredentialsError
 from botocore.stub import Stubber
+from pydantic import ValidationError
 
 from household import config
 from household.config import ROOT, Settings, load_settings
@@ -33,7 +34,17 @@ from household.executor.receipts import (
     STRIPE_NO_KEY_LABEL,
     label_for,
 )
-from household.model import ActionProposal, ActionRecord, Household, money
+from household.model import (
+    Account,
+    ActionProposal,
+    ActionRecord,
+    Household,
+    external_account_id,
+    money,
+    signed_money,
+)
+from household.skills.benefits.form import LABELS
+from household.skills.benefits.rules import RULES
 
 DEMO = ROOT / "fixtures" / "households" / "demo.json"
 CPSC_FIXTURE = ROOT / "fixtures" / "skills" / "recall" / "cpsc-26639.json"
@@ -47,9 +58,11 @@ def demo() -> Household:
 
 
 def proposal(**overrides) -> ActionProposal:
+    # A top-up (household pot -> Kofi's allowance): the explicit `from_account` is how a top-up is expressed, since an
+    # allowance transfer otherwise spends from the subject's own allowance.
     base = dict(id="act-1", skill_id="allowance", action_type="allowance:transfer", rail="internal-ledger",
                 actor_member_id="ama", subject_member_id="kofi", recipient="allow-kofi", amount="10.00",
-                evidence_refs=["photo:chores"], rationale="Kofi finished the week's chores")
+                payload={"from_account": "hh-main"}, evidence_refs=["photo:chores"], rationale="Kofi finished the week's chores")
     return ActionProposal(**{**base, **overrides})
 
 
@@ -155,24 +168,63 @@ def test_ledger_double_entry_balances() -> None:
 
 def test_ledger_rejects_insufficient_balance_and_never_goes_negative() -> None:
     household = demo()
-    spend = proposal(id="spend", action_type="payment:transfer", subject_member_id="kofi", recipient="hh-main", amount="99.00")
-    receipt = run(household, spend, LIVE)  # Kofi's allowance holds 42.00
+    spend = proposal(id="spend", recipient="hh-main", amount="99.00", payload={})  # Kofi spends his own allowance (42.00)
+    receipt = run(household, spend, LIVE)
     assert receipt.mode == "SIMULATED" and receipt.label_reason == "insufficient balance"
     assert household.ledger == [] and household.account("allow-kofi").balance == "42.00" and household.account("hh-main").balance == "2400.00"
     assert run(demo(), spend, SIM).label_reason == "insufficient balance"  # the check runs before the mode, so a demo never pretends
-    exact = proposal(id="exact", action_type="payment:transfer", subject_member_id="kofi", recipient="hh-main", amount="42.00")
+    exact = proposal(id="exact", recipient="hh-main", amount="42.00", payload={})
     household = demo()
     assert run(household, exact, LIVE).mode == "COMPLETE" and household.account("allow-kofi").balance == "0.00"
+    # the household pot is bounded too, and a refused payment leaves no counterparty account behind
+    big = payment(id="big", rail="internal-ledger", recipient="Toronto Youth Wind Orchestra", amount="5000.00", payload={})
+    assert run(household, big, LIVE).label_reason == "insufficient balance"
+    assert [a.id for a in household.accounts] == ["hh-main", "allow-kofi", "allow-mei"] and len(household.ledger) == 1
+
+
+def test_ledger_spends_an_allowance_and_pays_a_payee_outside_the_household() -> None:
+    household = demo()
+    spend = proposal(id="spend", recipient="hh-main", amount="8.00", payload={"memo": "book fair"})  # the allowance skill's shape
+    receipt = run(household, spend, LIVE)
+    assert receipt.mode == "COMPLETE" and receipt.label_reason == LEDGER_LABEL
+    [entry] = household.ledger
+    assert (entry.debit_account, entry.credit_account, entry.amount, entry.memo) == ("hh-main", "allow-kofi", "8.00", "book fair")
+    assert household.account("allow-kofi").balance == "34.00" and household.account("hh-main").balance == "2408.00"
+    # a payment names a payee, not an account: the payee becomes a counterparty account the moment money is posted
+    pay = payment(id="pay", rail="internal-ledger", recipient="Toronto Youth Wind Orchestra", amount="300.00", payload={"purpose": "band trip deposit"})
+    assert household.account("ext-toronto-youth-wind-orchestra") is None
+    receipt = run(household, pay, LIVE)
+    payee = household.account("ext-toronto-youth-wind-orchestra")
+    assert receipt.mode == "COMPLETE" and payee is not None and receipt.provider_ref == household.ledger[-1].id
+    assert (payee.kind, payee.owner_member_id, payee.balance, payee.currency) == ("external", "", "300.00", "CAD")
+    assert payee.rules == {"name": "Toronto Youth Wind Orchestra"}
+    assert (household.ledger[-1].debit_account, household.ledger[-1].credit_account, household.ledger[-1].memo) == (payee.id, "hh-main", "band trip deposit")
+    assert household.account("hh-main").balance == "2108.00"
+    # the same payee again reuses the account; a member id as destination is that member's allowance
+    again = payment(id="again", rail="internal-ledger", recipient="Toronto Youth Wind Orchestra", amount="150.00", payload={})
+    assert run(household, again, LIVE).mode == "COMPLETE" and payee.balance == "450.00" and len(household.accounts) == 4
+    gift = payment(id="gift", rail="internal-ledger", recipient="mei", amount="5.00", payload={})
+    assert run(household, gift, LIVE).mode == "COMPLETE" and household.account("allow-mei").balance == "23.00"
+    # the outside world may go negative (a refund from the payee); household money never does; the store round-trips both
+    refund = payment(id="refund", rail="internal-ledger", recipient="hh-main", amount="500.00", payload={"from_account": payee.id})
+    assert run(household, refund, LIVE).mode == "COMPLETE" and payee.balance == "-50.00" and household.account("hh-main").balance == "2453.00"
+    assert Household.model_validate(household.model_dump(mode="json")).account(payee.id).balance == "-50.00"
+    assert sum(signed_money(a.balance) for a in household.accounts) == Decimal("2460.00")  # double entry: the total never changes
+    with pytest.raises(ValidationError, match="non-negative"):
+        Account(id="hh-x", owner_member_id="ama", kind="household", balance="-1.00")
+    assert external_account_id("  Toronto Youth Wind Orchestra! ") == "ext-toronto-youth-wind-orchestra" and external_account_id("***") == "ext-unnamed"
 
 
 def test_ledger_problems_are_labelled_and_post_nothing() -> None:
     household = demo()
-    assert run(household, proposal(id="p1", recipient="nowhere"), LIVE).label_reason == "unknown destination account"
+    assert run(household, proposal(id="p0", recipient=None, payload={}), LIVE).label_reason == "unknown destination account"
+    assert run(household, proposal(id="p1", payload={"from_account": "nowhere"}), LIVE).label_reason == "unknown source account"
     assert run(household, proposal(id="p2", recipient="hh-main", payload={"from_account": "hh-main"}), LIVE).label_reason == "source and destination are the same account"
     assert run(household, proposal(id="p3", amount="0.00"), LIVE).label_reason == "amount must be positive"
     assert run(household, proposal(id="p4", currency="USD"), LIVE).label_reason.startswith("currency mismatch")
     assert run(household, proposal(id="p5", action_type="email:send"), LIVE).label_reason == "internal-ledger cannot execute email:send"
     assert household.ledger == [] and household.account("hh-main").balance == "2400.00"
+    assert [a.id for a in household.accounts] == ["hh-main", "allow-kofi", "allow-mei"]
 
 
 def test_ledger_simulated_mode_posts_nothing() -> None:
@@ -217,6 +269,30 @@ def test_form_render_is_prepare_only_and_writes_the_file(monkeypatch, tmp_path) 
     assert broken.mode == "SIMULATED" and broken.label_reason.startswith("form payload invalid")
     assert run(demo(), form(id="form-4", payload={}), SIM).label_reason == "form payload invalid: no form fields: a prepared form needs the skill's field schema"
     assert forms.safe_name("../x/y") == "x-y" and forms.safe_name("") == "form"
+
+
+def test_form_render_uses_the_schema_the_skill_owns(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr(forms, "FORMS_DIR", tmp_path / "forms")
+    payload = {"insurer": "Sun Life", "plan_id": "SL-1", "service_date": "September 3, 2026", "billed": "$180.00",
+               "primary_paid": "$144.00", "claim_amount": "36.00", "provider": "Bloor West Dental"}
+    statement = "cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+    claim = form(id="claim-1", action_type="benefits:claim", recipient="Sun Life", amount="36.00", payload=payload, evidence_refs=[statement])
+    outputs: dict = {}
+    receipt = run(demo(), claim, LIVE, outputs=outputs)
+    assert receipt.mode == "PREPARE-ONLY" and receipt.label_reason == FORM_LABEL
+    text = Path(receipt.provider_ref).read_text(encoding="utf-8")
+    assert text.startswith("# Sun Life coordination-of-benefits claim (secondary plan) (prepared, not filed)")
+    assert "| Insurer (secondary plan) | Sun Life |  |" in text and "| Plan ID | SL-1 |  |" in text
+    assert f"| Amount billed | $180.00 | {statement} |" in text and f"| Provider | Bloor West Dental | {statement} |" in text
+    assert "| Amount claimed (residual) | 36.00 | the secondary claim is the eligible expense minus what the primary plan paid, never below zero |" in text
+    for citation in RULES.citations:
+        assert f"> {citation.quote}\n> — {citation.label}, {citation.url}" in text
+    rendered = outputs["claim-1"]["form"]
+    assert rendered["form_id"] == "cob-secondary-claim" and [f["name"] for f in rendered["fields"]] == list(LABELS.values())
+    # a skill without a form for the action type falls back to the payload schema; the skill's schema wins when it has one
+    assert forms.spec_from_skill(form()) is None and forms.spec_for(form()).form_id == "manulife-claim"
+    assert forms.spec_for(form(id="mixed", action_type="benefits:claim", payload={**payload, "fields": "[]"})).form_id == "cob-secondary-claim"
+    assert forms.spec_for(proposal(skill_id="nobody", action_type="form:prepare", rail="official-form", payload={"field:Name": "x"})).form_id == "form:prepare"
 
 
 # External read-only lookups
@@ -356,6 +432,17 @@ def test_settings_cache_ses_identities_only_in_live_mode(monkeypatch) -> None:
     assert load_settings(provider="fake", ses_verified_identities=("x@y.test",)).ses_verified_identities == ("x@y.test",) and calls == ["us-east-1"]
     with pytest.raises(ValueError, match="EXECUTION_MODE"):
         load_settings(provider="fake", execution_mode="prod")
+
+
+def test_live_mode_without_a_sender_never_asks_ses(monkeypatch) -> None:
+    monkeypatch.setattr(config, "ses_verified_identities", never)
+    monkeypatch.setenv("EXECUTION_MODE", "live")
+    monkeypatch.delenv("SES_FROM", raising=False)
+    s = load_settings(provider="fake")
+    assert s.execution_mode == "live" and s.ses_from is None and s.ses_verified_identities == ()
+    assert label_for("ses-email", s).reason == SES_NO_FROM_LABEL and label_for("internal-ledger", s).mode == "COMPLETE"
+    monkeypatch.setenv("SES_FROM", "   ")
+    assert load_settings(provider="fake").ses_from is None
 
 
 def test_ses_identity_listing_pages_and_filters_through_stubber(monkeypatch) -> None:
