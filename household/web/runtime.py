@@ -226,7 +226,7 @@ async def remote_session(target: RuntimeTarget, payload: dict[str, Any], meta: d
             elif kind == "session_start":
                 if started is not None or any(event.get(key) != value for key, value in {
                     "language": payload["language"], "provider": meta["provider"], "model_id": meta["model_id"],
-                }.items()) or (payload.get("fixture_id") and event.get("fixture_id") != payload["fixture_id"]):
+                }.items()) or (payload.get("fixture_id") and event.get("request_id") != payload["fixture_id"]):
                     raise protocol_failure()
                 started = event
                 yield event
@@ -237,7 +237,7 @@ async def remote_session(target: RuntimeTarget, payload: dict[str, Any], meta: d
                     result = SessionResult.model_validate(event.get("result"))
                 except ValueError as exc:
                     raise protocol_failure() from exc
-                if any(getattr(result, key) != started[key] for key in ("fixture_id", "language", "provider", "model_id")):
+                if any(getattr(result, key) != started[key] for key in ("request_id", "language", "provider", "model_id")):
                     raise protocol_failure()
                 terminal = {"event": "result", "result": result.model_dump(mode="json", exclude_none=True)}
             elif kind in {"node_start", "node_done"} and started is not None and event.get("node_id") in node_ids:

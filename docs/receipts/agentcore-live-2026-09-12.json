@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "runtimeArn": "arn:aws:bedrock-agentcore:us-east-1:<aws-account-id>:runtime/household_preview-<id>",
+  "runtimeVersion": "1",
+  "imageDigest": "sha256:85a4226893c830a21ed217947e1a86bad279130ef74f461f6e9a26caba75d977",
+  "sourceCommit": "502f8f9f4ed29af45c92fb90ffcd7d523bcf74c4",
+  "checks": [
+    "AWS metadata matches live Bedrock mode, Memory off and call allowance",
+    "Live AWS household session: kofi-allowance-8 -> result",
+    "Live AWS household session: kofi-allowance-40 -> result"
+  ],
+  "invocationAttempts": 5,
+  "distinctSessions": 5,
+  "_note": "Live invocation proof of the deployed Bedrock AgentCore runtime; account id and runtime suffix masked. Regenerate with scripts/verify_aws_runtime.py."
+}
