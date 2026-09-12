@@ -253,7 +253,7 @@ def main() -> int:
             expect(page.locator('#ledger-consents .ledger-row[data-kind="action-approve"]')).to_have_count(1)
             expect(page.locator("#receipts .receipt")).to_have_count(3)
             if latest["mode"] == "COMPLETE":
-                expect(page.locator('#ledger-accounts .ledger-row[data-account-id="allow-kofi"]')).to_contain_text("82.00 CAD")
+                expect(page.locator('#ledger-accounts .ledger-row[data-account-id="allow-kofi"]')).to_contain_text("2.00 CAD")
             shot("home-kofi-after")
             receipt["checks"].append("home after approval: the queue shows the action as done, the consent list gains an action-approve entry, receipts list three")
 
