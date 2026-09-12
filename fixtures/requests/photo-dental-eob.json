@@ -1,0 +1,25 @@
+{
+  "id": "photo-dental-eob",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "photo",
+  "image_id": "dental-eob",
+  "request": "Shown a photo: dental-eob.png",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "benefits",
+    "allow": [
+      "benefits:claim"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "photo",
+    "vision",
+    "hero",
+    "spouse-grant",
+    "benefits"
+  ],
+  "notes": "Ama shows Daniel's Manulife dental statement. The secondary claim is prepared for the printed balance ($36.00, bound to 'Balance not covered: $36.00') under g-daniel-ama-benefits; PREPARE-ONLY, never filed."
+}

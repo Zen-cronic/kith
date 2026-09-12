@@ -59,3 +59,4 @@ ignore = ["E501"]  # long literal strings (prompts, verbatim rule quotes, fixtur
 testpaths = ["tests"]
 pythonpath = ["."]
 addopts = "-q"
+markers = ["live: calls a real model host; runs only with HOUSEHOLD_LIVE=1 and credentials, never in CI"]

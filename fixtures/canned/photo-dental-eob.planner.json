@@ -1,0 +1,55 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "daniel",
+      "recipient": "Sun Life",
+      "amount_text": "36.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Sun Life"
+        },
+        {
+          "key": "plan_id",
+          "value": "SL-1"
+        },
+        {
+          "key": "service_date",
+          "value": "September 3, 2026"
+        },
+        {
+          "key": "billed",
+          "value": "$180.00"
+        },
+        {
+          "key": "primary_paid",
+          "value": "$144.00"
+        },
+        {
+          "key": "claim_amount",
+          "value": "36.00"
+        },
+        {
+          "key": "provider",
+          "value": "Bloor West Dental"
+        }
+      ],
+      "evidence_refs": [
+        "Amount billed: $180.00",
+        "Amount paid by Manulife: $144.00",
+        "Balance not covered: $36.00",
+        "Service date: September 3, 2026"
+      ],
+      "rationale": "Daniel's own Manulife plan ML-7 paid first; the printed balance not covered, $36.00, goes to Ama's Sun Life plan SL-1 as the secondary claim, prepared for Ama to file.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: ML-7 (Manulife) primary because Daniel is the claimant; SL-1 (Sun Life) secondary.",
+    "claim amount is the printed line 'Balance not covered: $36.00'; nothing was computed."
+  ]
+}

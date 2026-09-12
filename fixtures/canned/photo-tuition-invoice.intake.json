@@ -1,0 +1,46 @@
+{
+  "document_class": "tuition-invoice",
+  "issuer": "Toronto District School Board",
+  "subject_hint": "Kofi's band program fee",
+  "amounts": [
+    {
+      "label": "band program fee",
+      "amount_text": "$180.00",
+      "quote": "Band program fee (September to June): $180.00"
+    },
+    {
+      "label": "late fee after the due date",
+      "amount_text": "$25.00",
+      "quote": "Late fee after the due date: $25.00"
+    }
+  ],
+  "dates": [
+    {
+      "label": "invoice date",
+      "date_text": "September 8, 2026",
+      "quote": "Invoice date: September 8, 2026"
+    },
+    {
+      "label": "due date",
+      "date_text": "September 30, 2026",
+      "quote": "Due date: September 30, 2026"
+    }
+  ],
+  "transcribed_lines": [
+    "Toronto District School Board",
+    "Invoice for band program fee",
+    "Student: Kofi Okafor-Lim, Grade 7",
+    "Invoice number: TDSB-2026-4471",
+    "Invoice date: September 8, 2026",
+    "Band program fee (September to June): $180.00",
+    "Late fee after the due date: $25.00",
+    "Due date: September 30, 2026",
+    "Pay online or by cheque to the school office."
+  ],
+  "summary_en": "The Toronto District School Board invoices Kofi's band program fee of $180.00, due September 30, 2026, with a $25.00 late fee after the due date.",
+  "evidence": [
+    "Toronto District School Board",
+    "Invoice for band program fee"
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,109 @@
+{
+  "kind": "live-intake-trace",
+  "date_utc": "2026-09-12T16:55:57+00:00",
+  "fixture": "fixtures/images/dental-eob.png",
+  "actor": "ama",
+  "provider": "bedrock",
+  "region": "us-east-1",
+  "intake_model": "bedrock:us.amazon.nova-pro-v1:0",
+  "other_nodes_model": "us.amazon.nova-2-lite-v1:0",
+  "max_model_calls": 20,
+  "node_events": [
+    "node_start:intake:",
+    "node_done:intake:completed",
+    "node_start:matcher:",
+    "node_done:matcher:completed",
+    "node_start:planner:",
+    "node_done:planner:completed",
+    "node_start:authority:",
+    "node_done:authority:completed",
+    "node_start:executor:",
+    "node_done:executor:completed",
+    "node_start:briefer:",
+    "node_done:briefer:completed"
+  ],
+  "intake_reading_after_binder": {
+    "document_class": "dental-eob",
+    "issuer": "Manulife Group Benefits",
+    "subject_hint": "Daniel Lim's dental claim",
+    "amounts": [
+      {
+        "label": "Amount billed",
+        "amount_text": "$180.00",
+        "quote": "Amount billed: $180.00"
+      },
+      {
+        "label": "Amount paid by Manulife",
+        "amount_text": "$144.00",
+        "quote": "Amount paid by Manulife: $144.00"
+      },
+      {
+        "label": "Balance not covered",
+        "amount_text": "$36.00",
+        "quote": "Balance not covered: $36.00"
+      }
+    ],
+    "dates": [
+      {
+        "label": "Service date",
+        "date_text": "September 3, 2026",
+        "quote": "Service date: September 3, 2026"
+      },
+      {
+        "label": "Statement date",
+        "date_text": "September 8, 2026",
+        "quote": "Statement date: September 8, 2026"
+      }
+    ],
+    "transcribed_lines": [
+      "Manulife Group Benefits",
+      "Explanation of Benefits: dental",
+      "Member: Daniel Lim, plan ML-7",
+      "Provider: Bloor West Dental",
+      "Service: recall exam and cleaning",
+      "Service date: September 3, 2026",
+      "Amount billed: $180.00",
+      "Amount paid by Manulife: $144.00",
+      "Balance not covered: $36.00",
+      "Statement date: September 8, 2026",
+      "Submit any balance to your secondary plan."
+    ],
+    "summary_en": "This is an Explanation of Benefits for dental services provided to Daniel Lim on September 3, 2026. The service was a recall exam and cleaning, billed at $180.00. Manulife paid $144.00, leaving a balance of $36.00 not covered.",
+    "evidence": [
+      "Submit any balance to your secondary plan.",
+      "Explanation of Benefits: dental"
+    ],
+    "confidence": "high"
+  },
+  "extraction_score": {
+    "correct": 18,
+    "total": 18,
+    "misses": []
+  },
+  "intake_issues": [],
+  "outcome": "executed",
+  "guard": {
+    "decisions_checked": 1,
+    "overrides": 0,
+    "verdict_overrides": 0,
+    "dropped_proposals": 0,
+    "dropped_receipts": 0,
+    "override": false,
+    "notes": []
+  },
+  "model_calls": {
+    "limit": 20,
+    "attempted": 12,
+    "remaining": 8,
+    "exhausted": false
+  },
+  "error": null,
+  "note": "Events persisted per node; the reading above is the intake node's structured output after bind_image_values. No ARNs or account ids. first_attempt records the scar: the default Bedrock model is gated by the account's Anthropic use-case form; Nova Pro intake itself never failed.",
+  "first_attempt": {
+    "command": "HOUSEHOLD_LIVE=1 MODEL_PROVIDER=bedrock NODE_MODELS=intake=bedrock:us.amazon.nova-pro-v1:0 AWS_PROFILE=hackathon-1 household run --image fixtures/images/dental-eob.png --actor ama --trace --json",
+    "intake": "completed on us.amazon.nova-pro-v1:0 in 4783 ms (tool/structured output succeeded)",
+    "failed_node": "matcher, on the Strands regional default Bedrock model (Anthropic)",
+    "error": "strands.types.exceptions.EventLoopException: An error occurred (ResourceNotFoundException) when calling the ConverseStream operation (reached max retries: 0): Model use case details have not been submitted for this account. Fill out the Anthropic use case details form before using the model. If you have already filled out the form, try again in 15 minutes.",
+    "retry": "BEDROCK_MODEL_ID=us.amazon.nova-2-lite-v1:0 for the five non-intake nodes (the plan's stated pairing); intake unchanged"
+  }
+}

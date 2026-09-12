@@ -1,0 +1,48 @@
+{
+  "id": "dental-eob",
+  "issuer": "Manulife",
+  "document_class": "dental-eob",
+  "lines": [
+    "Manulife Group Benefits",
+    "Explanation of Benefits: dental",
+    "Member: Daniel Lim, plan ML-7",
+    "Provider: Bloor West Dental",
+    "Service: recall exam and cleaning",
+    "Service date: September 3, 2026",
+    "Amount billed: $180.00",
+    "Amount paid by Manulife: $144.00",
+    "Balance not covered: $36.00",
+    "Statement date: September 8, 2026",
+    "Submit any balance to your secondary plan."
+  ],
+  "amounts": [
+    {
+      "label": "billed by the dentist",
+      "amount_text": "$180.00",
+      "quote": "Amount billed: $180.00"
+    },
+    {
+      "label": "paid by Manulife",
+      "amount_text": "$144.00",
+      "quote": "Amount paid by Manulife: $144.00"
+    },
+    {
+      "label": "balance not covered",
+      "amount_text": "$36.00",
+      "quote": "Balance not covered: $36.00"
+    }
+  ],
+  "dates": [
+    {
+      "label": "service date",
+      "date_text": "September 3, 2026",
+      "quote": "Service date: September 3, 2026"
+    },
+    {
+      "label": "statement date",
+      "date_text": "September 8, 2026",
+      "quote": "Statement date: September 8, 2026"
+    }
+  ],
+  "injection_lines": []
+}

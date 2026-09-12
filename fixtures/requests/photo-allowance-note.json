@@ -1,0 +1,21 @@
+{
+  "id": "photo-allowance-note",
+  "household_id": "demo",
+  "actor_member_id": "kofi",
+  "channel": "photo",
+  "image_id": "allowance-note",
+  "request": "Shown a photo: allowance-note.png",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "allowance",
+    "allow": [],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "photo",
+    "vision",
+    "allowance"
+  ],
+  "notes": "Kofi shows his own handwritten-style note. Intake is canned to the rendered truth; no plan is canned in fake mode."
+}

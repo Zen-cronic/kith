@@ -1,0 +1,26 @@
+{
+  "id": "allowance-note",
+  "issuer": "Kofi",
+  "document_class": "allowance-note",
+  "lines": [
+    "Note from Kofi",
+    "Mom, can I take $8.00 from my allowance for the bake sale?",
+    "It is on Friday, September 18, 2026.",
+    "Thanks, Kofi"
+  ],
+  "amounts": [
+    {
+      "label": "asked from allowance for the bake sale",
+      "amount_text": "$8.00",
+      "quote": "Mom, can I take $8.00 from my allowance for the bake sale?"
+    }
+  ],
+  "dates": [
+    {
+      "label": "bake sale",
+      "date_text": "Friday, September 18, 2026",
+      "quote": "It is on Friday, September 18, 2026."
+    }
+  ],
+  "injection_lines": []
+}

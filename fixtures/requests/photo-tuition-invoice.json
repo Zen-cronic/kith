@@ -1,0 +1,21 @@
+{
+  "id": "photo-tuition-invoice",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "photo",
+  "image_id": "tuition-invoice",
+  "request": "Shown a photo: tuition-invoice.png",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "household",
+    "allow": [],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "photo",
+    "vision",
+    "tuition"
+  ],
+  "notes": "Ama shows the school's band program invoice for Kofi. Intake is canned to the rendered truth; no plan is canned, so the fake run ends with no action and the reading is the proof."
+}
