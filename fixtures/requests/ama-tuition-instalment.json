@@ -1,0 +1,23 @@
+{
+  "id": "ama-tuition-instalment",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay my $450.00 tuition instalment (2 of 3) to Bright Path Montessori for my teacher-training course, due September 30, 2026.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "education",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama"
+    ]
+  },
+  "tags": [
+    "self-confirm",
+    "education",
+    "tuition:pay",
+    "needs-approval"
+  ],
+  "notes": "An adult paying her own tuition: 450.00 is above the 200.00 self-confirm limit, so rule:self-confirm asks Ama herself to confirm (PIN) before the ledger posts to ext-bright-path-montessori. The due date is checked by tuition_schedule and is not past."
+}

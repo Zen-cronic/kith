@@ -1,0 +1,24 @@
+{
+  "id": "kofi-resp-ask",
+  "household_id": "demo",
+  "actor_member_id": "kofi",
+  "channel": "text",
+  "request": "Can we put $50.00 into my RESP for university? I want to start saving.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "education",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama",
+      "daniel"
+    ]
+  },
+  "tags": [
+    "minor",
+    "education",
+    "resp:contribute",
+    "needs-approval"
+  ],
+  "notes": "A minor asks for household money for his own RESP. It is a payment:transfer, not an allowance spend, so rule:minor-guardian routes it to both guardians and nothing moves until one approves."
+}

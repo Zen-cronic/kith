@@ -21,7 +21,7 @@ def collect(request_id: str) -> list[dict]:
 def test_stream_emits_roster_action_and_receipt_events_in_execution_order() -> None:
     events = collect("kofi-allowance-8")
     assert events[0]["event"] == "session_start" and len(events[0]["roster"]) == 6
-    assert [s["id"] for s in events[0]["skills"]] == ["allowance", "benefits", "household"]
+    assert [s["id"] for s in events[0]["skills"]] == ["allowance", "benefits", "education", "recall", "household"]
     kinds = [e["event"] for e in events]
     assert kinds == ["session_start", "node_start", "node_done", "node_start", "node_done", "node_start", "node_done",
                      "node_start", "node_done", "action", "node_start", "node_done", "receipt", "node_start", "node_done", "result"]

@@ -1,0 +1,44 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "ama",
+      "recipient": "Bright Path Montessori",
+      "amount_text": "450.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "kind",
+          "value": "tuition:pay"
+        },
+        {
+          "key": "payee",
+          "value": "Bright Path Montessori"
+        },
+        {
+          "key": "due",
+          "value": "September 30, 2026"
+        },
+        {
+          "key": "instalment",
+          "value": "2 of 3"
+        },
+        {
+          "key": "purpose",
+          "value": "tuition instalment (2 of 3) for Ama Okafor-Lim, due September 30, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "Pay my $450.00 tuition instalment (2 of 3) to Bright Path Montessori for my teacher-training course, due September 30, 2026."
+      ],
+      "rationale": "Ama pays her own tuition instalment (2 of 3) to Bright Path Montessori; the due date September 30, 2026 is not past, so the payment is proposed as asked.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "tuition_schedule(Bright Path Montessori, September 30, 2026): no schedule on file; the quoted due date is not past (past_due false).",
+    "450.00 is above the household self-confirm limit of 200.00, so authority will ask Ama to confirm; proposed once as asked."
+  ]
+}

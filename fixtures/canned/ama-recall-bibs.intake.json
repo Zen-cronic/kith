@@ -1,0 +1,23 @@
+{
+  "document_class": "recall-notice",
+  "issuer": "Ama Okafor-Lim (relaying a CPSC recall she read)",
+  "subject_hint": "Ama's recalled baby bibs",
+  "amounts": [],
+  "dates": [
+    {
+      "label": "purchase date",
+      "date_text": "December 2025",
+      "quote": "The Peony Design personalized baby bibs we bought on Etsy in December 2025 were recalled by the CPSC, recall number 26639."
+    }
+  ],
+  "transcribed_lines": [
+    "The Peony Design personalized baby bibs we bought on Etsy in December 2025 were recalled by the CPSC, recall number 26639.",
+    "Please look up the recall and email Peony Design to ask for the refund it promises."
+  ],
+  "summary_en": "Ama says the Peony Design baby bibs the household bought on Etsy in December 2025 are under CPSC recall 26639 and asks the agent to look up the recall and email Peony Design for the refund it promises.",
+  "evidence": [
+    "The Peony Design personalized baby bibs we bought on Etsy in December 2025 were recalled by the CPSC, recall number 26639.",
+    "Please look up the recall and email Peony Design to ask for the refund it promises."
+  ],
+  "confidence": "high"
+}

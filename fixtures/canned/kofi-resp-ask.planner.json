@@ -1,0 +1,44 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "RESP for Kofi",
+      "amount_text": "50.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "kind",
+          "value": "resp:contribute"
+        },
+        {
+          "key": "beneficiary_member_id",
+          "value": "kofi"
+        },
+        {
+          "key": "year_contributed_so_far",
+          "value": "0.00"
+        },
+        {
+          "key": "grant_room_note",
+          "value": "CESG on 50.00: 10.00 (20% basic CESG; 490.00 of this year's grant room left after this; lifetime room 7190.00 of 7200.00). Source: canada.ca, Estimating amounts (fetched 2026-09-12); this year's earlier RESP contributions (0.00) are read from the household ledger; carry-forward room and CESG received to date are not on file, assumed 0.00."
+        },
+        {
+          "key": "purpose",
+          "value": "saving for university"
+        }
+      ],
+      "evidence_refs": [
+        "Can we put $50.00 into my RESP for university? I want to start saving."
+      ],
+      "rationale": "Kofi asks to put 50.00 CAD of household money into his own RESP; a minor cannot decide a household payment, so it is proposed once for a guardian to decide.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cesg_room(kofi, 50.00): basic 20% = 10.00; grant 10.00; 490.00 of this year's room left after (canada.ca, fetched 2026-09-12).",
+    "Kofi is a minor: the RESP money comes from the household account, so authority routes this to his guardians."
+  ]
+}

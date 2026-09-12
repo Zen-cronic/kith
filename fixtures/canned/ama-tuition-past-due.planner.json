@@ -1,0 +1,10 @@
+{
+  "actions": [],
+  "needs": [
+    "The tuition instalment (1 of 3) to Bright Path Montessori was due August 15, 2026, which is already past; no payment is proposed on a past due date. Confirm with Bright Path Montessori whether the instalment is still owed and whether a late fee applies, then ask again with the new due date."
+  ],
+  "notes": [
+    "tuition_schedule(Bright Path Montessori, August 15, 2026): no schedule on file; the quoted due date is past (past_due true).",
+    "propose_tuition_payment refused: the instalment was due August 15, 2026, which is already past (2026-09-11 today); no payment is proposed on a past due date: put it in needs and ask the member to confirm with the school what is still owed"
+  ]
+}

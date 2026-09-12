@@ -1,0 +1,15 @@
+{
+  "headline_en": "Looked up recall 26639 and emailed Peony Design to ask for your refund.",
+  "headline_target": "Looked up recall 26639 and emailed Peony Design to ask for your refund.",
+  "done": [
+    "CPSC recall 26639, Peony Design personalized baby bibs and stroller bags: looked up, read-only. The notice says to take the bibs away from children immediately, stop using them, and contact Peony Design for a full refund (the receipt says whether the record was read live or replayed from 2026-09-12).",
+    "Refund request emailed to Peony Design at the contact in the recall notice, quoting the remedy word for word (simulated receipt: no email leaves this demo until SES is configured)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED",
+    "SIMULATED-replay"
+  ],
+  "next_step_en": "Take the bibs away from the children now. When Peony Design replies with the refund steps, tell me and I will help you follow them; no money has moved yet.",
+  "next_step_target": "Take the bibs away from the children now. When Peony Design replies with the refund steps, tell me and I will help you follow them; no money has moved yet."
+}

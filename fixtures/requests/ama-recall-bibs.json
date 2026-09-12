@@ -1,0 +1,26 @@
+{
+  "id": "ama-recall-bibs",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "The Peony Design personalized baby bibs we bought on Etsy in December 2025 were recalled by the CPSC, recall number 26639.\nPlease look up the recall and email Peony Design to ask for the refund it promises.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "recall",
+    "allow": [
+      "recall:remedy",
+      "email:send"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "hero",
+    "self",
+    "recall",
+    "money-owed",
+    "live-data",
+    "allow"
+  ],
+  "notes": "Ama decides for herself (rule:self, no amount on either action). The lookup reads the CPSC record live when the network answers, else replays fixtures/skills/recall/cpsc-26639.json (SIMULATED-replay); the claim email quotes the remedy verbatim and stays SIMULATED until SES is configured. No money moves: the refund is Peony Design's to pay."
+}

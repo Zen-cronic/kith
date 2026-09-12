@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Kofi Okafor-Lim",
+  "subject_hint": "Kofi's RESP",
+  "amounts": [
+    {
+      "label": "RESP contribution asked for",
+      "amount_text": "$50.00",
+      "quote": "Can we put $50.00 into my RESP for university? I want to start saving."
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Can we put $50.00 into my RESP for university? I want to start saving."
+  ],
+  "summary_en": "Kofi asks to put $50.00 into his own RESP to start saving for university.",
+  "evidence": [
+    "Can we put $50.00 into my RESP for university? I want to start saving."
+  ],
+  "confidence": "high"
+}

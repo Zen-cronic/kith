@@ -46,7 +46,7 @@ def test_meta_names_the_sdk_roster_skills_and_rails(client: TestClient) -> None:
     meta = client.get("/api/meta").json()
     assert "Strands Agents SDK" in meta["sdk"] and meta["backend"] == "local" and meta["provider"] == "fake"
     assert [a["id"] for a in meta["roster"]] == ["intake", "matcher", "planner", "authority", "executor", "briefer"]
-    assert [s["id"] for s in meta["skills"]] == ["allowance", "benefits", "household"]
+    assert [s["id"] for s in meta["skills"]] == ["allowance", "benefits", "education", "recall", "household"]
     assert meta["execution_mode"] == "simulated" and meta["reset_enabled"] is False
     rails = meta["rails"]
     assert rails["intro"].startswith("Every action ends in a receipt") and rails["execution_mode"] == "simulated"

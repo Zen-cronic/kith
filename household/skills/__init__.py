@@ -11,8 +11,10 @@ from .allowance import ALLOWANCE
 from .base import ActionTemplate, Citation, RulesTable, Skill, SkillTool, ToolContext
 from .benefits import BENEFITS
 from .core import HOUSEHOLD
+from .education import EDUCATION
+from .recall import RECALL
 
-SKILLS: tuple[Skill, ...] = (ALLOWANCE, BENEFITS)
+SKILLS: tuple[Skill, ...] = (ALLOWANCE, BENEFITS, EDUCATION, RECALL)
 CORE: Skill = HOUSEHOLD
 ALL_SKILLS: tuple[Skill, ...] = (*SKILLS, CORE)
 SKILL_BY_ID: dict[str, Skill] = {skill.id: skill for skill in ALL_SKILLS}
