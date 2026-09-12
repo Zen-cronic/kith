@@ -12,6 +12,9 @@ from dotenv import load_dotenv
 PROVIDERS: tuple[str, ...] = ("fake", "anthropic", "openai", "bedrock")
 SELECTABLE: tuple[str, ...] = ("auto", *PROVIDERS)
 EXECUTION_MODES: tuple[str, ...] = ("simulated", "live")
+SPEECH_MODES: tuple[str, ...] = ("on", "off")
+DEFAULT_SONIC_MODEL_ID = "amazon.nova-2-sonic-v1:0"
+DEFAULT_SONIC_VOICE = "matthew"
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -38,6 +41,10 @@ class Settings:
     stripe_secret_key_present: bool = False
     aeroapi_key_present: bool = False
     allow_live_ses: bool = False
+    # Voice (P7): Nova 2 Sonic over the /api/voice WebSocket. speech=off skips Sonic and serves the text fallback.
+    sonic_model_id: str = DEFAULT_SONIC_MODEL_ID
+    sonic_voice: str = DEFAULT_SONIC_VOICE
+    speech: str = "on"
 
     def __post_init__(self) -> None:
         if self.execution_mode not in EXECUTION_MODES:
@@ -46,6 +53,8 @@ class Settings:
             raise ValueError("MAX_MODEL_CALLS must be a positive integer")
         if self.execution_mode not in EXECUTION_MODES:
             raise ValueError(f"EXECUTION_MODE must be one of {EXECUTION_MODES}, got {self.execution_mode!r}")
+        if self.speech not in SPEECH_MODES:
+            raise ValueError(f"SPEECH must be one of {SPEECH_MODES}, got {self.speech!r}")
         for node_id, spec in self.node_models.items():
             if ":" not in spec or spec.split(":", 1)[0] not in PROVIDERS:
                 raise ValueError(f"NODE_MODELS entry for {node_id!r} must look like provider:model_id, got {spec!r}")
@@ -102,6 +111,9 @@ def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: o
         "stripe_secret_key_present": bool(os.environ.get("STRIPE_SECRET_KEY")),
         "aeroapi_key_present": bool(os.environ.get("AEROAPI_KEY")),
         "allow_live_ses": os.environ.get("HOUSEHOLD_ALLOW_LIVE_SES", "").strip() == "1",
+        "sonic_model_id": os.environ.get("SONIC_MODEL_ID", "").strip() or DEFAULT_SONIC_MODEL_ID,
+        "sonic_voice": os.environ.get("SONIC_VOICE", "").strip() or DEFAULT_SONIC_VOICE,
+        "speech": os.environ.get("SPEECH", "on").strip().lower() or "on",
     }
     values.update({k: v for k, v in overrides.items() if v is not None})
     return Settings(**values)  # type: ignore[arg-type]

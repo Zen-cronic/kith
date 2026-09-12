@@ -1,0 +1,268 @@
+{
+  "status": "succeeded",
+  "at": "2026-09-12T17:04:34.195565+00:00",
+  "url": "ws://127.0.0.1:8020/api/voice",
+  "member": "kofi",
+  "text_only": false,
+  "wav": "fixtures/audio/kofi-allowance.wav",
+  "checks": [
+    {
+      "check": "identified",
+      "ok": true,
+      "detail": "Kofi Okafor-Lim (minor), mode sonic, model amazon.nova-2-sonic-v1:0"
+    },
+    {
+      "check": "voice mode offered",
+      "ok": true,
+      "detail": "mode sonic"
+    },
+    {
+      "check": "sonic connected",
+      "ok": true,
+      "detail": "bidi_connection_start"
+    },
+    {
+      "check": "turn 1: user transcript",
+      "ok": true,
+      "detail": "hey, can i have eight dollars for the book fair?"
+    },
+    {
+      "check": "turn 1: propose_action decided in code",
+      "ok": true,
+      "detail": "{\"outcome\": \"allow\", \"rule_id\": \"minor-allowance\", \"grant_id\": \"rule:minor-allowance\", \"approver_ids\": []}"
+    },
+    {
+      "check": "turn 1: allowed under rule:minor-allowance with a receipt",
+      "ok": true,
+      "detail": "receipt SIMULATED rcpt-c8cb4ae64800"
+    },
+    {
+      "check": "turn 1: assistant spoke, no JSON",
+      "ok": true,
+      "detail": "Done. 8.00 CAD for book fair; this is a simulated run, nothing real moved. |  Receipt SIMULATED."
+    },
+    {
+      "check": "turn 1: audio frames received",
+      "ok": true,
+      "detail": "74 frames, 195840 bytes"
+    },
+    {
+      "check": "turn 2: needs-approval by ama and daniel",
+      "ok": true,
+      "detail": "{\"outcome\": \"needs-approval\", \"rule_id\": \"minor-guardian\", \"approver_ids\": [\"ama\", \"daniel\"]}"
+    },
+    {
+      "check": "turn 2: assistant announced the approval",
+      "ok": true,
+      "detail": "I've asked Ama or Daniel to approve 40.00 CAD for science kit. |  Nothing moves until they do."
+    },
+    {
+      "check": "stop closes the socket cleanly",
+      "ok": true,
+      "detail": "(1000, 'received 1000 (OK) session ended; then sent 1000 (OK) session ended')"
+    },
+    {
+      "check": "every frame under 32 KB and of a known type",
+      "ok": true,
+      "detail": "max 10371 bytes, 171 frames"
+    }
+  ],
+  "turns": [
+    {
+      "turn": "1",
+      "input": "audio kofi-allowance.wav",
+      "user_transcripts": [
+        "hey, can i have eight dollars for the book fair?"
+      ],
+      "assistant_transcripts": [
+        "Done. 8.00 CAD for book fair; this is a simulated run, nothing real moved.",
+        " Receipt SIMULATED."
+      ],
+      "tools": [
+        {
+          "type": "tool",
+          "name": "propose_action",
+          "status": "started",
+          "tool_use_id": "b4a04a1d-3044-4182-8d0c-80ad9b96d8a7"
+        },
+        {
+          "action_id": "act-voice-9125e1a5-1",
+          "outcome": "allow",
+          "rule_id": "minor-allowance",
+          "grant_id": "rule:minor-allowance",
+          "approver_ids": [],
+          "explanation": "Allowed under rule:minor-allowance: Kofi Okafor-Lim may take up to 10.00 CAD from their own allowance without asking (0 of 15.00 used this week).",
+          "proposal": {
+            "id": "act-voice-9125e1a5-1",
+            "skill_id": "allowance",
+            "action_type": "allowance:transfer",
+            "rail": "internal-ledger",
+            "actor_member_id": "kofi",
+            "subject_member_id": "kofi",
+            "recipient": "hh-main",
+            "amount": "8.00",
+            "currency": "CAD",
+            "payload": {
+              "memo": "book fair"
+            },
+            "evidence_refs": [
+              "spoken by Kofi: book fair"
+            ],
+            "rationale": "Kofi asked by voice for allowance:transfer (8.00 CAD): book fair",
+            "idempotency_key": "c8cb4ae648002b9b7a418f59901d205e1b12bcba3204625b8606045b284087d2",
+            "claimed_grant_id": null
+          },
+          "decision": {
+            "action_id": "act-voice-9125e1a5-1",
+            "outcome": "allow",
+            "rule_id": "minor-allowance",
+            "grant_id": "rule:minor-allowance",
+            "approver_ids": [],
+            "reasons": [
+              "Kofi Okafor-Lim may take up to 10.00 CAD from their own allowance without asking (0 of 15.00 used this week)"
+            ]
+          },
+          "receipt": {
+            "id": "rcpt-c8cb4ae64800",
+            "action_id": "act-voice-9125e1a5-1",
+            "rail": "internal-ledger",
+            "mode": "SIMULATED",
+            "provider_ref": null,
+            "request_digest": "a7d2bd2a030bc3313d8f93f30ad89c41d3fea1c9a97773d8f53b61f52f755bda",
+            "response_digest": "",
+            "at": "2026-09-12T17:04:38.733145+00:00",
+            "executed_under_grant": "rule:minor-allowance",
+            "label_reason": "source and destination are the same account"
+          },
+          "type": "tool",
+          "name": "propose_action",
+          "status": "done",
+          "say": "Done. 8.00 CAD for book fair; this is a simulated run, nothing real moved. Receipt SIMULATED."
+        }
+      ],
+      "audio_frames": 74,
+      "audio_bytes": 195840,
+      "frame_types": [
+        "bidi_audio_stream",
+        "bidi_response_start",
+        "bidi_transcript_stream",
+        "tool"
+      ]
+    },
+    {
+      "turn": "2",
+      "input": "Can I have forty dollars from my allowance for the science kit?",
+      "user_transcripts": [],
+      "assistant_transcripts": [
+        "I've asked Ama or Daniel to approve 40.00 CAD for science kit.",
+        " Nothing moves until they do."
+      ],
+      "tools": [
+        {
+          "type": "tool",
+          "name": "propose_action",
+          "status": "started",
+          "tool_use_id": "e476765e-3f39-4ef4-bd15-a3724d73cfdb"
+        },
+        {
+          "action_id": "act-voice-9125e1a5-2",
+          "outcome": "needs-approval",
+          "rule_id": "minor-guardian",
+          "grant_id": null,
+          "approver_ids": [
+            "ama",
+            "daniel"
+          ],
+          "explanation": "Needs approval from ama, daniel: 40.00 CAD is above Kofi Okafor-Lim's auto-approve allowance limit 10.00 CAD; minor requires guardian approval.",
+          "proposal": {
+            "id": "act-voice-9125e1a5-2",
+            "skill_id": "allowance",
+            "action_type": "allowance:transfer",
+            "rail": "internal-ledger",
+            "actor_member_id": "kofi",
+            "subject_member_id": "kofi",
+            "recipient": "hh-main",
+            "amount": "40.00",
+            "currency": "CAD",
+            "payload": {
+              "memo": "science kit"
+            },
+            "evidence_refs": [
+              "spoken by Kofi: science kit"
+            ],
+            "rationale": "Kofi asked by voice for allowance:transfer (40.00 CAD): science kit",
+            "idempotency_key": "",
+            "claimed_grant_id": null
+          },
+          "decision": {
+            "action_id": "act-voice-9125e1a5-2",
+            "outcome": "needs-approval",
+            "rule_id": "minor-guardian",
+            "grant_id": null,
+            "approver_ids": [
+              "ama",
+              "daniel"
+            ],
+            "reasons": [
+              "40.00 CAD is above Kofi Okafor-Lim's auto-approve allowance limit 10.00 CAD",
+              "minor requires guardian approval"
+            ]
+          },
+          "receipt": null,
+          "type": "tool",
+          "name": "propose_action",
+          "status": "done",
+          "say": "I've asked Ama or Daniel to approve 40.00 CAD for science kit. Nothing moves until they do."
+        }
+      ],
+      "audio_frames": 67,
+      "audio_bytes": 177920,
+      "frame_types": [
+        "bidi_audio_stream",
+        "bidi_response_start",
+        "bidi_transcript_stream",
+        "tool"
+      ]
+    }
+  ],
+  "fallback": null,
+  "frame_counts": {
+    "identified": 1,
+    "bidi_connection_start": 1,
+    "bidi_response_start": 15,
+    "bidi_transcript_stream": 9,
+    "tool": 4,
+    "bidi_audio_stream": 141
+  },
+  "max_frame_bytes": 10371,
+  "closed": [
+    1000,
+    "received 1000 (OK) session ended; then sent 1000 (OK) session ended"
+  ],
+  "identified": {
+    "type": "identified",
+    "session_id": "9125e1a501fb40dcbe65d60747240f1a",
+    "mode": "sonic",
+    "banner": null,
+    "member": {
+      "id": "kofi",
+      "name": "Kofi Okafor-Lim",
+      "role": "minor",
+      "language": "en"
+    },
+    "model": "amazon.nova-2-sonic-v1:0",
+    "sdk": "Strands Agents SDK 1.54.0 (strands.experimental.bidi.BidiAgent)",
+    "tools": [
+      "propose_action",
+      "household_status",
+      "lookup_recall",
+      "explain_grant",
+      "read_last_upload",
+      "stop_conversation"
+    ]
+  },
+  "mode": "sonic",
+  "banner": null,
+  "model": "amazon.nova-2-sonic-v1:0",
+  "sdk": "Strands Agents SDK 1.54.0 (strands.experimental.bidi.BidiAgent)"
+}

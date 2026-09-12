@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Household voice (dev)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font: 15px/1.4 system-ui, sans-serif; margin: 0 auto; max-width: 760px; padding: 24px; color: #1a1a1a; }
+    h1 { font-size: 20px; margin: 0 0 12px; }
+    form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+    input, select, button { font: inherit; padding: 6px 10px; }
+    button { cursor: pointer; }
+    #banner { display: none; background: #fff4d6; border: 1px solid #e0b34c; padding: 8px 12px; margin: 12px 0; }
+    #status { color: #555; margin: 8px 0; }
+    #transcript { border: 1px solid #ddd; padding: 12px; min-height: 160px; margin-bottom: 12px; }
+    .line { margin: 4px 0; }
+    .user { color: #0b4f9c; }
+    .assistant { color: #1a1a1a; }
+    .preview { color: #888; }
+    #tools { border: 1px solid #ddd; padding: 12px; font-family: ui-monospace, monospace; font-size: 13px; }
+    .tool { margin: 4px 0; }
+    .tool.vetoed, .tool.error { color: #b42318; }
+    .tool.done { color: #146c2e; }
+  </style>
+</head>
+<body>
+  <h1>Household voice (dev page)</h1>
+  <form id="identify">
+    <select id="member"></select>
+    <input id="pin" type="password" placeholder="PIN" autocomplete="off" size="6">
+    <button type="submit" id="connect">Connect</button>
+    <button type="button" id="talk" disabled>Talk</button>
+    <button type="button" id="stop" disabled>Stop</button>
+  </form>
+  <form id="typed">
+    <input id="text" placeholder="Or type a request" size="48" disabled>
+    <button type="submit" id="send" disabled>Send</button>
+  </form>
+  <div id="banner"></div>
+  <div id="status">Not connected.</div>
+  <div id="transcript"></div>
+  <div id="tools"><em>Tool events (also dispatched as window "household:voice")</em></div>
+
+  <script type="module">
+    import { HouseholdVoice } from "/static/voice/voice.js";
+
+    const el = (id) => document.getElementById(id);
+    let voice = null;
+    let preview = null;
+
+    const meta = await fetch("/api/voice/meta").then((r) => r.json());
+    for (const m of meta.members) {
+      const option = document.createElement("option");
+      option.value = m.id;
+      option.textContent = `${m.name} (${m.role})`;
+      el("member").appendChild(option);
+    }
+    el("status").textContent = `SPEECH=${meta.speech}, provider ${meta.provider}, ${meta.sdk}`;
+
+    function line(role, text, final) {
+      if (!final) {
+        if (!preview) { preview = document.createElement("div"); preview.className = "line preview"; el("transcript").appendChild(preview); }
+        preview.textContent = `${role}: ${text}`;
+        return;
+      }
+      if (preview) { preview.remove(); preview = null; }
+      const div = document.createElement("div");
+      div.className = `line ${role}`;
+      div.textContent = `${role}: ${text}`;
+      el("transcript").appendChild(div);
+    }
+
+    window.addEventListener("household:voice", (event) => {
+      const frame = event.detail;
+      if (frame.type === "tool") {
+        const div = document.createElement("div");
+        div.className = `tool ${frame.status}`;
+        div.textContent = `${frame.name} ${frame.status}` + (frame.outcome ? ` -> ${frame.outcome}` : "") +
+          (frame.approver_ids && frame.approver_ids.length ? ` (approvers: ${frame.approver_ids.join(", ")})` : "") +
+          (frame.receipt ? ` receipt ${frame.receipt.mode}` : "") + (frame.reason ? ` (${frame.reason})` : "");
+        el("tools").appendChild(div);
+      }
+    });
+
+    el("identify").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      voice = new HouseholdVoice({
+        memberId: el("member").value,
+        pin: el("pin").value,
+        onFrame: (frame) => {
+          if (frame.type === "identified") {
+            el("status").textContent = `Identified ${frame.member.name} (${frame.member.role}); mode ${frame.mode}; model ${frame.model}`;
+            el("talk").disabled = frame.mode !== "sonic";
+            el("stop").disabled = false; el("text").disabled = false; el("send").disabled = false;
+            if (frame.banner) { el("banner").style.display = "block"; el("banner").textContent = frame.banner; }
+          } else if (frame.type === "identify_failed") {
+            el("status").textContent = `${frame.detail} ${frame.attempts_left} attempts left.`;
+          } else if (frame.type === "fallback") {
+            el("banner").style.display = "block"; el("banner").textContent = `${frame.banner} (${frame.reason})`;
+            el("talk").disabled = true; el("talk").textContent = "Talk";
+          } else if (frame.type === "bidi_transcript_stream") {
+            line(frame.role, frame.text, frame.is_final);
+          } else if (frame.type === "error") {
+            el("status").textContent = `${frame.code}: ${frame.detail}`;
+          } else if (frame.type === "bidi_error") {
+            el("status").textContent = `${frame.code}: ${frame.message}`;
+          } else if (frame.type === "closed") {
+            el("status").textContent = `Closed (${frame.code} ${frame.reason || ""}).`;
+            el("talk").disabled = true; el("stop").disabled = true; el("text").disabled = true; el("send").disabled = true;
+          }
+        },
+      });
+      try { await voice.connect(); } catch (err) { el("status").textContent = `Connection failed: ${err.message || err}`; }
+    });
+
+    el("talk").addEventListener("click", async () => {
+      if (voice.mic) { voice.stopMic(); el("talk").textContent = "Talk"; return; }
+      try { await voice.startMic(); el("talk").textContent = "Mute"; }
+      catch (err) { el("status").textContent = `Microphone failed: ${err.message || err}`; }
+    });
+
+    el("stop").addEventListener("click", () => voice && voice.stop());
+
+    el("typed").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const text = el("text").value.trim();
+      if (!text || !voice) return;
+      voice.sendText(text);
+      el("text").value = "";
+    });
+  </script>
+</body>
+</html>
