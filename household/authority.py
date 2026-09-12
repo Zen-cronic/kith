@@ -158,13 +158,18 @@ def decide(
         reasons.append(f"{actor.name} is a guardian of {subject.name}")
         return decision("allow", RULE_PARENT_FOR_MINOR, grant_id=f"rule:{RULE_PARENT_FOR_MINOR}")
 
-    # 7. Otherwise only an active, in-scope, unexpired, under-limit grant from the subject allows it.
+    # 7. Otherwise only an active, in-scope, unexpired, under-limit grant from the subject allows it. A grant
+    #    to the agent is the grantor's own standing instruction: it covers the agent acting on that member's
+    #    request, never another member asking the agent to act for them.
     actor_label = actor.name if actor is not None else "the agent"
     candidates = [
         g
         for g in household.grants
         if g.grantor_id == subject.id
-        and g.grantee_id in {proposal.actor_member_id, AGENT_ACTOR}
+        and (
+            g.grantee_id == proposal.actor_member_id
+            or (g.grantee_id == AGENT_ACTOR and g.grantor_id == proposal.actor_member_id)
+        )
         and proposal.action_type in g.scope
     ]
     failures: list[str] = []
@@ -174,8 +179,16 @@ def decide(
             candidates = [claimed]
         else:
             candidates = []
+            owner = household.member(claimed.grantor_id)
+            owner_label = owner.name if owner else claimed.grantor_id
+            standing = (
+                f" is {owner_label}'s own standing instruction to the agent and"
+                if claimed.grantee_id == AGENT_ACTOR and claimed.grantor_id != proposal.actor_member_id
+                else ""
+            )
             failures.append(
-                f"grant {claimed.id} does not cover {actor_label} deciding {proposal.action_type} for {subject.name}"
+                f"grant {claimed.id}{standing} does not cover {actor_label} deciding {proposal.action_type} "
+                f"for {subject.name}"
             )
     for grant in candidates:
         failure = _grant_failure(grant, amount, currency, household, now)

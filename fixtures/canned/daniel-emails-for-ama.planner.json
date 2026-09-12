@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "ama",
+      "recipient": "recalls@cozycot.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Cozy Cot CC-200 crib recall: free repair kit requested"
+        },
+        {
+          "key": "body",
+          "value": "Hello, we received the product safety recall notice for the Cozy Cot convertible crib, model CC-200. Please send the free repair kit to our home address. Thank you, on behalf of Ama Okafor-Lim"
+        }
+      ],
+      "evidence_refs": [
+        "Ama got the Cozy Cot crib recall notice for our CC-200. Email the seller at recalls@cozycot.example.test on her behalf and ask them to send the free repair kit to the house."
+      ],
+      "rationale": "Ama's grant g-ama-agent-recall lets the agent email about her recalls, so the agent sends this one for Daniel.",
+      "claimed_grant_id": "g-ama-agent-recall"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}
