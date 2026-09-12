@@ -1,0 +1,11 @@
+{
+  "headline_en": "The $85.00 for Ama's phone bill is waiting for Ama.",
+  "headline_target": "Les 85,00 $ pour la facture de téléphone d'Ama attendent Ama.",
+  "done": [],
+  "waiting_on": [
+    "$85.00 to Fido for Ama's phone bill: waiting for Ama, because she has not given you a payments grant."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Ama to approve it in the app before September 20.",
+  "next_step_target": "Demandez à Ama de l'approuver dans l'application avant le 20 septembre."
+}

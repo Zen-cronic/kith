@@ -1,0 +1,15 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Daniel's note to his landlord",
+  "amounts": [],
+  "dates": [],
+  "transcribed_lines": [
+    "Email my landlord at rent@parkdale-mgmt.example.test that the bathroom fan is broken and ask for a repair visit."
+  ],
+  "summary_en": "Daniel asks to email his landlord at rent@parkdale-mgmt.example.test that the bathroom fan is broken and to request a repair visit.",
+  "evidence": [
+    "Email my landlord at rent@parkdale-mgmt.example.test that the bathroom fan is broken and ask for a repair visit."
+  ],
+  "confidence": "high"
+}

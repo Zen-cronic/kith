@@ -1,0 +1,34 @@
+{
+  "document_class": "text-request",
+  "issuer": "Sun Life (statement relayed by Kofi Okafor-Lim)",
+  "subject_hint": "Kofi's dental claim",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$150.00",
+      "quote": "Here's my dental statement from Sun Life: cleaning at Bloor West Dental on September 4, 2026, billed $150.00, Sun Life paid $120.00."
+    },
+    {
+      "label": "amount as written",
+      "amount_text": "$120.00",
+      "quote": "Here's my dental statement from Sun Life: cleaning at Bloor West Dental on September 4, 2026, billed $150.00, Sun Life paid $120.00."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 4, 2026",
+      "quote": "Here's my dental statement from Sun Life: cleaning at Bloor West Dental on September 4, 2026, billed $150.00, Sun Life paid $120.00."
+    }
+  ],
+  "transcribed_lines": [
+    "Here's my dental statement from Sun Life: cleaning at Bloor West Dental on September 4, 2026, billed $150.00, Sun Life paid $120.00.",
+    "File the Manulife claim for the rest."
+  ],
+  "summary_en": "Kofi relays his Sun Life dental statement for a cleaning on September 4, 2026 ($150.00 billed, $120.00 paid) and asks for the Manulife claim for the rest.",
+  "evidence": [
+    "Here's my dental statement from Sun Life: cleaning at Bloor West Dental on September 4, 2026, billed $150.00, Sun Life paid $120.00.",
+    "File the Manulife claim for the rest."
+  ],
+  "confidence": "high"
+}

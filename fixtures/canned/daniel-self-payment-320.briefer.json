@@ -1,0 +1,11 @@
+{
+  "headline_en": "Your $320.00 payment is waiting for your confirmation.",
+  "headline_target": "Votre paiement de 320,00 $ attend votre confirmation.",
+  "done": [],
+  "waiting_on": [
+    "$320.00 to Roncesvalles Physio: waiting for your own confirmation, because it is above the $200.00 you may pay without confirming."
+  ],
+  "labels": [],
+  "next_step_en": "Confirm it with your PIN in the app before September 30, 2026.",
+  "next_step_target": "Confirmez-le avec votre NIP dans l'application avant le 30 septembre 2026."
+}

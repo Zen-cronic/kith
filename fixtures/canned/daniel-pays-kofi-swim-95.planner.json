@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "Parkdale Community Centre",
+      "amount_text": "95.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Parkdale Community Centre"
+        },
+        {
+          "key": "purpose",
+          "value": "Kofi's swim lessons"
+        },
+        {
+          "key": "due",
+          "value": "September 20, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "Pay $95.00 to the Parkdale Community Centre for Kofi's swim lessons before September 20, 2026."
+      ],
+      "rationale": "Daniel pays his son's swim lessons; amount and date are quoted from the request.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

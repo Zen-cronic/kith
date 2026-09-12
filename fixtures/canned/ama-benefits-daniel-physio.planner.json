@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "daniel",
+      "recipient": "Sun Life",
+      "amount_text": "19.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Sun Life"
+        },
+        {
+          "key": "plan_id",
+          "value": "SL-1"
+        },
+        {
+          "key": "service_date",
+          "value": "September 9, 2026"
+        },
+        {
+          "key": "billed",
+          "value": "$95.00"
+        },
+        {
+          "key": "primary_paid",
+          "value": "$76.00"
+        },
+        {
+          "key": "claim_amount",
+          "value": "19.00"
+        },
+        {
+          "key": "provider",
+          "value": "Roncesvalles Physio"
+        }
+      ],
+      "evidence_refs": [
+        "Daniel's Manulife statement: physiotherapy at Roncesvalles Physio on September 9, 2026, billed $95.00, Manulife paid $76.00."
+      ],
+      "rationale": "Daniel's own Manulife plan ML-7 paid first; the residual 19.00 goes to Ama's Sun Life plan SL-1 as the secondary claim, prepared for Ama to file.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: ML-7 (Manulife) primary because Daniel is the claimant; SL-1 (Sun Life) secondary.",
+    "residual: 95.00 - 76.00 = 19.00."
+  ]
+}

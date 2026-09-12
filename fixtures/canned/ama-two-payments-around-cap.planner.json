@@ -1,0 +1,60 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "daniel",
+      "recipient": "Toronto Youth Wind Orchestra",
+      "amount_text": "200.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Toronto Youth Wind Orchestra"
+        },
+        {
+          "key": "purpose",
+          "value": "Daniel's band trip (payment 1 of 2, today)"
+        },
+        {
+          "key": "due",
+          "value": ""
+        }
+      ],
+      "evidence_refs": [
+        "Pay $200.00 today and another $200.00 next week to the Toronto Youth Wind Orchestra for Daniel's band trip, both under his payments grant g-daniel-ama-payments."
+      ],
+      "rationale": "The first of the two payments Ama asked for, under g-daniel-ama-payments.",
+      "claimed_grant_id": "g-daniel-ama-payments"
+    },
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "daniel",
+      "recipient": "Toronto Youth Wind Orchestra",
+      "amount_text": "200.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Toronto Youth Wind Orchestra"
+        },
+        {
+          "key": "purpose",
+          "value": "Daniel's band trip (payment 2 of 2, next week)"
+        },
+        {
+          "key": "due",
+          "value": ""
+        }
+      ],
+      "evidence_refs": [
+        "Pay $200.00 today and another $200.00 next week to the Toronto Youth Wind Orchestra for Daniel's band trip, both under his payments grant g-daniel-ama-payments."
+      ],
+      "rationale": "The second of the two payments Ama asked for, under g-daniel-ama-payments.",
+      "claimed_grant_id": "g-daniel-ama-payments"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

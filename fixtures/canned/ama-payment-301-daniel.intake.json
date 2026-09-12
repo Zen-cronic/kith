@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Daniel's band trip deposit and late fee",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$301.00",
+      "quote": "Pay $301.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit and the late fee under his payments grant g-daniel-ama-payments."
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Pay $301.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit and the late fee under his payments grant g-daniel-ama-payments."
+  ],
+  "summary_en": "Ama asks to pay $301.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit and late fee, citing Daniel's payments grant g-daniel-ama-payments.",
+  "evidence": [
+    "Pay $301.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit and the late fee under his payments grant g-daniel-ama-payments."
+  ],
+  "confidence": "high"
+}

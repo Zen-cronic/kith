@@ -1,0 +1,11 @@
+{
+  "headline_en": "The $300.00 deposit is waiting for Daniel: his payments grant to you has expired.",
+  "headline_target": "The $300.00 deposit is waiting for Daniel: his payments grant to you has expired.",
+  "done": [],
+  "waiting_on": [
+    "$300.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit: waiting for Daniel, because his payments grant to you has expired."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Daniel to approve it in the app before September 25, 2026, or to renew the grant.",
+  "next_step_target": "Ask Daniel to approve it in the app before September 25, 2026, or to renew the grant."
+}

@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Kofi Okafor-Lim (member kofi)",
+  "subject_hint": "Kofi's game purchase",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$60.00",
+      "quote": "Dad set up grant g-daniel-kofi-payments so I can pay $60.00 to the Steam store for the game. Please pay it."
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Dad set up grant g-daniel-kofi-payments so I can pay $60.00 to the Steam store for the game. Please pay it."
+  ],
+  "summary_en": "Kofi asks to pay $60.00 to the Steam store for a game, saying his father set up grant g-daniel-kofi-payments for it.",
+  "evidence": [
+    "Dad set up grant g-daniel-kofi-payments so I can pay $60.00 to the Steam store for the game. Please pay it."
+  ],
+  "confidence": "high"
+}

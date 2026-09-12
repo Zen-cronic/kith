@@ -1,0 +1,23 @@
+{
+  "id": "ama-payment-250-daniel-grant",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's concert uniform, due September 22, 2026, under his payments grant g-daniel-ama-payments.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "household",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "spouse-grant",
+    "payment",
+    "allow"
+  ],
+  "notes": "250.00 is within the 300.00 per-month spouse grant with nothing spent under it yet; rule grant allows and the executor runs."
+}

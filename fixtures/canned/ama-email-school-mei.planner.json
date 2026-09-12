@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "mei",
+      "recipient": "park@school.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Mei Okafor-Lim will be away on Monday, September 21, 2026"
+        },
+        {
+          "key": "body",
+          "value": "Dear Ms. Park, Mei will be away on Monday, September 21, 2026 for a family appointment. Thank you, Ama Okafor-Lim"
+        }
+      ],
+      "evidence_refs": [
+        "Email Mei's teacher Ms. Park at park@school.example.test that Mei will be away on Monday, September 21, 2026 for a family appointment."
+      ],
+      "rationale": "Ama asked for one email to Mei's teacher with the date and reason she gave.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

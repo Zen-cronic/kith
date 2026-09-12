@@ -1,0 +1,34 @@
+{
+  "document_class": "text-request",
+  "issuer": "Manulife (statement relayed by Ama Okafor-Lim)",
+  "subject_hint": "Daniel's dental crown claim",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$1,300.00",
+      "quote": "Daniel's Manulife statement: crown at Bloor West Dental on September 8, 2026, billed $1,300.00, Manulife paid $650.00."
+    },
+    {
+      "label": "amount as written",
+      "amount_text": "$650.00",
+      "quote": "Daniel's Manulife statement: crown at Bloor West Dental on September 8, 2026, billed $1,300.00, Manulife paid $650.00."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 8, 2026",
+      "quote": "Daniel's Manulife statement: crown at Bloor West Dental on September 8, 2026, billed $1,300.00, Manulife paid $650.00."
+    }
+  ],
+  "transcribed_lines": [
+    "Daniel's Manulife statement: crown at Bloor West Dental on September 8, 2026, billed $1,300.00, Manulife paid $650.00.",
+    "Prepare the Sun Life claim for the rest; I will file it myself."
+  ],
+  "summary_en": "Ama relays Daniel's Manulife statement for a crown on September 8, 2026 ($1,300.00 billed, $650.00 paid) and asks for the Sun Life claim for the rest, which she will file herself.",
+  "evidence": [
+    "Daniel's Manulife statement: crown at Bloor West Dental on September 8, 2026, billed $1,300.00, Manulife paid $650.00.",
+    "Prepare the Sun Life claim for the rest; I will file it myself."
+  ],
+  "confidence": "high"
+}

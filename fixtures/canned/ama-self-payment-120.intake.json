@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Ama's own dental cleaning",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$120.00",
+      "quote": "Pay $120.00 from the household account to Bloor West Dental for my cleaning on September 8, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 8, 2026",
+      "quote": "Pay $120.00 from the household account to Bloor West Dental for my cleaning on September 8, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay $120.00 from the household account to Bloor West Dental for my cleaning on September 8, 2026."
+  ],
+  "summary_en": "Ama asks to pay $120.00 to Bloor West Dental for her own cleaning on September 8, 2026.",
+  "evidence": [
+    "Pay $120.00 from the household account to Bloor West Dental for my cleaning on September 8, 2026."
+  ],
+  "confidence": "high"
+}

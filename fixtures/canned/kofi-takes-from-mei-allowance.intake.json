@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Kofi Okafor-Lim (member kofi)",
+  "subject_hint": "Mei's allowance",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$5.00",
+      "quote": "Take $5.00 from Mei's allowance for the comic I lent her."
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Take $5.00 from Mei's allowance for the comic I lent her."
+  ],
+  "summary_en": "Kofi asks to take $5.00 from Mei's allowance for a comic he lent her.",
+  "evidence": [
+    "Take $5.00 from Mei's allowance for the comic I lent her."
+  ],
+  "confidence": "high"
+}

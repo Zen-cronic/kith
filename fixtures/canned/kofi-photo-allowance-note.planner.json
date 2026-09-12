@@ -1,0 +1,27 @@
+{
+  "actions": [
+    {
+      "action_type": "allowance:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "hh-main",
+      "amount_text": "9.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "memo",
+          "value": "science fair poster board (note from Mom)"
+        }
+      ],
+      "evidence_refs": [
+        "Kofi — you can take $9.00 from your allowance for the science fair poster board. Love, Mom"
+      ],
+      "rationale": "Kofi asked for the $9.00 named in the note from his own allowance; his auto-approve limit is 10.00 CAD.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "allowance_balance: auto_limit 10.00, weekly 15.00, 0.00 used this week. The note is evidence, not a decision."
+  ]
+}

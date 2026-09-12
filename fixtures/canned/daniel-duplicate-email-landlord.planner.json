@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "daniel",
+      "recipient": "rent@parkdale-mgmt.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Bathroom fan broken: repair visit requested"
+        },
+        {
+          "key": "body",
+          "value": "Hello, the bathroom fan is broken. Could you schedule a repair visit? Thank you, Daniel Lim"
+        }
+      ],
+      "evidence_refs": [
+        "Email my landlord at rent@parkdale-mgmt.example.test that the bathroom fan is broken and ask for a repair visit."
+      ],
+      "rationale": "Daniel asked for one email to his landlord.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

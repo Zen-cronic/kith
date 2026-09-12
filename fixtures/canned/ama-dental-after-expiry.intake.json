@@ -1,0 +1,34 @@
+{
+  "document_class": "text-request",
+  "issuer": "Manulife (statement relayed by Ama Okafor-Lim)",
+  "subject_hint": "Daniel's dental claim",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$240.00",
+      "quote": "Daniel's Manulife statement: filling at Bloor West Dental on September 10, 2026, billed $240.00, Manulife paid $192.00."
+    },
+    {
+      "label": "amount as written",
+      "amount_text": "$192.00",
+      "quote": "Daniel's Manulife statement: filling at Bloor West Dental on September 10, 2026, billed $240.00, Manulife paid $192.00."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 10, 2026",
+      "quote": "Daniel's Manulife statement: filling at Bloor West Dental on September 10, 2026, billed $240.00, Manulife paid $192.00."
+    }
+  ],
+  "transcribed_lines": [
+    "Daniel's Manulife statement: filling at Bloor West Dental on September 10, 2026, billed $240.00, Manulife paid $192.00.",
+    "Prepare the Sun Life claim for the rest and email me the packet at ama@example.test."
+  ],
+  "summary_en": "Ama relays Daniel's Manulife statement for a filling on September 10, 2026 ($240.00 billed, $192.00 paid) and asks for the Sun Life claim for the rest, emailed to her at ama@example.test.",
+  "evidence": [
+    "Daniel's Manulife statement: filling at Bloor West Dental on September 10, 2026, billed $240.00, Manulife paid $192.00.",
+    "Prepare the Sun Life claim for the rest and email me the packet at ama@example.test."
+  ],
+  "confidence": "high"
+}

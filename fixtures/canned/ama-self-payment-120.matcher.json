@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "ama",
+  "actor_member_id": "ama",
+  "skill_id": "household",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "A plain payment or email; no domain skill matches, so the core household skill handles it.",
+    "Ama is the subject: the cleaning was for Ama herself (household_lookup).",
+    "hh-main is the account involved."
+  ]
+}

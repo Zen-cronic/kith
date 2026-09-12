@@ -1,0 +1,11 @@
+{
+  "subject_member_id": "ama",
+  "actor_member_id": "daniel",
+  "skill_id": "benefits",
+  "account_id": "",
+  "confidence": "high",
+  "reasons": [
+    "A benefits statement with an explanation of benefits: the benefits skill applies.",
+    "Ama is the subject: the cleaning was Ama's; Daniel cites grant g-revoked (household_lookup)."
+  ]
+}

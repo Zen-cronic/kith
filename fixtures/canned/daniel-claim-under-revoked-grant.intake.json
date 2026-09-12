@@ -1,0 +1,34 @@
+{
+  "document_class": "text-request",
+  "issuer": "Sun Life (statement relayed by Daniel Lim)",
+  "subject_hint": "Ama's dental claim",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$180.00",
+      "quote": "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00."
+    },
+    {
+      "label": "amount as written",
+      "amount_text": "$144.00",
+      "quote": "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 10, 2026",
+      "quote": "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00."
+    }
+  ],
+  "transcribed_lines": [
+    "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00.",
+    "Prepare the Manulife claim for the rest under grant g-revoked."
+  ],
+  "summary_en": "Daniel relays Ama's Sun Life statement for a cleaning on September 10, 2026 ($180.00 billed, $144.00 paid) and asks for the Manulife claim for the rest, citing grant g-revoked.",
+  "evidence": [
+    "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00.",
+    "Prepare the Manulife claim for the rest under grant g-revoked."
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Kofi Okafor-Lim (member kofi)",
+  "subject_hint": "Kofi's allowance",
+  "amounts": [
+    {
+      "label": "amount asked from allowance (spoken)",
+      "amount_text": "six dollars",
+      "quote": "can I take six dollars from my allowance for the book fair on friday"
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "can I take six dollars from my allowance for the book fair on friday"
+  ],
+  "summary_en": "Kofi asks, by voice, to take six dollars from his own allowance for the book fair on Friday.",
+  "evidence": [
+    "can I take six dollars from my allowance for the book fair on friday"
+  ],
+  "confidence": "high"
+}

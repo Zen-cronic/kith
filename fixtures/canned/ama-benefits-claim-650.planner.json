@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "daniel",
+      "recipient": "Sun Life",
+      "amount_text": "650.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Sun Life"
+        },
+        {
+          "key": "plan_id",
+          "value": "SL-1"
+        },
+        {
+          "key": "service_date",
+          "value": "September 8, 2026"
+        },
+        {
+          "key": "billed",
+          "value": "$1,300.00"
+        },
+        {
+          "key": "primary_paid",
+          "value": "$650.00"
+        },
+        {
+          "key": "claim_amount",
+          "value": "650.00"
+        },
+        {
+          "key": "provider",
+          "value": "Bloor West Dental"
+        }
+      ],
+      "evidence_refs": [
+        "Daniel's Manulife statement: crown at Bloor West Dental on September 8, 2026, billed $1,300.00, Manulife paid $650.00."
+      ],
+      "rationale": "Daniel's own Manulife plan ML-7 paid first; the residual 650.00 goes to Ama's Sun Life plan SL-1.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: ML-7 primary, SL-1 secondary.",
+    "residual: 1300.00 - 650.00 = 650.00."
+  ]
+}

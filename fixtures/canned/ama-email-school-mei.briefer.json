@@ -1,0 +1,13 @@
+{
+  "headline_en": "Emailed Ms. Park that Mei will be away on September 21.",
+  "headline_target": "Emailed Ms. Park that Mei will be away on September 21.",
+  "done": [
+    "Email to park@school.example.test about Mei's absence on Monday, September 21, 2026, as her guardian (simulated receipt in this demo)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Nothing else to do right now.",
+  "next_step_target": "Nothing else to do right now."
+}

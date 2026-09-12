@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Daniel's band trip",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$250.00",
+      "quote": "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's band trip under his grant g-daniel-ama-everything."
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's band trip under his grant g-daniel-ama-everything."
+  ],
+  "summary_en": "Ama asks to pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's band trip, citing a grant g-daniel-ama-everything.",
+  "evidence": [
+    "Pay $250.00 to the Toronto Youth Wind Orchestra for Daniel's band trip under his grant g-daniel-ama-everything."
+  ],
+  "confidence": "high"
+}

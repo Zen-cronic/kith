@@ -1,0 +1,11 @@
+{
+  "headline_en": "The Manulife claim for Ama is waiting for Ama: the grant you named was revoked.",
+  "headline_target": "La réclamation Manulife pour Ama attend Ama : l'autorisation citée a été révoquée.",
+  "done": [],
+  "waiting_on": [
+    "The Manulife claim for $36.00 for Ama's cleaning: waiting for Ama, because the grant you named, g-revoked, is no longer active."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Ama to approve it in the app.",
+  "next_step_target": "Demandez à Ama de l'approuver dans l'application."
+}

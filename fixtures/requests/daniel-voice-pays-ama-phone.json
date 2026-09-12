@@ -1,0 +1,24 @@
+{
+  "id": "daniel-voice-pays-ama-phone",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "voice-transcript",
+  "request": "paie la facture de téléphone d'Ama, quatre-vingt-cinq dollars, à Fido avant le vingt septembre",
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "household",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "cross-spouse-without-scope",
+    "voice",
+    "payment",
+    "french"
+  ],
+  "notes": "A French spoken request to pay Ama's bill. Code finds no grant from Ama to Daniel (rule no-grant) and asks Ama."
+}

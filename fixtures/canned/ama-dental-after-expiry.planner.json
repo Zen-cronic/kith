@@ -1,0 +1,75 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "daniel",
+      "recipient": "Sun Life",
+      "amount_text": "48.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Sun Life"
+        },
+        {
+          "key": "plan_id",
+          "value": "SL-1"
+        },
+        {
+          "key": "service_date",
+          "value": "September 10, 2026"
+        },
+        {
+          "key": "billed",
+          "value": "$240.00"
+        },
+        {
+          "key": "primary_paid",
+          "value": "$192.00"
+        },
+        {
+          "key": "claim_amount",
+          "value": "48.00"
+        },
+        {
+          "key": "provider",
+          "value": "Bloor West Dental"
+        }
+      ],
+      "evidence_refs": [
+        "Daniel's Manulife statement: filling at Bloor West Dental on September 10, 2026, billed $240.00, Manulife paid $192.00."
+      ],
+      "rationale": "Daniel's own Manulife plan ML-7 paid first; the residual 48.00 goes to Ama's Sun Life plan SL-1.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    },
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "daniel",
+      "recipient": "ama@example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Sun Life coordination-of-benefits claim packet for Daniel: September 10, 2026 filling"
+        },
+        {
+          "key": "body",
+          "value": "Attached is the prepared Sun Life secondary claim for Daniel's filling at Bloor West Dental on September 10, 2026: billed $240.00, Manulife paid $192.00, claim amount 48.00."
+        }
+      ],
+      "evidence_refs": [
+        "Prepare the Sun Life claim for the rest and email me the packet at ama@example.test."
+      ],
+      "rationale": "Ama asked for the packet by email at ama@example.test.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: ML-7 primary, SL-1 secondary.",
+    "residual: 240.00 - 192.00 = 48.00."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "mei",
+      "recipient": "rivera@swimclub.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Mei will miss practice on Saturday, September 19"
+        },
+        {
+          "key": "body",
+          "value": "Hi Coach Rivera, I can't come to practice on Saturday, September 19. Thank you, Mei"
+        }
+      ],
+      "evidence_refs": [
+        "can you email coach Rivera at rivera at swimclub dot example dot test that I can't come to practice on saturday september nineteenth"
+      ],
+      "rationale": "Mei asked for one email to her coach; the spoken address is written as rivera@swimclub.example.test.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

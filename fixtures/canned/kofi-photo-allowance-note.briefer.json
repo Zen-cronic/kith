@@ -1,0 +1,13 @@
+{
+  "headline_en": "Done: $9.00 from your allowance for the poster board.",
+  "headline_target": "Done: $9.00 from your allowance for the poster board.",
+  "done": [
+    "$9.00 from your allowance for the science fair poster board (simulated receipt: no real money moves in this demo)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Nothing else to do right now.",
+  "next_step_target": "Nothing else to do right now."
+}

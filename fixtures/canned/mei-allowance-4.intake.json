@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Mei Okafor-Lim (member mei)",
+  "subject_hint": "Mei's allowance",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$4.00",
+      "quote": "Can I have $4.00 from my allowance for stickers at the book fair on Friday, September 18, 2026?"
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "Friday, September 18, 2026",
+      "quote": "Can I have $4.00 from my allowance for stickers at the book fair on Friday, September 18, 2026?"
+    }
+  ],
+  "transcribed_lines": [
+    "Can I have $4.00 from my allowance for stickers at the book fair on Friday, September 18, 2026?"
+  ],
+  "summary_en": "Mei asks to take $4.00 from her own allowance for stickers at the book fair on Friday, September 18, 2026.",
+  "evidence": [
+    "Can I have $4.00 from my allowance for stickers at the book fair on Friday, September 18, 2026?"
+  ],
+  "confidence": "high"
+}

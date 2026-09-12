@@ -1,0 +1,11 @@
+{
+  "headline_en": "The $650.00 claim is waiting for Daniel: it is above his grant to you.",
+  "headline_target": "The $650.00 claim is waiting for Daniel: it is above his grant to you.",
+  "done": [],
+  "waiting_on": [
+    "The Sun Life claim for $650.00: waiting for Daniel, because his benefits grant to you covers up to $500.00 per claim."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Daniel to approve it in the app.",
+  "next_step_target": "Ask Daniel to approve it in the app."
+}

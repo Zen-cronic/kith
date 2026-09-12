@@ -1,0 +1,25 @@
+{
+  "actions": [
+    {
+      "action_type": "allowance:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "mei",
+      "recipient": "hh-main",
+      "amount_text": "5.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "memo",
+          "value": "the comic Kofi lent Mei"
+        }
+      ],
+      "evidence_refs": [
+        "Take $5.00 from Mei's allowance for the comic I lent her."
+      ],
+      "rationale": "Kofi asked for $5.00 from Mei's allowance.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

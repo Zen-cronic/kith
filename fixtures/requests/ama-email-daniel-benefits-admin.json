@@ -1,0 +1,24 @@
+{
+  "id": "ama-email-daniel-benefits-admin",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Email Daniel's benefits administrator at benefits@northshore.example.test to ask for the 2026 dental plan booklet for plan ML-7, under his benefits grant g-daniel-ama-benefits.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "benefits",
+    "allow": [
+      "email:send"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "spouse-grant",
+    "benefits",
+    "email",
+    "allow"
+  ],
+  "notes": "email:send is in the scope of g-daniel-ama-benefits; rule grant allows and the executor runs."
+}

@@ -1,0 +1,32 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Daniel's own dental claim",
+  "amounts": [
+    {
+      "label": "billed by the dentist (spoken, French)",
+      "amount_text": "cent quatre-vingts dollars",
+      "quote": "peux-tu préparer la réclamation Sun Life pour mon nettoyage dentaire chez Bloor West Dental le trois septembre deux mille vingt-six, facturé cent quatre-vingts dollars, Manulife a payé cent quarante-quatre dollars"
+    },
+    {
+      "label": "paid by Manulife (spoken, French)",
+      "amount_text": "cent quarante-quatre dollars",
+      "quote": "peux-tu préparer la réclamation Sun Life pour mon nettoyage dentaire chez Bloor West Dental le trois septembre deux mille vingt-six, facturé cent quatre-vingts dollars, Manulife a payé cent quarante-quatre dollars"
+    }
+  ],
+  "dates": [
+    {
+      "label": "service date (spoken, French)",
+      "date_text": "le trois septembre deux mille vingt-six",
+      "quote": "peux-tu préparer la réclamation Sun Life pour mon nettoyage dentaire chez Bloor West Dental le trois septembre deux mille vingt-six, facturé cent quatre-vingts dollars, Manulife a payé cent quarante-quatre dollars"
+    }
+  ],
+  "transcribed_lines": [
+    "peux-tu préparer la réclamation Sun Life pour mon nettoyage dentaire chez Bloor West Dental le trois septembre deux mille vingt-six, facturé cent quatre-vingts dollars, Manulife a payé cent quarante-quatre dollars"
+  ],
+  "summary_en": "Daniel asks, in French by voice, to prepare the Sun Life claim for his own dental cleaning at Bloor West Dental on September 3, 2026: one hundred eighty dollars billed, Manulife paid one hundred forty-four dollars.",
+  "evidence": [
+    "peux-tu préparer la réclamation Sun Life pour mon nettoyage dentaire chez Bloor West Dental le trois septembre deux mille vingt-six, facturé cent quatre-vingts dollars, Manulife a payé cent quarante-quatre dollars"
+  ],
+  "confidence": "high"
+}

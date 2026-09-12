@@ -1,0 +1,11 @@
+{
+  "headline_en": "The $120.00 for Daniel's session is waiting for Daniel.",
+  "headline_target": "The $120.00 for Daniel's session is waiting for Daniel.",
+  "done": [],
+  "waiting_on": [
+    "$120.00 to Roncesvalles Physio for Daniel's session: waiting for Daniel, because the grant you named was not given by Daniel."
+  ],
+  "labels": [],
+  "next_step_en": "Ask Daniel to approve it in the app.",
+  "next_step_target": "Ask Daniel to approve it in the app."
+}

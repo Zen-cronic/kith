@@ -1,0 +1,27 @@
+{
+  "actions": [
+    {
+      "action_type": "allowance:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "mei",
+      "recipient": "hh-main",
+      "amount_text": "4.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "memo",
+          "value": "stickers at the book fair on Friday, September 18, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "Can I have $4.00 from my allowance for stickers at the book fair on Friday, September 18, 2026?"
+      ],
+      "rationale": "Mei asked for $4.00 from her own allowance; her auto-approve limit is 5.00 CAD.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "allowance_balance: auto_limit 5.00, weekly 8.00, 0.00 used this week."
+  ]
+}

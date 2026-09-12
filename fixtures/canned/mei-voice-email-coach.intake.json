@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Mei Okafor-Lim (member mei)",
+  "subject_hint": "Mei's note to her swim coach",
+  "amounts": [],
+  "dates": [
+    {
+      "label": "missed practice date (spoken)",
+      "date_text": "saturday september nineteenth",
+      "quote": "can you email coach Rivera at rivera at swimclub dot example dot test that I can't come to practice on saturday september nineteenth"
+    }
+  ],
+  "transcribed_lines": [
+    "can you email coach Rivera at rivera at swimclub dot example dot test that I can't come to practice on saturday september nineteenth"
+  ],
+  "summary_en": "Mei asks, by voice, to email coach Rivera at rivera@swimclub.example.test that she cannot come to practice on Saturday, September 19.",
+  "evidence": [
+    "can you email coach Rivera at rivera at swimclub dot example dot test that I can't come to practice on saturday september nineteenth"
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "daniel",
+      "recipient": "rent@parkdale-mgmt.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Kitchen tap leaking since September 8, 2026: repair visit requested"
+        },
+        {
+          "key": "body",
+          "value": "Hello, the kitchen tap has been leaking since Tuesday, September 8, 2026. Could you schedule a repair visit next week? Thank you, Daniel Lim"
+        }
+      ],
+      "evidence_refs": [
+        "Email my landlord at rent@parkdale-mgmt.example.test that the kitchen tap has been leaking since Tuesday, September 8, 2026 and ask for a repair visit next week."
+      ],
+      "rationale": "Daniel asked for one email to his landlord with the date and the request he gave.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

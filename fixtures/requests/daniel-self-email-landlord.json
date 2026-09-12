@@ -1,0 +1,24 @@
+{
+  "id": "daniel-self-email-landlord",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "text",
+  "request": "Email my landlord at rent@parkdale-mgmt.example.test that the kitchen tap has been leaking since Tuesday, September 8, 2026 and ask for a repair visit next week.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "household",
+    "allow": [
+      "email:send"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "in-scope",
+    "self",
+    "email",
+    "allow",
+    "french"
+  ],
+  "notes": "An adult emails on his own behalf; rule:self allows (no amount) and the executor runs. Daniel is briefed in French."
+}

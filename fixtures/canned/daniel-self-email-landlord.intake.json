@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Daniel's note to his landlord",
+  "amounts": [],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "Tuesday, September 8, 2026",
+      "quote": "Email my landlord at rent@parkdale-mgmt.example.test that the kitchen tap has been leaking since Tuesday, September 8, 2026 and ask for a repair visit next week."
+    }
+  ],
+  "transcribed_lines": [
+    "Email my landlord at rent@parkdale-mgmt.example.test that the kitchen tap has been leaking since Tuesday, September 8, 2026 and ask for a repair visit next week."
+  ],
+  "summary_en": "Daniel asks to email his landlord at rent@parkdale-mgmt.example.test about a kitchen tap leaking since Tuesday, September 8, 2026 and to request a repair visit next week.",
+  "evidence": [
+    "Email my landlord at rent@parkdale-mgmt.example.test that the kitchen tap has been leaking since Tuesday, September 8, 2026 and ask for a repair visit next week."
+  ],
+  "confidence": "high"
+}

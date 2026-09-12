@@ -1,0 +1,29 @@
+{
+  "actions": [
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "mei",
+      "recipient": "park@school.example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Mei will be late tomorrow"
+        },
+        {
+          "key": "body",
+          "value": "Dear Ms. Park, I will be late tomorrow. Thank you, Mei"
+        }
+      ],
+      "evidence_refs": [
+        "mom gave me grant g dash ama dash mei dash email so email my teacher ms park at park at school dot example dot test that I'll be late tomorrow"
+      ],
+      "rationale": "Mei asked for one email to her teacher under the grant she cites, g-ama-mei-email.",
+      "claimed_grant_id": "g-ama-mei-email"
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

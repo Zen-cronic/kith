@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "kofi",
+  "actor_member_id": "ama",
+  "skill_id": "household",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "A plain payment or email; no domain skill matches, so the core household skill handles it.",
+    "Kofi is the subject: the trip is Kofi's and Ama is his guardian (household_lookup).",
+    "hh-main is the account involved."
+  ]
+}

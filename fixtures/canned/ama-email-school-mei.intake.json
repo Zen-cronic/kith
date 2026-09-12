@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Ama Okafor-Lim (member ama)",
+  "subject_hint": "Mei's absence from school",
+  "amounts": [],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "Monday, September 21, 2026",
+      "quote": "Email Mei's teacher Ms. Park at park@school.example.test that Mei will be away on Monday, September 21, 2026 for a family appointment."
+    }
+  ],
+  "transcribed_lines": [
+    "Email Mei's teacher Ms. Park at park@school.example.test that Mei will be away on Monday, September 21, 2026 for a family appointment."
+  ],
+  "summary_en": "Ama asks to email Mei's teacher Ms. Park at park@school.example.test that Mei will be away on Monday, September 21, 2026 for a family appointment.",
+  "evidence": [
+    "Email Mei's teacher Ms. Park at park@school.example.test that Mei will be away on Monday, September 21, 2026 for a family appointment."
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Kofi's swim lessons",
+  "amounts": [
+    {
+      "label": "amount as written",
+      "amount_text": "$95.00",
+      "quote": "Pay $95.00 to the Parkdale Community Centre for Kofi's swim lessons before September 20, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "date as written",
+      "date_text": "September 20, 2026",
+      "quote": "Pay $95.00 to the Parkdale Community Centre for Kofi's swim lessons before September 20, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay $95.00 to the Parkdale Community Centre for Kofi's swim lessons before September 20, 2026."
+  ],
+  "summary_en": "Daniel asks to pay $95.00 to the Parkdale Community Centre for Kofi's swim lessons before September 20, 2026.",
+  "evidence": [
+    "Pay $95.00 to the Parkdale Community Centre for Kofi's swim lessons before September 20, 2026."
+  ],
+  "confidence": "high"
+}

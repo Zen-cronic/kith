@@ -1,0 +1,33 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "Toronto District School Board",
+      "amount_text": "180.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "payee",
+          "value": "Toronto District School Board"
+        },
+        {
+          "key": "purpose",
+          "value": "Kofi's band program fee"
+        },
+        {
+          "key": "due",
+          "value": "September 30, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "Pay Kofi's $180.00 band program fee to the Toronto District School Board before September 30, 2026."
+      ],
+      "rationale": "Ama pays her son's band program fee; the amount and due date match the tuition entry on file.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": []
+}

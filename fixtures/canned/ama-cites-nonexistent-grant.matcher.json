@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "daniel",
+  "actor_member_id": "ama",
+  "skill_id": "household",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "A plain payment or email; no domain skill matches, so the core household skill handles it.",
+    "Daniel is the subject: the trip is Daniel's and Ama cites a grant from him (household_lookup).",
+    "hh-main is the account involved."
+  ]
+}

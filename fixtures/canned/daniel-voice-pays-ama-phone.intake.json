@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim (member daniel)",
+  "subject_hint": "Ama's phone bill",
+  "amounts": [
+    {
+      "label": "phone bill (spoken, French)",
+      "amount_text": "quatre-vingt-cinq dollars",
+      "quote": "paie la facture de téléphone d'Ama, quatre-vingt-cinq dollars, à Fido avant le vingt septembre"
+    }
+  ],
+  "dates": [
+    {
+      "label": "pay before (spoken, French)",
+      "date_text": "le vingt septembre",
+      "quote": "paie la facture de téléphone d'Ama, quatre-vingt-cinq dollars, à Fido avant le vingt septembre"
+    }
+  ],
+  "transcribed_lines": [
+    "paie la facture de téléphone d'Ama, quatre-vingt-cinq dollars, à Fido avant le vingt septembre"
+  ],
+  "summary_en": "Daniel asks, in French by voice, to pay Ama's phone bill of eighty-five dollars to Fido before September 20.",
+  "evidence": [
+    "paie la facture de téléphone d'Ama, quatre-vingt-cinq dollars, à Fido avant le vingt septembre"
+  ],
+  "confidence": "high"
+}

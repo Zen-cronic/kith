@@ -1,0 +1,43 @@
+{
+  "document_class": "dental-eob",
+  "issuer": "Manulife (photo shown by Ama Okafor-Lim)",
+  "subject_hint": "Daniel's dental claim",
+  "amounts": [
+    {
+      "label": "billed by the dentist",
+      "amount_text": "$180.00",
+      "quote": "Amount billed: $180.00"
+    },
+    {
+      "label": "paid by Manulife",
+      "amount_text": "$144.00",
+      "quote": "Amount paid: $144.00"
+    }
+  ],
+  "dates": [
+    {
+      "label": "service date",
+      "date_text": "September 3, 2026",
+      "quote": "Service date: September 3, 2026"
+    }
+  ],
+  "transcribed_lines": [
+    "Here is Daniel's dental statement. Prepare the Sun Life claim for the rest.",
+    "Manulife — Explanation of Benefits",
+    "Patient: Daniel Lim   Plan: ML-7",
+    "Provider: Bloor West Dental",
+    "Service date: September 3, 2026",
+    "Amount billed: $180.00",
+    "Amount paid: $144.00"
+  ],
+  "summary_en": "Ama shows a photo of Daniel's Manulife explanation of benefits (Bloor West Dental, September 3, 2026, $180.00 billed, $144.00 paid) and asks for the Sun Life claim for the rest.",
+  "evidence": [
+    "Manulife — Explanation of Benefits",
+    "Patient: Daniel Lim   Plan: ML-7",
+    "Provider: Bloor West Dental",
+    "Service date: September 3, 2026",
+    "Amount billed: $180.00",
+    "Amount paid: $144.00"
+  ],
+  "confidence": "high"
+}

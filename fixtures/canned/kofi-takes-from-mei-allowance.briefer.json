@@ -1,0 +1,11 @@
+{
+  "headline_en": "Asked your parents: $5.00 from Mei's allowance is waiting for Ama or Daniel.",
+  "headline_target": "Asked your parents: $5.00 from Mei's allowance is waiting for Ama or Daniel.",
+  "done": [],
+  "waiting_on": [
+    "$5.00 from Mei's allowance for the comic: waiting for Ama or Daniel, because you can't decide about Mei's allowance."
+  ],
+  "labels": [],
+  "next_step_en": "Nothing moves until Ama or Daniel approves it in the app.",
+  "next_step_target": "Nothing moves until Ama or Daniel approves it in the app."
+}

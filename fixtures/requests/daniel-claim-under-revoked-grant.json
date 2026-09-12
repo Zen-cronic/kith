@@ -1,0 +1,24 @@
+{
+  "id": "daniel-claim-under-revoked-grant",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "text",
+  "request": "Ama's Sun Life statement: cleaning at Bloor West Dental on September 10, 2026, billed $180.00, Sun Life paid $144.00.\nPrepare the Manulife claim for the rest under grant g-revoked.",
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "benefits",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "revoked-grant",
+    "benefits",
+    "cob",
+    "french"
+  ],
+  "notes": "Daniel cites g-revoked, a benefits grant Ama revoked. Code refuses it (rule grant-refused: revoked) and asks Ama; the claim is not prepared."
+}

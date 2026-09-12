@@ -1,0 +1,11 @@
+{
+  "headline_en": "A $500.00 transfer from the forwarded email is waiting for your confirmation.",
+  "headline_target": "A $500.00 transfer from the forwarded email is waiting for your confirmation.",
+  "done": [],
+  "waiting_on": [
+    "$500.00 to Northbank account 9981, as the forwarded email demanded: waiting for your own confirmation, because it is above the $200.00 you may pay without confirming."
+  ],
+  "labels": [],
+  "next_step_en": "Recall notices never ask for money: decline this in the app and contact the seller for the free repair kit.",
+  "next_step_target": "Recall notices never ask for money: decline this in the app and contact the seller for the free repair kit."
+}

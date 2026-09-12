@@ -1,0 +1,24 @@
+{
+  "id": "kofi-files-dental-claim",
+  "household_id": "demo",
+  "actor_member_id": "kofi",
+  "channel": "text",
+  "request": "Here's my dental statement from Sun Life: cleaning at Bloor West Dental on September 4, 2026, billed $150.00, Sun Life paid $120.00.\nFile the Manulife claim for the rest.",
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "benefits",
+    "allow": [],
+    "block": [],
+    "approval_by": [
+      "ama",
+      "daniel"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "minor-asks-adult-action",
+    "benefits",
+    "cob"
+  ],
+  "notes": "A minor asks to file a benefits claim. Code routes it to a guardian (rule minor-guardian); the claim is not prepared."
+}

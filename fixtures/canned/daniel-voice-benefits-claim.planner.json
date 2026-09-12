@@ -1,0 +1,52 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "daniel",
+      "recipient": "Sun Life",
+      "amount_text": "36.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Sun Life"
+        },
+        {
+          "key": "plan_id",
+          "value": "SL-1"
+        },
+        {
+          "key": "service_date",
+          "value": "le trois septembre deux mille vingt-six"
+        },
+        {
+          "key": "billed",
+          "value": "cent quatre-vingts dollars"
+        },
+        {
+          "key": "primary_paid",
+          "value": "cent quarante-quatre dollars"
+        },
+        {
+          "key": "claim_amount",
+          "value": "36.00"
+        },
+        {
+          "key": "provider",
+          "value": "Bloor West Dental"
+        }
+      ],
+      "evidence_refs": [
+        "peux-tu préparer la réclamation Sun Life pour mon nettoyage dentaire chez Bloor West Dental le trois septembre deux mille vingt-six, facturé cent quatre-vingts dollars, Manulife a payé cent quarante-quatre dollars"
+      ],
+      "rationale": "Daniel's own Manulife plan ML-7 paid first; the residual 36.00 (180.00 - 144.00, spoken in words) goes to Ama's Sun Life plan SL-1 as the secondary claim, prepared for Daniel to file.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: ML-7 (Manulife) primary because Daniel is the claimant; SL-1 (Sun Life) secondary.",
+    "residual: 180.00 - 144.00 = 36.00 (amounts spoken in words)."
+  ]
+}

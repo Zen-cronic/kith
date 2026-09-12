@@ -1,0 +1,22 @@
+{
+  "document_class": "allowance-note",
+  "issuer": "Handwritten note (photo shown by Kofi Okafor-Lim)",
+  "subject_hint": "Kofi's allowance",
+  "amounts": [
+    {
+      "label": "amount named in the note",
+      "amount_text": "$9.00",
+      "quote": "Kofi — you can take $9.00 from your allowance for the science fair poster board. Love, Mom"
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Here's the note from Mom. Can I take the money for the poster board?",
+    "Kofi — you can take $9.00 from your allowance for the science fair poster board. Love, Mom"
+  ],
+  "summary_en": "Kofi shows a photo of a note from his mother saying he may take $9.00 from his allowance for the science fair poster board, and asks to take it.",
+  "evidence": [
+    "Kofi — you can take $9.00 from your allowance for the science fair poster board. Love, Mom"
+  ],
+  "confidence": "high"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "ama-two-payments-around-cap",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay $200.00 today and another $200.00 next week to the Toronto Youth Wind Orchestra for Daniel's band trip, both under his payments grant g-daniel-ama-payments.",
+  "expected": {
+    "kind": "out-of-scope",
+    "skill_id": "household",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": [
+      "daniel"
+    ]
+  },
+  "tags": [
+    "out-of-scope",
+    "over-limit",
+    "payment",
+    "split"
+  ],
+  "notes": "Two payments that together exceed the 300.00 per-month grant. The first is allowed; code counts it against the second in the same plan (provisional accounting), refuses the second and asks Daniel."
+}

@@ -1,0 +1,13 @@
+{
+  "headline_en": "Emailed your landlord about the bathroom fan.",
+  "headline_target": "Courriel envoyé à votre propriétaire au sujet du ventilateur de la salle de bain.",
+  "done": [
+    "Email to rent@parkdale-mgmt.example.test asking for a repair visit (simulated receipt in this demo)."
+  ],
+  "waiting_on": [],
+  "labels": [
+    "SIMULATED"
+  ],
+  "next_step_en": "Nothing else to do right now.",
+  "next_step_target": "Rien d'autre à faire pour l'instant."
+}
