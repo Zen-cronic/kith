@@ -44,3 +44,6 @@ out/
 docs/BUILD-LOG.md
 docs/DESIGN-BRIEF.md
 BUILD_CHECKPOINT.md
+
+# Local ledger state seeded from fixtures/households (never commit a household)
+data/

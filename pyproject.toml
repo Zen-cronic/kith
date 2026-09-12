@@ -56,4 +56,5 @@ ignore = ["E501"]  # long literal strings (prompts, verbatim rule quotes, fixtur
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-q"
