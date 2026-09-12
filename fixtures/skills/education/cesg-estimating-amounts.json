@@ -1,0 +1,40 @@
+{
+  "recorded": true,
+  "fetched": "2026-09-12",
+  "source": "https://www.canada.ca/en/services/benefits/education/education-savings/estimating-amounts.html",
+  "note": "Sentences copied verbatim from the canada.ca page 'Estimating amounts' (Government of Canada, public information) on the fetch date, after stripping HTML. household/skills/education/rules.py quotes exactly these; tests/skills/test_education.py cross-checks them.",
+  "quotes": [
+    {
+      "label": "CESG, basic rate",
+      "text": "If eligible, beneficiaries can receive up to 20% of the first $2,500 contributed to the RESP."
+    },
+    {
+      "label": "CESG, yearly maximum",
+      "text": "The CESG adds a maximum of $500 to an RESP each year, and up to another $100 for eligible families living with low or middle-income"
+    },
+    {
+      "label": "CESG, carry-forward",
+      "text": "CESG amounts accumulate and can carry-forward to the current year. If you don’t receive the maximum CESG amount in a given year, you can still receive it in future years. You can catch up on this amount by making more contributions to the RESP."
+    },
+    {
+      "label": "CESG, carry-forward yearly cap",
+      "text": "If there is an unused CESG amount from previous years, the subscriber can contribute more than $2,500 to the RESP per year and receive up to 20% of their contributions (up to $5,000) each year. This way, a child could get up to $1,000 of the CESG in their RESP per calendar year if there are unused amounts from previous years."
+    },
+    {
+      "label": "CESG, lifetime maximum",
+      "text": "The maximum that can be received from the CESG is $7,200 until the age of 17 per eligible beneficiary."
+    },
+    {
+      "label": "CESG, age limit",
+      "text": "The CESG is available until the end of the calendar year that the beneficiary turns 17"
+    },
+    {
+      "label": "CLB, amounts",
+      "text": "A beneficiary will receive $500 their first year of eligibility, then another $100 for each year of eligibility up to and including age 15"
+    },
+    {
+      "label": "CLB, no contribution needed",
+      "text": "No contributions to the RESP are needed to get the CLB"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "kofi",
+  "actor_member_id": "daniel",
+  "skill_id": "education",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "An RESP contribution with a question about the education savings grant: the education skill applies.",
+    "The RESP is Kofi's, so Kofi is the subject; Daniel is his guardian (household_lookup).",
+    "hh-main is the household account the contribution comes from."
+  ]
+}

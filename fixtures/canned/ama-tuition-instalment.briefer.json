@@ -1,0 +1,11 @@
+{
+  "headline_en": "Your $450.00 tuition instalment is ready and waiting for your confirmation.",
+  "headline_target": "Your $450.00 tuition instalment is ready and waiting for your confirmation.",
+  "done": [],
+  "waiting_on": [
+    "$450.00 to Bright Path Montessori for your teacher-training course (instalment 2 of 3, due September 30, 2026): waiting for you to confirm with your PIN, because it is above the $200.00 you may decide without confirming."
+  ],
+  "labels": [],
+  "next_step_en": "Confirm it with your PIN in the app before September 30, 2026; nothing has been paid yet.",
+  "next_step_target": "Confirm it with your PIN in the app before September 30, 2026; nothing has been paid yet."
+}

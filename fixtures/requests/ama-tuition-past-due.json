@@ -1,0 +1,21 @@
+{
+  "id": "ama-tuition-past-due",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay my $450.00 tuition instalment (1 of 3) to Bright Path Montessori for my teacher-training course; it was due August 15, 2026.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "education",
+    "allow": [],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "education",
+    "tuition:pay",
+    "past-due",
+    "no-action"
+  ],
+  "notes": "The due date is already past, so the planner proposes nothing money-moving and explains in needs (propose_tuition_payment refuses a past due date in code). Outcome no-action; no receipt, no approval."
+}

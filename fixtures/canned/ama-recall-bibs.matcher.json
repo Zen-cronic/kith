@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "ama",
+  "actor_member_id": "ama",
+  "skill_id": "recall",
+  "account_id": "",
+  "confidence": "high",
+  "reasons": [
+    "A product recall with a recall number: the recall skill applies.",
+    "The bibs are Ama's own purchase and she is asking, so Ama is the subject and decides for herself (household_lookup).",
+    "No household account is involved: a refund is the manufacturer's to pay."
+  ]
+}

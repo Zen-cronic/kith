@@ -1,0 +1,56 @@
+{
+  "actions": [
+    {
+      "action_type": "recall:remedy",
+      "rail": "external-api-readonly",
+      "subject_member_id": "ama",
+      "recipient": "",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "recall_number",
+          "value": "26639"
+        },
+        {
+          "key": "product",
+          "value": "Peony Design personalized baby bibs"
+        }
+      ],
+      "evidence_refs": [
+        "The Peony Design personalized baby bibs we bought on Etsy in December 2025 were recalled by the CPSC, recall number 26639."
+      ],
+      "rationale": "Read-only lookup of CPSC recall 26639 so the remedy can be quoted word for word.",
+      "claimed_grant_id": ""
+    },
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "ama",
+      "recipient": "peonydesigncoshoppe@gmail.com",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Recall 26639: refund request for Peony Design personalized baby bibs"
+        },
+        {
+          "key": "body",
+          "value": "Hello Peony Design Co.,\n\nI am writing about CPSC recall 26639, \"Peony Design Recalls Personalized Baby Bibs and Stroller Bags Due to Risk of Serious Injury or Death from Choking Hazard\".\nWe own Peony Design personalized baby bibs, bought on Etsy in December 2025, and I am requesting the remedy the recall notice promises.\n\nThe recall notice says:\n\"Consumers should take the recalled baby bibs and stroller bags away from children immediately, stop using them, and contact Peony Design to receive a full refund. Consumers will be asked to discard the recalled baby bibs and stroller bags.\"\n\nRecall notice: https://www.cpsc.gov/Recalls/2026/Peony-Design-Recalls-Personalized-Baby-Bibs-and-Stroller-Bags-Due-to-Risk-of-Serious-Injury-or-Death-from-Choking-Hazard\n\nPlease tell me how to receive the refund and what you need from me (photos, proof of purchase, or the items).\n\nThank you,\nAma Okafor-Lim"
+        }
+      ],
+      "evidence_refs": [
+        "The Peony Design personalized baby bibs we bought on Etsy in December 2025 were recalled by the CPSC, recall number 26639.",
+        "Please look up the recall and email Peony Design to ask for the refund it promises."
+      ],
+      "rationale": "Ama Okafor-Lim claims the remedy the recall promises (Refund) from Peony Design Co. at the consumer contact in the record.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "lookup_recall 26639: Peony Design Recalls Personalized Baby Bibs and Stroller Bags Due to Risk of Serious Injury or Death from Choking Hazard (recorded CPSC response fetched 2026-09-12); remedy options: Refund.",
+    "propose_recall_claim: the recipient is the ConsumerContact email in the record (peonydesigncoshoppe@gmail.com); the body quotes the remedy and the recall URL verbatim."
+  ]
+}

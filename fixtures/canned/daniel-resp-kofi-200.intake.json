@@ -1,0 +1,21 @@
+{
+  "document_class": "text-request",
+  "issuer": "Daniel Lim",
+  "subject_hint": "Kofi's RESP",
+  "amounts": [
+    {
+      "label": "RESP contribution",
+      "amount_text": "$200.00",
+      "quote": "Contribute $200.00 from the household account to Kofi's RESP this month, and tell me how much education savings grant it earns."
+    }
+  ],
+  "dates": [],
+  "transcribed_lines": [
+    "Contribute $200.00 from the household account to Kofi's RESP this month, and tell me how much education savings grant it earns."
+  ],
+  "summary_en": "Daniel asks for a $200.00 contribution from the household account to Kofi's RESP this month and wants to know how much education savings grant it earns.",
+  "evidence": [
+    "Contribute $200.00 from the household account to Kofi's RESP this month, and tell me how much education savings grant it earns."
+  ],
+  "confidence": "high"
+}

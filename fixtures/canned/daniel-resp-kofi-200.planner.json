@@ -1,0 +1,44 @@
+{
+  "actions": [
+    {
+      "action_type": "payment:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "RESP for Kofi",
+      "amount_text": "200.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "kind",
+          "value": "resp:contribute"
+        },
+        {
+          "key": "beneficiary_member_id",
+          "value": "kofi"
+        },
+        {
+          "key": "year_contributed_so_far",
+          "value": "0.00"
+        },
+        {
+          "key": "grant_room_note",
+          "value": "CESG on 200.00: 40.00 (20% basic CESG; 460.00 of this year's grant room left after this; lifetime room 7160.00 of 7200.00). Source: canada.ca, Estimating amounts (fetched 2026-09-12); this year's earlier RESP contributions (0.00) are read from the household ledger; carry-forward room and CESG received to date are not on file, assumed 0.00."
+        },
+        {
+          "key": "purpose",
+          "value": "Kofi's RESP contribution for this month"
+        }
+      ],
+      "evidence_refs": [
+        "Contribute $200.00 from the household account to Kofi's RESP this month, and tell me how much education savings grant it earns."
+      ],
+      "rationale": "Daniel contributes 200.00 CAD to his son Kofi's RESP as his guardian; the CESG on it (40.00) comes from cesg_room, not from the planner.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cesg_room(kofi, 200.00): basic 20% = 40.00; grant 40.00; this year's room 500.00 before, 460.00 after; lifetime room 7160.00 of 7200.00 after; Kofi is 14 this year, eligible until the end of the year he turns 17 (canada.ca, Estimating amounts, fetched 2026-09-12).",
+    "The RESP provider requests the CESG from the government on the contribution; this ledger only records the contribution itself."
+  ]
+}

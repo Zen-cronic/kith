@@ -1,0 +1,27 @@
+{
+  "document_class": "tuition-invoice",
+  "issuer": "Ama Okafor-Lim",
+  "subject_hint": "Ama's teacher-training tuition",
+  "amounts": [
+    {
+      "label": "tuition instalment",
+      "amount_text": "$450.00",
+      "quote": "Pay my $450.00 tuition instalment (2 of 3) to Bright Path Montessori for my teacher-training course, due September 30, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "due date",
+      "date_text": "September 30, 2026",
+      "quote": "Pay my $450.00 tuition instalment (2 of 3) to Bright Path Montessori for my teacher-training course, due September 30, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "Pay my $450.00 tuition instalment (2 of 3) to Bright Path Montessori for my teacher-training course, due September 30, 2026."
+  ],
+  "summary_en": "Ama asks to pay her $450.00 tuition instalment (2 of 3) to Bright Path Montessori for her teacher-training course, due September 30, 2026.",
+  "evidence": [
+    "Pay my $450.00 tuition instalment (2 of 3) to Bright Path Montessori for my teacher-training course, due September 30, 2026."
+  ],
+  "confidence": "high"
+}

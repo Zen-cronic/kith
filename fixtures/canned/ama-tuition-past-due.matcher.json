@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "ama",
+  "actor_member_id": "ama",
+  "skill_id": "education",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "A tuition instalment with a due date: the education skill applies.",
+    "The course is Ama's own, so Ama is the subject and decides for herself (household_lookup); no tuition entry is on file for Bright Path Montessori.",
+    "hh-main is the household account it would be paid from."
+  ]
+}

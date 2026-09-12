@@ -1,0 +1,24 @@
+{
+  "id": "daniel-resp-kofi-200",
+  "household_id": "demo",
+  "actor_member_id": "daniel",
+  "channel": "text",
+  "request": "Contribute $200.00 from the household account to Kofi's RESP this month, and tell me how much education savings grant it earns.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "education",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": []
+  },
+  "tags": [
+    "hero",
+    "parent-for-minor",
+    "education",
+    "resp:contribute",
+    "allow"
+  ],
+  "notes": "A guardian contributes to his own child's RESP: rule:parent-for-minor allows and the ledger posts 200.00 to ext-resp-for-kofi. The briefing shows the CESG arithmetic from cesg_room (20% of 200.00 = 40.00; 460.00 of this year's 500.00 room left; 7,160.00 of the 7,200.00 lifetime maximum), cited to canada.ca."
+}
