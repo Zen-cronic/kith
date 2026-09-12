@@ -1,0 +1,115 @@
+{
+  "recorded": true,
+  "fetched": "2026-09-12",
+  "source": "https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallNumber=26639",
+  "recall_number": "26639",
+  "note": "Verbatim CPSC SaferProducts REST response (public data), recorded for SIMULATED-replay receipts. The API returns a JSON array; it is kept under `response` unchanged.",
+  "response": [
+    {
+      "RecallID": 10880,
+      "RecallNumber": "26639",
+      "RecallDate": "2026-07-23T00:00:00",
+      "Description": "This recall involves Peony Design personalized handmade baby bibs and stroller bags. The bibs have scalloped edges, a snap closure, and personalized embroidery on the front. The bibs were sold in fabric designs of geese, strawberries, heart tulip, plaid checks, and floral print. The stroller bags were made in coordinating fabrics including heart tulip, plaid check, floral print, and Winnie the Pooh. Each stroller bag has two straps with snaps at the ends for attachment and is personalized with embroidery and a ruffle around the top edge.",
+      "URL": "https://www.cpsc.gov/Recalls/2026/Peony-Design-Recalls-Personalized-Baby-Bibs-and-Stroller-Bags-Due-to-Risk-of-Serious-Injury-or-Death-from-Choking-Hazard",
+      "Title": "Peony Design Recalls Personalized Baby Bibs and Stroller Bags Due to Risk of Serious Injury or Death from Choking Hazard",
+      "ConsumerContact": "Peony Design by email at peonydesigncoshoppe@gmail.com for more information.",
+      "LastPublishDate": "2026-07-24T00:00:00",
+      "Products": [
+        {
+          "Name": "Personalized Baby Bibs and Stroller Bags",
+          "Description": "",
+          "Model": "",
+          "Type": "",
+          "CategoryID": "",
+          "NumberOfUnits": "About 52"
+        }
+      ],
+      "Inconjunctions": [],
+      "Images": [
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-1.png",
+          "Caption": "Recalled bib with strawberry print"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-2.png",
+          "Caption": "Recalled bib with geese print"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-3.png",
+          "Caption": "Recalled bib with plaid check print"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-4.png",
+          "Caption": "Recalled bib with heart tulip print"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-5.png",
+          "Caption": "Recalled bib with floral print"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-6.png",
+          "Caption": "Recalled heart tulip stroller bag"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-7.png",
+          "Caption": "Recalled floral print stroller bag"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-8.png",
+          "Caption": "Recalled plaid check stroller bag"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-9.png",
+          "Caption": "Recalled Winnie the Pooh stroller bag"
+        },
+        {
+          "URL": "https://www.cpsc.gov/s3fs-public/peony-10.png",
+          "Caption": "Recalled plaid check stroller bag"
+        }
+      ],
+      "Injuries": [
+        {
+          "Name": "The firm received three reported incidents of a broken snap on a bib and a broken snap on two stroller bags. No injuries have been reported."
+        }
+      ],
+      "Manufacturers": [
+        {
+          "Name": "Peony Design Co., of Howell, MI",
+          "CompanyID": ""
+        }
+      ],
+      "Retailers": [
+        {
+          "Name": "Online at Etsy.com from October 2025 through July 2026 for between $15 and $45.",
+          "CompanyID": ""
+        }
+      ],
+      "Importers": [],
+      "Distributors": [],
+      "SoldAtLabel": null,
+      "ManufacturerCountries": [
+        {
+          "Country": "United States"
+        }
+      ],
+      "ProductUPCs": [],
+      "Hazards": [
+        {
+          "Name": "The snap can detach from the recalled bibs and stroller bags, posing a risk of serious injury or death from a choking hazard to young children.",
+          "HazardType": "",
+          "HazardTypeID": ""
+        }
+      ],
+      "Remedies": [
+        {
+          "Name": "Consumers should take the recalled baby bibs and stroller bags away from children immediately, stop using them, and contact Peony Design to receive a full refund. Consumers will be asked to discard the recalled baby bibs and stroller bags."
+        }
+      ],
+      "RemedyOptions": [
+        {
+          "Option": "Refund"
+        }
+      ]
+    }
+  ]
+}

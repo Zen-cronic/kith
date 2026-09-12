@@ -1,4 +1,4 @@
-"""Idempotency keys and the P1 SIMULATED executor stub: one request, one receipt."""
+"""Idempotency keys and the executor entry point: one request, one receipt (rails are covered in test_rails.py)."""
 
 import json
 from datetime import UTC, datetime, timedelta
@@ -7,7 +7,16 @@ from typing import get_args
 import pytest
 
 from household.config import ROOT
-from household.executor import RAILS, STUB_LABEL, execute, idempotency, record, request_digest
+from household.executor import (
+    RAILS,
+    SIMULATED_LABEL,
+    execute,
+    idempotency,
+    rails,
+    receipts,
+    record,
+    request_digest,
+)
 from household.model import ActionProposal, ActionRecord, Household, Rail, Receipt
 
 DEMO = ROOT / "fixtures" / "households" / "demo.json"
@@ -20,7 +29,7 @@ def demo() -> Household:
 
 def proposal(**overrides) -> ActionProposal:
     base = dict(id="act-1", skill_id="test", action_type="payment:transfer", rail="internal-ledger",
-                actor_member_id="ama", subject_member_id="daniel", recipient="hh-main", amount="100.00",
+                actor_member_id="ama", subject_member_id="daniel", recipient="allow-kofi", amount="100.00",
                 evidence_refs=["doc:b", "doc:a"])
     return ActionProposal(**{**base, **overrides})
 
@@ -56,14 +65,16 @@ def test_is_duplicate_finds_the_receipt_only_once_recorded() -> None:
     assert idempotency.is_duplicate("", household) is None
 
 
-def test_execute_stub_returns_a_simulated_receipt_with_the_request_digest() -> None:
+def test_execute_in_simulated_mode_returns_a_simulated_receipt_with_the_request_digest() -> None:
     household = demo()
     action = proposal()
     household.actions.append(ActionRecord(proposal=action, created_at=NOW.isoformat()))
     receipt = execute(action, household, now=NOW, grant_id="g-daniel-ama-payments")
     assert receipt.mode == "SIMULATED" and receipt.provider_ref is None and receipt.response_digest == ""
-    assert receipt.label_reason == STUB_LABEL and receipt.rail == "internal-ledger" and receipt.action_id == "act-1"
-    assert receipt.request_digest == request_digest(action) and len(receipt.request_digest) == 64
+    assert receipt.label_reason == SIMULATED_LABEL and receipt.rail == "internal-ledger" and receipt.action_id == "act-1"
+    source, dest = rails.ledger_accounts(action, household)
+    assert receipt.request_digest == receipts.digest(rails.ledger_request(action, source, dest, NOW))
+    assert len(receipt.request_digest) == 64 and household.ledger == []  # simulated: the posting is digested, not made
     assert receipt.executed_under_grant == "g-daniel-ama-payments" and receipt.at == NOW.isoformat()
     assert action.idempotency_key == idempotency.key(action, "demo", "2026-09-11")
     assert receipt.id == f"rcpt-{action.idempotency_key[:12]}"

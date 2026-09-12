@@ -94,6 +94,8 @@ def main(argv: list[str] | None = None) -> int:
     ts.add_argument("--lang", default="es")
     ts.add_argument("--write-readme", action="store_true", help="regenerate the results table in README.md")
     ts.add_argument("--all", action="store_true", help="include fixtures not tagged 'trapset'")
+    rl = sub.add_parser("rails", help="show the action rails, their honest labels, and what this environment can complete")
+    rl.add_argument("--write-readme", action="store_true", help="regenerate the 'What is real' table in README.md")
     args = parser.parse_args(argv)
 
     if args.command == "run":
@@ -152,6 +154,16 @@ def main(argv: list[str] | None = None) -> int:
         if args.write_readme:
             write_readme(summary)
             print("README.md trap-set table regenerated")
+        return 0
+    if args.command == "rails":
+        from .executor import readme as rails_readme
+
+        print(rails_readme.rails_table())
+        print()
+        print(rails_readme.current_labels(load_settings()))
+        if args.write_readme:
+            changed = rails_readme.write_readme()
+            print("README.md rails block " + ("regenerated" if changed else "already current"))
         return 0
     if args.command == "serve":
         import uvicorn

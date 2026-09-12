@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -10,6 +11,7 @@ from dotenv import load_dotenv
 
 PROVIDERS: tuple[str, ...] = ("fake", "anthropic", "openai", "bedrock")
 SELECTABLE: tuple[str, ...] = ("auto", *PROVIDERS)
+EXECUTION_MODES: tuple[str, ...] = ("simulated", "live")
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -26,8 +28,17 @@ class Settings:
     fidelity_caution: float = 0.70
     max_revisions: int = 2
     max_model_calls: int = 20
+    # Action rails (P3). Presence flags only; the secrets themselves stay in the environment for the SDK clients.
+    execution_mode: str = "simulated"
+    ses_from: str | None = None
+    ses_verified_identities: tuple[str, ...] = ()
+    stripe_secret_key_present: bool = False
+    aeroapi_key_present: bool = False
+    allow_live_ses: bool = False
 
     def __post_init__(self) -> None:
+        if self.execution_mode not in EXECUTION_MODES:
+            raise ValueError(f"EXECUTION_MODE must be one of {EXECUTION_MODES}, got {self.execution_mode!r}")
         if isinstance(self.max_model_calls, bool) or not isinstance(self.max_model_calls, int) or self.max_model_calls <= 0:
             raise ValueError("MAX_MODEL_CALLS must be a positive integer")
 
@@ -48,6 +59,11 @@ def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: o
     if requested not in SELECTABLE:
         raise ValueError(f"MODEL_PROVIDER must be one of {SELECTABLE}, got {requested!r}")
     provider = resolve_auto() if requested == "auto" else requested
+    execution_mode = str(overrides.pop("execution_mode", None) or os.environ.get("EXECUTION_MODE", "simulated")).strip().lower()
+    region = str(overrides.get("aws_region") or os.environ.get("AWS_REGION", "us-east-1"))
+    identities = overrides.pop("ses_verified_identities", None)
+    if identities is None:  # the SES identity list is fetched once, at startup, and only when a real send is possible
+        identities = ses_verified_identities(region) if execution_mode == "live" else ()
     values = {
         "provider": provider,
         "requested_provider": requested,
@@ -57,6 +73,12 @@ def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: o
         "aws_region": os.environ.get("AWS_REGION", "us-east-1"),
         "speech_provider": os.environ.get("SPEECH_PROVIDER", "browser"),
         "max_model_calls": overrides.get("max_model_calls") if overrides.get("max_model_calls") is not None else int(os.environ.get("MAX_MODEL_CALLS", "20")),
+        "execution_mode": execution_mode,
+        "ses_from": os.environ.get("SES_FROM", "").strip() or None,
+        "ses_verified_identities": tuple(identities),
+        "stripe_secret_key_present": bool(os.environ.get("STRIPE_SECRET_KEY")),
+        "aeroapi_key_present": bool(os.environ.get("AEROAPI_KEY")),
+        "allow_live_ses": os.environ.get("HOUSEHOLD_ALLOW_LIVE_SES", "").strip() == "1",
     }
     values.update({k: v for k, v in overrides.items() if v is not None})
     return Settings(**values)  # type: ignore[arg-type]
@@ -70,6 +92,41 @@ def resolve_auto() -> str:
     if os.environ.get("OPENAI_API_KEY"):
         return "openai"
     return "fake"
+
+
+def sesv2_client(region: str):
+    """The SES v2 client, built in one place so tests can substitute a botocore Stubber-wrapped client."""
+    import boto3
+    from botocore.config import Config
+
+    return boto3.client(
+        "sesv2", region_name=region,
+        config=Config(connect_timeout=5, read_timeout=20, retries={"total_max_attempts": 1, "mode": "standard"}),
+    )
+
+
+def ses_verified_identities(region: str) -> tuple[str, ...]:
+    """Identities SES will send from and, while the account is sandboxed, the only addresses it will send to.
+    Called once at startup and only when EXECUTION_MODE=live. Any AWS error yields an empty tuple, so a missing
+    credential degrades every email to a SIMULATED receipt instead of crashing the app."""
+    from botocore.exceptions import BotoCoreError, ClientError
+
+    names: set[str] = set()
+    token: str | None = None
+    try:
+        client = sesv2_client(region)
+        while True:
+            page = client.list_email_identities(**({"PageSize": 100, "NextToken": token} if token else {"PageSize": 100}))
+            names.update(
+                item["IdentityName"] for item in page.get("EmailIdentities", [])
+                if item.get("SendingEnabled") and item.get("VerificationStatus", "SUCCESS") == "SUCCESS"
+            )
+            token = page.get("NextToken")
+            if not token:
+                return tuple(sorted(names))
+    except (BotoCoreError, ClientError) as exc:
+        logging.getLogger(__name__).warning("SES identities unavailable in %s (%s); email will be SIMULATED", region, type(exc).__name__)
+        return ()
 
 
 def provider_readiness() -> dict[str, dict[str, str | bool]]:
