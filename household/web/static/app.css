@@ -251,3 +251,11 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 @media screen and (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Voice */
+.voice-row { margin-top: 10px; align-items: center; gap: 10px; }
+.voice-panel { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 10px; }
+.transcript { list-style: none; margin: 0 0 8px; padding: 0; max-height: 220px; overflow-y: auto; }
+.transcript li { padding: 4px 0; border-bottom: 1px dashed var(--line); }
+.transcript li b { font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; margin-right: 8px; color: var(--muted-foreground); }
+#voice-text { flex: 1; min-width: 0; }

@@ -74,6 +74,17 @@
       </div>
       <p class="small muted" id="upload-note"></p>
       <div class="row"><button class="btn primary" id="run-request">Ask the household agent</button></div>
+      <div class="row voice-row">
+        <button class="btn ghost" id="talk" type="button">Talk instead</button>
+        <span class="small muted" id="voice-banner" role="status"></span>
+      </div>
+      <div id="voice-panel" class="voice-panel" hidden>
+        <ol id="voice-transcript" class="transcript small" aria-live="polite"></ol>
+        <form id="voice-text-form" class="row" hidden>
+          <input id="voice-text" type="text" placeholder="Type your turn (text fallback)…" autocomplete="off">
+          <button class="btn ghost compact" type="submit">Send</button>
+        </form>
+      </div>
       <p role="alert" id="ask-error" class="error-line"></p>
     </article>
     <article class="card"><h2>Sample requests</h2><p class="small muted">Written for the member who is speaking. Pick one to fill it in.</p><div class="sample-list" id="sample-list"></div></article>

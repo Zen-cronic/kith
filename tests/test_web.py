@@ -264,3 +264,15 @@ def test_reset_is_gated_and_reseeds_the_ledger(client: TestClient, monkeypatch) 
     assert client.post("/api/reset").json()["reset"] is True
     household = client.get("/api/household").json()
     assert household["actions"] == [] and household["receipts"] == [] and len(household["consents"]) == 2
+
+
+# Voice router mounted on the web app (P7 wired by the coordinator)
+
+
+def test_voice_router_is_mounted_and_refuses_a_wrong_pin(client) -> None:
+    meta = client.get("/api/voice/meta")
+    assert meta.status_code == 200 and "tools" in meta.json()
+    with client.websocket_connect("/api/voice") as ws:
+        ws.send_json({"type": "identify", "member_id": "kofi", "pin": "0000"})
+        frame = ws.receive_json()
+        assert frame["type"] == "identify_failed" and frame["attempts_left"] == 2

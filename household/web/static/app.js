@@ -168,7 +168,7 @@
     $("pin-error").textContent = "";
     try {
       const data = await Q.post("/api/identify", { member_id: memberId, pin: $("pin").value });
-      state.member = data.member; state.token = data.session_token;
+      state.member = data.member; state.token = data.session_token; state.pin = $("pin").value;
       $("pin").value = "";
       const who = $("who-line"); who.replaceChildren(el("span", "", data.member.name), el("span", `badge ${data.member.role}`, data.member.role));
       $("ask-as").textContent = `Speaking as ${data.member.name} · ${data.member.role} · ${LANGUAGE_NAMES[data.member.language] || data.member.language}`;
@@ -179,7 +179,50 @@
   };
   $("pin-cancel").onclick = () => { $("pin-form").hidden = true; document.querySelectorAll(".member-card").forEach((c) => c.classList.remove("selected")); };
 
+  // Voice (P7): the same member, identified again by PIN over the socket; every tool call runs under the authority hook
+  let voice = null;
+  function say(role, text) {
+    if (!text) return;
+    const item = el("li", "", ""); item.append(el("b", "", role), document.createTextNode(text));
+    $("voice-transcript").append(item); $("voice-transcript").scrollTop = $("voice-transcript").scrollHeight;
+  }
+  function onVoiceFrame(frame) {
+    if (frame.type === "identified") { $("voice-banner").textContent = frame.banner || `Voice: ${frame.mode}`; $("voice-text-form").hidden = frame.mode !== "text"; }
+    if (frame.type === "fallback") { $("voice-banner").textContent = frame.banner || "Voice unavailable: text fallback"; $("voice-text-form").hidden = false; }
+    if (frame.type === "bidi_transcript_stream" && frame.is_final) say(frame.role === "user" ? "you" : "agent", frame.text);
+    if (frame.type === "tool") {
+      if (frame.status === "done" || frame.status === "vetoed") { say("agent", frame.say); loadHousehold().catch(() => {}); }
+      if (frame.status === "error") say("agent", frame.say || "That did not work.");
+    }
+    if (frame.type === "identify_failed") $("ask-error").textContent = `Voice: identification failed (${frame.attempts_left} attempts left)`;
+    if (frame.type === "error") $("ask-error").textContent = `Voice: ${frame.detail || frame.code || "error"}`;
+    if (frame.type === "closed") stopVoice();
+  }
+  function stopVoice() {
+    if (voice) { try { voice.stop(); } catch (_) { /* already closed */ } }
+    voice = null; $("talk").textContent = "Talk instead"; $("voice-text-form").hidden = true;
+  }
+  $("talk").onclick = async () => {
+    if (voice) { stopVoice(); return; }
+    if (!state.member || !state.pin) { $("ask-error").textContent = "Identify with your PIN first."; return; }
+    $("ask-error").textContent = ""; $("voice-panel").hidden = false; $("voice-transcript").replaceChildren();
+    $("talk").textContent = "Stop talking"; $("voice-banner").textContent = "Connecting…";
+    try {
+      const { HouseholdVoice } = await import("/static/voice/voice.js");
+      voice = new HouseholdVoice({ memberId: state.member.id, pin: state.pin, onFrame: onVoiceFrame });
+      const identified = await voice.connect();
+      if (identified.mode === "sonic") await voice.startMic();
+    } catch (err) { $("ask-error").textContent = `Voice: ${err && err.message ? err.message : err}`; stopVoice(); }
+  };
+  $("voice-text-form").onsubmit = (event) => {
+    event.preventDefault();
+    const text = $("voice-text").value.trim();
+    if (!voice || !text) return;
+    say("you", text); voice.sendText(text); $("voice-text").value = "";
+  };
+
   function switchMember() {
+    stopVoice(); $("voice-panel").hidden = true; state.pin = null;
     resetSession();
     state.member = null; state.token = null; state.fixtureId = null; state.upload = null;
     $("request-text").value = ""; $("upload-status").textContent = ""; $("upload-clear").hidden = true; $("ask-error").textContent = "";

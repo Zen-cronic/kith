@@ -52,6 +52,7 @@ from ..pipeline import execute_approved, stream_session
 from ..providers.budget import ModelCallLimitExceeded
 from ..skills import ALL_SKILLS
 from ..store import JsonLedgerStore
+from ..voice.web import build_router as build_voice_router
 from .runtime import RuntimeFailure, remote_metadata, remote_session, runtime_target
 
 STATIC = Path(__file__).parent / "static"
@@ -510,6 +511,8 @@ def create_app(data_dir: str | os.PathLike[str] | None = None) -> FastAPI:
             uploads.mkdir(parents=True, exist_ok=True)
         return {"reset": True, "household_id": household.id, "members": [m.id for m in household.members]}
 
+    # Voice: the same ledger and upload directory, identified by member id + PIN over WebSocket (P7)
+    app.include_router(build_voice_router(store=ledger, uploads_dir=uploads))
     app.mount("/static", StaticFiles(directory=STATIC), name="static")
     return app
 
