@@ -21,6 +21,8 @@ from ..pipeline import SessionResult
 from ..runtime_protocol import PROTOCOL_VERSION, digest, fixture_digest
 
 MAX_EVENT_BYTES = 1_048_576
+# Household session events the bridge relays untouched once the session has started (decided and issued in code upstream).
+PASSTHROUGH_EVENTS = frozenset({"action", "receipt", "approval_needed", "ledger_post"})
 
 
 class RuntimeFailure(Exception):
@@ -239,6 +241,8 @@ async def remote_session(target: RuntimeTarget, payload: dict[str, Any], meta: d
                     raise protocol_failure()
                 terminal = {"event": "result", "result": result.model_dump(mode="json", exclude_none=True)}
             elif kind in {"node_start", "node_done"} and started is not None and event.get("node_id") in node_ids:
+                yield event
+            elif kind in PASSTHROUGH_EVENTS and started is not None:
                 yield event
             else:
                 raise protocol_failure()
