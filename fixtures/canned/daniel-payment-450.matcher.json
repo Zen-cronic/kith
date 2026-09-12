@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "daniel",
+  "actor_member_id": "ama",
+  "skill_id": "household",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "A plain payment for Daniel's band trip; no domain skill matches, so the core household skill handles it.",
+    "Ama cites Daniel's payments grant g-daniel-ama-payments, which household_lookup confirms exists.",
+    "hh-main is the household account."
+  ]
+}

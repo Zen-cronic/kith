@@ -1,0 +1,12 @@
+{
+  "subject_member_id": "kofi",
+  "actor_member_id": "ama",
+  "skill_id": "household",
+  "account_id": "hh-main",
+  "confidence": "high",
+  "reasons": [
+    "A plain fee payment for Kofi; no domain skill matches, so the core household skill handles it.",
+    "Ama is a guardian of Kofi (household_lookup); the tuition entry for Kofi's band program is 180.00 due 2026-09-30.",
+    "hh-main is the household account."
+  ]
+}

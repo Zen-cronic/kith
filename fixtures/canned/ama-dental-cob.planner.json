@@ -1,0 +1,75 @@
+{
+  "actions": [
+    {
+      "action_type": "benefits:claim",
+      "rail": "official-form",
+      "subject_member_id": "daniel",
+      "recipient": "Sun Life",
+      "amount_text": "36.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "insurer",
+          "value": "Sun Life"
+        },
+        {
+          "key": "plan_id",
+          "value": "SL-1"
+        },
+        {
+          "key": "service_date",
+          "value": "September 3, 2026"
+        },
+        {
+          "key": "billed",
+          "value": "$180.00"
+        },
+        {
+          "key": "primary_paid",
+          "value": "$144.00"
+        },
+        {
+          "key": "claim_amount",
+          "value": "36.00"
+        },
+        {
+          "key": "provider",
+          "value": "Bloor West Dental"
+        }
+      ],
+      "evidence_refs": [
+        "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+      ],
+      "rationale": "Daniel's own Manulife plan ML-7 paid first; the residual 36.00 goes to Ama's Sun Life plan SL-1 as the secondary claim, prepared for Ama to file.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    },
+    {
+      "action_type": "email:send",
+      "rail": "ses-email",
+      "subject_member_id": "daniel",
+      "recipient": "ama@example.test",
+      "amount_text": "",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "subject",
+          "value": "Sun Life coordination-of-benefits claim packet for Daniel: September 3, 2026 cleaning"
+        },
+        {
+          "key": "body",
+          "value": "Attached is the prepared Sun Life secondary claim for Daniel's cleaning at Bloor West Dental on September 3, 2026: billed $180.00, Manulife paid $144.00, claim amount 36.00. Review and file it with Sun Life."
+        }
+      ],
+      "evidence_refs": [
+        "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at ama@example.test."
+      ],
+      "rationale": "Ama asked for the packet by email at ama@example.test.",
+      "claimed_grant_id": "g-daniel-ama-benefits"
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "cob_order: ML-7 (Manulife) primary because Daniel is the claimant; SL-1 (Sun Life) secondary.",
+    "residual: 180.00 - 144.00 = 36.00."
+  ]
+}

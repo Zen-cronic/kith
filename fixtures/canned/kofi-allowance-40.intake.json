@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Kofi Okafor-Lim (member kofi)",
+  "subject_hint": "Kofi's allowance",
+  "amounts": [
+    {
+      "label": "amount asked from allowance",
+      "amount_text": "$40.00",
+      "quote": "I need $40.00 from my allowance for the science kit for the fair on Friday, September 18, 2026."
+    }
+  ],
+  "dates": [
+    {
+      "label": "science fair date",
+      "date_text": "Friday, September 18, 2026",
+      "quote": "I need $40.00 from my allowance for the science kit for the fair on Friday, September 18, 2026."
+    }
+  ],
+  "transcribed_lines": [
+    "I need $40.00 from my allowance for the science kit for the fair on Friday, September 18, 2026."
+  ],
+  "summary_en": "Kofi asks to take $40.00 from his own allowance for a science kit for the fair on Friday, September 18, 2026.",
+  "evidence": [
+    "I need $40.00 from my allowance for the science kit for the fair on Friday, September 18, 2026."
+  ],
+  "confidence": "high"
+}

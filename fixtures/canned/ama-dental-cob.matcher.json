@@ -1,0 +1,11 @@
+{
+  "subject_member_id": "daniel",
+  "actor_member_id": "ama",
+  "skill_id": "benefits",
+  "account_id": "",
+  "confidence": "high",
+  "reasons": [
+    "A dental statement with an explanation of benefits: the benefits skill applies.",
+    "The service was for Daniel, so Daniel is the subject; Ama acts under grant g-daniel-ama-benefits (household_lookup)."
+  ]
+}

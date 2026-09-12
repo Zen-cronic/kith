@@ -1,0 +1,26 @@
+{
+  "id": "daniel-payment-450",
+  "household_id": "demo",
+  "actor_member_id": "ama",
+  "channel": "text",
+  "request": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.\nDaniel asked me to handle it under his payments grant g-daniel-ama-payments.",
+  "expected": {
+    "kind": "in-scope",
+    "skill_id": "household",
+    "allow": [
+      "payment:transfer"
+    ],
+    "block": [],
+    "approval_by": [
+      "daniel"
+    ]
+  },
+  "tags": [
+    "hero",
+    "spouse-grant",
+    "over-limit",
+    "revise",
+    "needs-approval"
+  ],
+  "notes": "Route (c): 450.00 exceeds the 300.00 per-month spouse grant; the authority sends the plan back once, the planner splits it, 300.00 runs and 150.00 waits for Daniel."
+}

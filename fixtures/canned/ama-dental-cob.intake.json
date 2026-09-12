@@ -1,0 +1,34 @@
+{
+  "document_class": "dental-eob",
+  "issuer": "Manulife (statement relayed by Ama Okafor-Lim)",
+  "subject_hint": "Daniel's dental claim",
+  "amounts": [
+    {
+      "label": "billed by the dentist",
+      "amount_text": "$180.00",
+      "quote": "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+    },
+    {
+      "label": "paid by Manulife",
+      "amount_text": "$144.00",
+      "quote": "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+    }
+  ],
+  "dates": [
+    {
+      "label": "service date",
+      "date_text": "September 3, 2026",
+      "quote": "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+    }
+  ],
+  "transcribed_lines": [
+    "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.",
+    "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at ama@example.test."
+  ],
+  "summary_en": "Ama relays Daniel's Manulife dental statement for a cleaning on September 3, 2026 ($180.00 billed, $144.00 paid) and asks for the Sun Life coordination-of-benefits claim to be prepared for the rest and emailed to her at ama@example.test.",
+  "evidence": [
+    "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.",
+    "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at ama@example.test."
+  ],
+  "confidence": "high"
+}

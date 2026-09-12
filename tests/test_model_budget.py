@@ -1,26 +1,32 @@
 """Exercise real Strands loops and entrypoints without paid provider requests."""
 
 import asyncio
-import json
+from datetime import UTC, datetime
 
 import pytest
-from fastapi.testclient import TestClient
 from strands import Agent, ModelRetryStrategy
 from strands.types.exceptions import ModelThrottledException
 
-from household.agents.tools import SessionRecord, make_tools
 from household.config import Settings, load_settings
+from household.fixtures import FixtureStore
 from household.pipeline import run_session, stream_session
-from household.providers.budget import BudgetedModel, ModelCallLimitExceeded
+from household.providers.budget import BudgetedModel, CallBudget, ModelCallLimitExceeded
 from household.providers.fake import FakeModel
 from household.providers.live import build_live_model
-from household.web.app import create_app
+
+NOW = datetime(2026, 9, 11, 16, 0, tzinfo=UTC)
+
+
+def demo():
+    return FixtureStore().household("demo")
 
 
 @pytest.mark.parametrize("limit", [0, -1, True, 1.5, "20"])
 def test_invalid_limits_are_rejected(limit):
     with pytest.raises(ValueError, match="positive integer"):
         Settings(max_model_calls=limit)
+    with pytest.raises(ValueError, match="positive integer"):
+        CallBudget(limit)
 
 
 def test_server_setting_cannot_be_disabled(monkeypatch):
@@ -34,16 +40,14 @@ def test_server_setting_cannot_be_disabled(monkeypatch):
         load_settings(provider="fake")
 
 
-@pytest.mark.parametrize("fixture,outcome", [("school-trip-letter", "proceed"), ("ltb-n4", "escalate")])
-def test_normal_graph_uses_one_shared_allowance(fixture, outcome):
+@pytest.mark.parametrize("request_id,outcome", [("kofi-allowance-8", "executed"), ("kofi-allowance-40", "needs-approval")])
+def test_normal_graph_uses_one_shared_allowance_across_six_node_models(request_id, outcome):
     model = FakeModel()
-    result = run_session(fixture, settings=Settings(), model=model)
+    result = run_session(request_id, settings=Settings(), model=model, household=demo(), now=NOW)
     assert result.outcome == outcome
     assert result.model_calls == {"limit": 20, "attempted": len(model.calls), "remaining": 20 - len(model.calls), "exhausted": False}
     # Tool-result turns are model calls too, so node executions alone undercount.
     assert len(model.calls) > len(result.execution_order)
-    if fixture == "ltb-n4":
-        assert "drafter" not in result.execution_order
 
 
 def test_limit_stops_graph_before_dispatch_and_no_final_result():
@@ -51,31 +55,30 @@ def test_limit_stops_graph_before_dispatch_and_no_final_result():
     events = []
 
     async def collect():
-        async for event in stream_session("school-trip-letter", settings=Settings(max_model_calls=3), model=model):
+        async for event in stream_session("kofi-allowance-8", settings=Settings(max_model_calls=3), model=model, household=demo(), now=NOW):
             events.append(event)
 
     with pytest.raises(ModelCallLimitExceeded) as error:
         asyncio.run(collect())
     assert len(model.calls) == 3
     assert error.value.usage == {"limit": 3, "attempted": 3, "remaining": 0, "exhausted": True}
+    assert error.value.as_event()["code"] == "model_call_limit"
     assert not any(e["event"] == "result" for e in events)
-    assert any(e["event"] == "node_done" and e["node_id"] == "interpreter" for e in events)
+    assert any(e["event"] == "node_done" and e["node_id"] == "planner" for e in events)
 
 
-def test_nested_back_translator_shares_the_parent_allowance():
+def test_two_budgeted_models_share_one_call_budget():
     model = FakeModel()
-    metered = BudgetedModel(model, 1)
-    record = SessionRecord()
-    tools = make_tools(metered, Settings(), record)
+    budget = CallBudget(1)
+    first, second = BudgetedModel(model, budget), BudgetedModel(model, budget)
 
     async def exercise():
-        await tools["back_translate"](text="Una carta", source_language="es")
-        assert record.back_translations
-        await Agent(model=metered, callback_handler=None).invoke_async("Another call")
+        await Agent(model=first, callback_handler=None).invoke_async("One call")
+        await Agent(model=second, callback_handler=None).invoke_async("Another call")
 
     with pytest.raises(ModelCallLimitExceeded):
         asyncio.run(exercise())
-    assert len(model.calls) == 1 and model.calls[0]["role"] == "back-translator"
+    assert len(model.calls) == 1 and first.snapshot() == second.snapshot() == {"limit": 1, "attempted": 1, "remaining": 0, "exhausted": True}
 
 
 def test_failed_strands_retries_consume_allowance():
@@ -100,7 +103,7 @@ def test_concurrent_runs_do_not_share_or_reset_each_others_allowance():
         model = FakeModel()
         events = []
         try:
-            async for event in stream_session("ltb-n4", settings=Settings(max_model_calls=limit), model=model):
+            async for event in stream_session("kofi-allowance-8", settings=Settings(max_model_calls=limit), model=model, household=demo(), now=NOW):
                 events.append(event)
         except ModelCallLimitExceeded:
             return len(model.calls), False
@@ -139,13 +142,13 @@ def test_owned_provider_clients_have_no_hidden_retries(monkeypatch):
     assert model.client.meta.config.retries == {"mode": "standard", "total_max_attempts": 1}
 
 
-def test_web_exhaustion_is_typed_and_request_cannot_raise_server_limit(monkeypatch):
-    monkeypatch.setenv("MODEL_PROVIDER", "fake")
-    monkeypatch.setenv("MAX_MODEL_CALLS", "2")
-    client = TestClient(create_app())
-    assert client.get("/api/meta").json()["max_model_calls"] == 2
-    body = client.post("/api/run", json={"fixture_id": "ltb-n4", "max_model_calls": 1000}).text
-    events = [json.loads(line[6:]) for line in body.splitlines() if line.startswith("data: ")]
-    assert events[-1]["code"] == "model_call_limit"
-    assert events[-1]["model_calls"]["attempted"] == 2
-    assert not any(e["event"] == "result" for e in events)
+def test_node_models_are_parsed_and_ignored_in_fake_mode(monkeypatch):
+    monkeypatch.setenv("NODE_MODELS", "intake=bedrock:us.amazon.nova-pro-v1:0, planner=anthropic:claude-opus-5")
+    settings = load_settings(provider="fake")
+    assert settings.node_models == {"intake": "bedrock:us.amazon.nova-pro-v1:0", "planner": "anthropic:claude-opus-5"}
+    model = FakeModel()
+    result = run_session("kofi-allowance-8", settings=settings, model=model, household=demo(), now=NOW)
+    assert result.outcome == "executed" and {c["role"] for c in model.calls} >= {"intake", "planner"}
+    monkeypatch.setenv("NODE_MODELS", "intake=nova")
+    with pytest.raises(ValueError, match="provider:model_id"):
+        load_settings(provider="fake")

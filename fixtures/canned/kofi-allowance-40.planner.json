@@ -1,0 +1,27 @@
+{
+  "actions": [
+    {
+      "action_type": "allowance:transfer",
+      "rail": "internal-ledger",
+      "subject_member_id": "kofi",
+      "recipient": "hh-main",
+      "amount_text": "40.00",
+      "currency": "CAD",
+      "payload": [
+        {
+          "key": "memo",
+          "value": "science kit for the fair on Friday, September 18, 2026"
+        }
+      ],
+      "evidence_refs": [
+        "I need $40.00 from my allowance for the science kit for the fair on Friday, September 18, 2026."
+      ],
+      "rationale": "Kofi asked for $40.00 from his own allowance; that is above his 10.00 CAD auto-approve limit, so a guardian decides.",
+      "claimed_grant_id": ""
+    }
+  ],
+  "needs": [],
+  "notes": [
+    "allowance_balance: auto_limit 10.00, weekly 15.00; 40.00 is above both, proposed once for a guardian to decide."
+  ]
+}

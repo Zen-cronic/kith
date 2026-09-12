@@ -1,0 +1,27 @@
+{
+  "document_class": "text-request",
+  "issuer": "Kofi Okafor-Lim (member kofi)",
+  "subject_hint": "Kofi's allowance",
+  "amounts": [
+    {
+      "label": "amount asked from allowance",
+      "amount_text": "$8.00",
+      "quote": "Can I take $8.00 from my allowance for the book fair on Friday, September 18, 2026?"
+    }
+  ],
+  "dates": [
+    {
+      "label": "book fair date",
+      "date_text": "Friday, September 18, 2026",
+      "quote": "Can I take $8.00 from my allowance for the book fair on Friday, September 18, 2026?"
+    }
+  ],
+  "transcribed_lines": [
+    "Can I take $8.00 from my allowance for the book fair on Friday, September 18, 2026?"
+  ],
+  "summary_en": "Kofi asks to take $8.00 from his own allowance for the school book fair on Friday, September 18, 2026.",
+  "evidence": [
+    "Can I take $8.00 from my allowance for the book fair on Friday, September 18, 2026?"
+  ],
+  "confidence": "high"
+}

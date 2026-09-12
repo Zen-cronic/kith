@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -28,8 +28,11 @@ class Settings:
     fidelity_caution: float = 0.70
     max_revisions: int = 2
     max_model_calls: int = 20
-    # Action rails (P3). Presence flags only; the secrets themselves stay in the environment for the SDK clients.
+    # Per-node model overrides, e.g. {"intake": "bedrock:us.amazon.nova-pro-v1:0"}; empty = the default model everywhere.
+    node_models: dict[str, str] = field(default_factory=dict)
+    # simulated = every rail returns a SIMULATED receipt with the request digest; live = real rails (P3).
     execution_mode: str = "simulated"
+    # Action rails (P3). Presence flags only; the secrets themselves stay in the environment for the SDK clients.
     ses_from: str | None = None
     ses_verified_identities: tuple[str, ...] = ()
     stripe_secret_key_present: bool = False
@@ -41,6 +44,11 @@ class Settings:
             raise ValueError(f"EXECUTION_MODE must be one of {EXECUTION_MODES}, got {self.execution_mode!r}")
         if isinstance(self.max_model_calls, bool) or not isinstance(self.max_model_calls, int) or self.max_model_calls <= 0:
             raise ValueError("MAX_MODEL_CALLS must be a positive integer")
+        if self.execution_mode not in EXECUTION_MODES:
+            raise ValueError(f"EXECUTION_MODE must be one of {EXECUTION_MODES}, got {self.execution_mode!r}")
+        for node_id, spec in self.node_models.items():
+            if ":" not in spec or spec.split(":", 1)[0] not in PROVIDERS:
+                raise ValueError(f"NODE_MODELS entry for {node_id!r} must look like provider:model_id, got {spec!r}")
 
     @property
     def model_id(self) -> str:
@@ -50,6 +58,20 @@ class Settings:
             "openai": self.openai_model_id,
             "bedrock": self.bedrock_model_id or "(strands regional default)",
         }[self.provider]
+
+
+def parse_node_models(raw: str | None) -> dict[str, str]:
+    """NODE_MODELS="intake=bedrock:us.amazon.nova-pro-v1:0,planner=anthropic:claude-opus-5" -> {node: provider:model}."""
+    parsed: dict[str, str] = {}
+    for item in (raw or "").split(","):
+        item = item.strip()
+        if not item:
+            continue
+        if "=" not in item:
+            raise ValueError(f"NODE_MODELS entry must look like node=provider:model_id, got {item!r}")
+        node_id, spec = item.split("=", 1)
+        parsed[node_id.strip()] = spec.strip()
+    return parsed
 
 
 def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: object) -> Settings:
@@ -73,6 +95,7 @@ def load_settings(env_file: str | os.PathLike[str] | None = None, **overrides: o
         "aws_region": os.environ.get("AWS_REGION", "us-east-1"),
         "speech_provider": os.environ.get("SPEECH_PROVIDER", "browser"),
         "max_model_calls": overrides.get("max_model_calls") if overrides.get("max_model_calls") is not None else int(os.environ.get("MAX_MODEL_CALLS", "20")),
+        "node_models": parse_node_models(os.environ.get("NODE_MODELS")),
         "execution_mode": execution_mode,
         "ses_from": os.environ.get("SES_FROM", "").strip() or None,
         "ses_verified_identities": tuple(identities),

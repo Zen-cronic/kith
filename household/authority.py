@@ -7,16 +7,19 @@ it may only repeat what this module returned.
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Mapping, Sequence
 from datetime import datetime, timedelta
 from decimal import Decimal
 
 from .model import (
     AGENT_ACTOR,
     ActionProposal,
+    ActionRecord,
     AuthorityDecision,
     AuthorityGrant,
     Household,
     Member,
+    Receipt,
     as_utc,
     money,
     parse_iso,
@@ -54,20 +57,40 @@ BANK_RAILS = ("internal-ledger", "stripe-test")
 WINDOWS = {"per-week": timedelta(days=7), "per-month": timedelta(days=30)}  # rolling windows ending at `now`
 
 
-def decide(proposal: ActionProposal, household: Household, now: datetime) -> AuthorityDecision:
-    """Allow, block, or route for approval. No I/O, no clock, no model: `now` is the only time source."""
+def decide(
+    proposal: ActionProposal,
+    household: Household,
+    now: datetime,
+    approvals: Mapping[str, Sequence[str]] | None = None,
+) -> AuthorityDecision:
+    """Allow, block, or route for approval. No I/O, no clock, no model: `now` is the only time source.
+
+    `approvals` maps an action id to the member ids who have recorded an action-approve consent for it. When the
+    rule that fires would ask one of those members, the decision becomes allow under `approval:<member>`; blocks
+    are never lifted by an approval.
+    """
     now = as_utc(now)
     reasons: list[str] = []
     amount = money(proposal.amount) if proposal.amount is not None else None
     currency = proposal.currency
 
     def decision(outcome: str, rule_id: str, *, grant_id: str | None = None, approvers: list[str] | None = None):
+        approvers = list(approvers or [])
+        if outcome == "needs-approval" and approvals and proposal.id in approvals:
+            given = [a for a in approvers if a in approvals[proposal.id]]
+            if given:
+                approver = household.member(given[0])
+                reasons.append(f"approved by {approver.name if approver else given[0]} (action-approve consent on file)")
+                return AuthorityDecision(
+                    action_id=proposal.id, outcome="allow", rule_id=rule_id, grant_id=f"approval:{given[0]}",
+                    approver_ids=given, reasons=list(reasons),
+                )
         return AuthorityDecision(
             action_id=proposal.id,
             outcome=outcome,  # type: ignore[arg-type]
             rule_id=rule_id,
             grant_id=grant_id,
-            approver_ids=list(approvers or []),
+            approver_ids=approvers,
             reasons=list(reasons),
         )
 
@@ -168,6 +191,41 @@ def decide(proposal: ActionProposal, household: Household, now: datetime) -> Aut
         return decision("needs-approval", RULE_GRANT_REFUSED, approvers=[subject.id])
     reasons.append(f"no grant covers {proposal.action_type} for {actor_label} deciding for {subject.name}")
     return decision("needs-approval", RULE_NO_GRANT, approvers=[subject.id])
+
+
+def provisional(
+    household: Household, allowed: Iterable[tuple[ActionProposal, AuthorityDecision]], now: datetime
+) -> Household:
+    """A deep copy of the ledger in which each allowed-but-not-yet-executed proposal already counts as spent, so
+    the next decision in the same plan sees it in the limit windows. The real ledger is never touched."""
+    at = as_utc(now).isoformat()
+    view = household.model_copy(deep=True)
+    for proposal, decision in allowed:
+        if decision.outcome != "allow" or view.action(proposal.id) is not None:
+            continue
+        view.actions.append(ActionRecord(proposal=proposal, decisions=[decision], created_at=at))
+        view.receipts.append(
+            Receipt(id=f"pending-{proposal.id}", action_id=proposal.id, rail=proposal.rail, mode="SIMULATED",
+                    request_digest="", response_digest="", at=at, executed_under_grant=decision.grant_id,
+                    label_reason="provisional: allowed earlier in the same plan")
+        )
+    return view
+
+
+def decide_plan(
+    proposals: Sequence[ActionProposal],
+    household: Household,
+    now: datetime,
+    approvals: Mapping[str, Sequence[str]] | None = None,
+) -> list[AuthorityDecision]:
+    """Decide a whole plan in order. An earlier allow counts against the limits of every later proposal, so a plan
+    cannot route two halves of one amount around a single monthly or weekly cap."""
+    decided: list[tuple[ActionProposal, AuthorityDecision]] = []
+    for proposal in proposals:
+        view = provisional(household, decided, now) if decided else household
+        decision = decide(proposal, view, now, approvals)
+        decided.append((proposal, decision))
+    return [decision for _, decision in decided]
 
 
 def explain(decision: AuthorityDecision) -> str:
