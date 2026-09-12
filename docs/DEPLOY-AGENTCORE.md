@@ -1,11 +1,9 @@
 # Household on Amazon Bedrock AgentCore Runtime
 
-Updated September 12, 2026. **The household container is built and verified locally as an ARM64 image; the AWS
-Runtime is planned but not yet created — it is paused at the human approval gate (H6).** The image serves the
+Updated September 12, 2026. **Deployed 2026-09-12: the AWS Runtime `household_preview` (us-east-1) is READY and a live invocation is
+verified (two household sessions returned results on real Bedrock; see `docs/receipts/agentcore-live-2026-09-12.json`).** The image serves the
 streaming `/invocations` text path and the `/ws` voice path. The web tier relays the browser voice socket to the
-Runtime over a SigV4 `wss://` URL, so no AWS credential ever reaches the browser. No AWS resource has been created,
-modified or deleted by this packet; `scripts/deploy_runtime_preview.py plan` only reads `sts get-caller-identity`
-and writes the local receipt.
+Runtime over a SigV4 `wss://` URL, so no AWS credential ever reaches the browser. Provisioned resources: ECR repo `bedrock-agentcore-household-preview`, IAM role `AmazonBedrockAgentCoreHouseholdPreview`, runtime `household_preview`. Tear-down steps are in `runs/aws-preview/CLEANUP.md` (delete after judging).
 
 ## Models
 
