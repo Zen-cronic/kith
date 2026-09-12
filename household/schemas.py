@@ -115,7 +115,7 @@ class DecisionEcho(AgentOutput):
     action_id: str
     outcome: str = Field(description="'allow', 'block' or 'needs-approval', exactly as the tool returned it")
     rule_id: str = Field(description="The rule id the tool returned")
-    grant_id: str = Field(description="The grant or rule the tool cited, or '' when none")
+    grant_id: str = Field(description="The grant or rule the tool cited, or '' when the tool returned null (never the word null)")
     approver_ids: list[str] = Field(default_factory=list)
     reasons: list[str] = Field(default_factory=list)
 

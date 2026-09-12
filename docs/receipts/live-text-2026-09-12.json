@@ -1,0 +1,953 @@
+{
+  "kind": "live-trace",
+  "date_utc": "2026-09-12",
+  "source": "runs/live/text.json",
+  "command": "python -m household.cli run --request fixtures/requests/ama-dental-cob.json --actor ama --trace --json",
+  "env": {
+    "MODEL_PROVIDER": "bedrock",
+    "BEDROCK_MODEL_ID": "us.amazon.nova-2-lite-v1:0",
+    "NODE_MODELS": "intake=bedrock:us.amazon.nova-pro-v1:0",
+    "MAX_MODEL_CALLS": "30",
+    "EXECUTION_MODE": "simulated",
+    "AWS_REGION": "us-east-1"
+  },
+  "provider": "bedrock",
+  "model_id": "us.amazon.nova-2-lite-v1:0",
+  "execution_mode": "simulated",
+  "request_id": "ama-dental-cob",
+  "actor": "ama",
+  "upload": null,
+  "roster_trace": "intake -> matcher -> planner -> authority -> executor -> briefer",
+  "outcome": "executed",
+  "graph_status": "completed",
+  "elapsed_ms": 17410,
+  "wall_ms": 17559,
+  "model_calls": {
+    "limit": 30,
+    "attempted": 12,
+    "remaining": 18,
+    "exhausted": false
+  },
+  "node_calls": {
+    "intake": {
+      "model_id": "us.amazon.nova-pro-v1:0",
+      "attempted": 1,
+      "completed": 1,
+      "errored": 0,
+      "latency_ms": [
+        3778
+      ],
+      "input_tokens": 1536,
+      "output_tokens": 464
+    },
+    "matcher": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        914,
+        1127
+      ],
+      "input_tokens": 4239,
+      "output_tokens": 162
+    },
+    "planner": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        1125,
+        2723
+      ],
+      "input_tokens": 8010,
+      "output_tokens": 597
+    },
+    "authority": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 3,
+      "completed": 3,
+      "errored": 0,
+      "latency_ms": [
+        745,
+        622,
+        1250
+      ],
+      "input_tokens": 6754,
+      "output_tokens": 325
+    },
+    "executor": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        1057,
+        1809
+      ],
+      "input_tokens": 3426,
+      "output_tokens": 500
+    },
+    "briefer": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        1050,
+        1174
+      ],
+      "input_tokens": 6640,
+      "output_tokens": 211
+    }
+  },
+  "tokens": {
+    "input": 30605,
+    "output": 2259
+  },
+  "guard": {
+    "decisions_checked": 2,
+    "overrides": 0,
+    "verdict_overrides": 0,
+    "dropped_proposals": 0,
+    "dropped_receipts": 0,
+    "override": false,
+    "notes": []
+  },
+  "intake_issues": [],
+  "plans": [
+    {
+      "revision": 1,
+      "verdict": "proceed",
+      "model_verdict": "proceed",
+      "actions": [
+        "benefits:claim 36.00 CAD on official-form -> allow [grant]",
+        "email:send CAD on ses-email -> allow [grant]"
+      ],
+      "needs": [],
+      "notes": [
+        "Prepared Sun Life coordination-of-benefits claim for Daniel's dental cleaning: residual $36.00 after Manulife paid $144.00 of $180.00.",
+        "Emailed the claim packet to <email-1> as requested."
+      ]
+    }
+  ],
+  "receipts": [
+    {
+      "id": "rcpt-614be130c0aa",
+      "action_id": "act-session-1-1-1",
+      "rail": "official-form",
+      "mode": "PREPARE-ONLY",
+      "label_reason": "PREPARE-ONLY: rendered for a human to review and file; never submitted"
+    },
+    {
+      "id": "rcpt-470b3704ea19",
+      "action_id": "act-session-1-1-2",
+      "rail": "ses-email",
+      "mode": "SIMULATED",
+      "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+    }
+  ],
+  "approvals_needed": [],
+  "briefing": {
+    "headline_en": "Daniel's dental claim packet is ready",
+    "headline_target": "Daniel's dental claim packet is ready",
+    "done": [
+      "Prepared Sun Life coordination-of-benefits claim for Daniel for $36.00, PREPARE-ONLY",
+      "Emailed the claim packet to Ama Okafor-Lim, SIMULATED"
+    ],
+    "waiting_on": [],
+    "labels": [
+      "SIMULATED",
+      "PREPARE-ONLY"
+    ],
+    "next_step_en": "Your next step is to review and file the prepared claim packet.",
+    "next_step_target": "Your next step is to review and file the prepared claim packet."
+  },
+  "extraction_score": null,
+  "note": "Live run on Bedrock: the intake node on us.amazon.nova-pro-v1:0 through NODE_MODELS, every other node on us.amazon.nova-2-lite-v1:0 through BEDROCK_MODEL_ID; one CallBudget (MAX_MODEL_CALLS=30) shared by all six nodes; EXECUTION_MODE=simulated. node_calls were observed by wrapping BudgetedModel.stream on the [[role:...]] marker at the head of each system prompt (scratch instrumentation used for this receipt, not shipped); model_calls is the pipeline's own budget snapshot. First and only attempt.",
+  "trace": {
+    "events": [
+      {
+        "event": "session_start",
+        "request_id": "ama-dental-cob",
+        "request_text": "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.\nPlease prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>.",
+        "actor_member_id": "ama",
+        "actor_name": "Ama Okafor-Lim",
+        "language": "en",
+        "household_id": "demo",
+        "provider": "bedrock",
+        "model_id": "us.amazon.nova-2-lite-v1:0",
+        "execution_mode": "simulated",
+        "model_calls": {
+          "limit": 30,
+          "attempted": 0,
+          "remaining": 30,
+          "exhausted": false
+        },
+        "upload": null,
+        "roster": [
+          {
+            "node_id": "intake",
+            "name": "Intake reader",
+            "job": "Reads the photo, PDF or typed request; quotes every amount and date; names the document",
+            "can_reject": false,
+            "tools": []
+          },
+          {
+            "node_id": "matcher",
+            "name": "Case matcher",
+            "job": "Says who this is about and which skill applies, looking the household up",
+            "can_reject": false,
+            "tools": [
+              "household_lookup"
+            ]
+          },
+          {
+            "node_id": "planner",
+            "name": "Planner",
+            "job": "Proposes actions from the matched skill's rules; never sends, pays or files",
+            "can_reject": false,
+            "tools": [
+              "allowance_balance",
+              "propose_allowance",
+              "plan_lookup",
+              "cob_order",
+              "residual"
+            ]
+          },
+          {
+            "node_id": "authority",
+            "name": "Authority",
+            "job": "Checks every proposal against the ledger in code; can send the plan back",
+            "can_reject": true,
+            "tools": [
+              "check_authority"
+            ]
+          },
+          {
+            "node_id": "executor",
+            "name": "Executor",
+            "job": "Runs only allowed actions through the rails and returns receipts",
+            "can_reject": false,
+            "tools": [
+              "execute_action"
+            ]
+          },
+          {
+            "node_id": "briefer",
+            "name": "Briefer",
+            "job": "Tells the member what happened and what is waiting on whom, in their language",
+            "can_reject": false,
+            "tools": [
+              "grant_text"
+            ]
+          }
+        ],
+        "skills": [
+          {
+            "id": "allowance",
+            "name": "Allowance",
+            "action_types": [
+              "allowance:transfer"
+            ]
+          },
+          {
+            "id": "benefits",
+            "name": "Benefits (coordination of benefits)",
+            "action_types": [
+              "benefits:claim",
+              "email:send"
+            ]
+          },
+          {
+            "id": "household",
+            "name": "Household payments and email (core)",
+            "action_types": [
+              "payment:transfer",
+              "email:send"
+            ]
+          }
+        ]
+      },
+      {
+        "event": "node_start",
+        "node_id": "intake",
+        "name": "Intake reader",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "intake",
+        "name": "Intake reader",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 3781,
+        "output": {
+          "document_class": "dental-eob",
+          "issuer": "member",
+          "subject_hint": "Daniel's dental claim",
+          "amounts": [
+            {
+              "label": "billed by the dentist",
+              "amount_text": "$180.00",
+              "quote": "cleaning at Bloor West Dental on September 3, 2026, billed $180.00"
+            },
+            {
+              "label": "paid by Manulife",
+              "amount_text": "$144.00",
+              "quote": "Manulife paid $144.00."
+            }
+          ],
+          "dates": [
+            {
+              "label": "service date",
+              "date_text": "September 3, 2026",
+              "quote": "cleaning at Bloor West Dental on September 3, 2026, billed $180.00"
+            }
+          ],
+          "transcribed_lines": [
+            "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.",
+            "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>."
+          ],
+          "summary_en": "The member has provided Daniel's dental statement and requested the preparation and email of a Sun Life coordination-of-benefits claim for the remaining amount.",
+          "evidence": [
+            "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.",
+            "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>."
+          ],
+          "confidence": "high"
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "matcher",
+        "name": "Case matcher",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "matcher",
+        "name": "Case matcher",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 2046,
+        "output": {
+          "subject_member_id": "daniel",
+          "actor_member_id": "ama",
+          "skill_id": "benefits",
+          "account_id": "",
+          "confidence": "high",
+          "reasons": [
+            "Daniel's dental claim for $180.00 was partially paid by Manulife, leaving a balance to be claimed through Sun Life coordination of benefits.",
+            "Ama is requesting the preparation and emailing of the Sun Life claim packet for the remaining amount."
+          ]
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 3855,
+        "output": {
+          "actions": [
+            {
+              "action_type": "benefits:claim",
+              "rail": "official-form",
+              "subject_member_id": "daniel",
+              "recipient": "",
+              "amount_text": "36.00",
+              "currency": "CAD",
+              "payload": [
+                {
+                  "key": "insurer",
+                  "value": "Sun Life"
+                },
+                {
+                  "key": "plan_id",
+                  "value": "SL-1"
+                },
+                {
+                  "key": "service_date",
+                  "value": "September 3, 2026"
+                },
+                {
+                  "key": "billed",
+                  "value": "$180.00"
+                },
+                {
+                  "key": "primary_paid",
+                  "value": "$144.00"
+                },
+                {
+                  "key": "claim_amount",
+                  "value": "$36.00"
+                },
+                {
+                  "key": "provider",
+                  "value": "Bloor West Dental"
+                }
+              ],
+              "evidence_refs": [
+                "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+              ],
+              "rationale": "Prepare Sun Life coordination-of-benefits claim for the residual amount after Manulife paid.",
+              "claimed_grant_id": ""
+            },
+            {
+              "action_type": "email:send",
+              "rail": "ses-email",
+              "subject_member_id": "daniel",
+              "recipient": "<email-1>",
+              "amount_text": "",
+              "currency": "CAD",
+              "payload": [
+                {
+                  "key": "subject",
+                  "value": "Daniel's Sun Life dental claim packet"
+                },
+                {
+                  "key": "body",
+                  "value": "Attached is the prepared Sun Life coordination-of-benefits claim for Daniel's dental cleaning on September 3, 2026. The residual amount to claim is $36.00."
+                }
+              ],
+              "evidence_refs": [
+                "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>."
+              ],
+              "rationale": "Email the prepared claim packet to the requester.",
+              "claimed_grant_id": "g-daniel-ama-benefits"
+            }
+          ],
+          "needs": [],
+          "notes": [
+            "Prepared Sun Life coordination-of-benefits claim for Daniel's dental cleaning: residual $36.00 after Manulife paid $144.00 of $180.00.",
+            "Emailed the claim packet to <email-1> as requested."
+          ]
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 2625,
+        "output": {
+          "decisions": [
+            {
+              "action_id": "act-session-1-1-1",
+              "outcome": "allow",
+              "rule_id": "grant",
+              "grant_id": "g-daniel-ama-benefits",
+              "approver_ids": [],
+              "reasons": [
+                "PREPARE-ONLY rail: official-form renders a prepared form for a human to file; it never submits",
+                "grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding benefits:claim up to 500.00 CAD per-action"
+              ]
+            },
+            {
+              "action_id": "act-session-1-1-2",
+              "outcome": "allow",
+              "rule_id": "grant",
+              "grant_id": "g-daniel-ama-benefits",
+              "approver_ids": [],
+              "reasons": [
+                "grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding email:send up to 500.00 CAD per-action"
+              ]
+            }
+          ],
+          "verdict": "proceed"
+        }
+      },
+      {
+        "event": "action",
+        "revision": 1,
+        "proposal": {
+          "id": "act-session-1-1-1",
+          "skill_id": "benefits",
+          "action_type": "benefits:claim",
+          "rail": "official-form",
+          "actor_member_id": "ama",
+          "subject_member_id": "daniel",
+          "recipient": null,
+          "amount": "36.00",
+          "currency": "CAD",
+          "payload": {
+            "insurer": "Sun Life",
+            "plan_id": "SL-1",
+            "service_date": "September 3, 2026",
+            "billed": "$180.00",
+            "primary_paid": "$144.00",
+            "claim_amount": "$36.00",
+            "provider": "Bloor West Dental"
+          },
+          "evidence_refs": [
+            "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+          ],
+          "rationale": "Prepare Sun Life coordination-of-benefits claim for the residual amount after Manulife paid.",
+          "idempotency_key": "",
+          "claimed_grant_id": null
+        },
+        "decision": {
+          "action_id": "act-session-1-1-1",
+          "outcome": "allow",
+          "rule_id": "grant",
+          "grant_id": "g-daniel-ama-benefits",
+          "approver_ids": [],
+          "reasons": [
+            "PREPARE-ONLY rail: official-form renders a prepared form for a human to file; it never submits",
+            "grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding benefits:claim up to 500.00 CAD per-action"
+          ]
+        },
+        "explanation": "Allowed under g-daniel-ama-benefits: PREPARE-ONLY rail: official-form renders a prepared form for a human to file; it never submits; grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding benefits:claim up to 500.00 CAD per-action."
+      },
+      {
+        "event": "action",
+        "revision": 1,
+        "proposal": {
+          "id": "act-session-1-1-2",
+          "skill_id": "benefits",
+          "action_type": "email:send",
+          "rail": "ses-email",
+          "actor_member_id": "ama",
+          "subject_member_id": "daniel",
+          "recipient": "<email-1>",
+          "amount": null,
+          "currency": "CAD",
+          "payload": {
+            "subject": "Daniel's Sun Life dental claim packet",
+            "body": "Attached is the prepared Sun Life coordination-of-benefits claim for Daniel's dental cleaning on September 3, 2026. The residual amount to claim is $36.00."
+          },
+          "evidence_refs": [
+            "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>."
+          ],
+          "rationale": "Email the prepared claim packet to the requester.",
+          "idempotency_key": "",
+          "claimed_grant_id": "g-daniel-ama-benefits"
+        },
+        "decision": {
+          "action_id": "act-session-1-1-2",
+          "outcome": "allow",
+          "rule_id": "grant",
+          "grant_id": "g-daniel-ama-benefits",
+          "approver_ids": [],
+          "reasons": [
+            "grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding email:send up to 500.00 CAD per-action"
+          ]
+        },
+        "explanation": "Allowed under g-daniel-ama-benefits: grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding email:send up to 500.00 CAD per-action."
+      },
+      {
+        "event": "node_start",
+        "node_id": "executor",
+        "name": "Executor",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "executor",
+        "name": "Executor",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 2872,
+        "output": {
+          "receipts": [
+            {
+              "id": "rcpt-614be130c0aa",
+              "action_id": "act-session-1-1-1",
+              "rail": "official-form",
+              "mode": "PREPARE-ONLY",
+              "provider_ref": "runs/forms/act-session-1-1-1.md",
+              "request_digest": "1b06db97a8de3a8c3d5af7b0e7e1985607ee31963b5104ff06288f2bf9b237b7",
+              "response_digest": "5b505ca68f81ef73bf9e4c14d34d77b3d8b1a764612e9d57262fc0586b92cbe9",
+              "at": "2026-09-12T17:17:54.474280+00:00",
+              "executed_under_grant": "g-daniel-ama-benefits",
+              "label_reason": "PREPARE-ONLY: rendered for a human to review and file; never submitted"
+            },
+            {
+              "id": "rcpt-470b3704ea19",
+              "action_id": "act-session-1-1-2",
+              "rail": "ses-email",
+              "mode": "SIMULATED",
+              "provider_ref": null,
+              "request_digest": "590d5d01c683f9d222c7ab2639c7372bfd2ac9476e5195bab6b85f10516b4b9f",
+              "response_digest": "",
+              "at": "2026-09-12T17:17:54.474280+00:00",
+              "executed_under_grant": "g-daniel-ama-benefits",
+              "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+            }
+          ],
+          "skipped": []
+        }
+      },
+      {
+        "event": "receipt",
+        "receipt": {
+          "id": "rcpt-470b3704ea19",
+          "action_id": "act-session-1-1-2",
+          "rail": "ses-email",
+          "mode": "SIMULATED",
+          "provider_ref": null,
+          "request_digest": "590d5d01c683f9d222c7ab2639c7372bfd2ac9476e5195bab6b85f10516b4b9f",
+          "response_digest": "",
+          "at": "2026-09-12T17:17:54.474280+00:00",
+          "executed_under_grant": "g-daniel-ama-benefits",
+          "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+        }
+      },
+      {
+        "event": "receipt",
+        "receipt": {
+          "id": "rcpt-614be130c0aa",
+          "action_id": "act-session-1-1-1",
+          "rail": "official-form",
+          "mode": "PREPARE-ONLY",
+          "provider_ref": "runs/forms/act-session-1-1-1.md",
+          "request_digest": "1b06db97a8de3a8c3d5af7b0e7e1985607ee31963b5104ff06288f2bf9b237b7",
+          "response_digest": "5b505ca68f81ef73bf9e4c14d34d77b3d8b1a764612e9d57262fc0586b92cbe9",
+          "at": "2026-09-12T17:17:54.474280+00:00",
+          "executed_under_grant": "g-daniel-ama-benefits",
+          "label_reason": "PREPARE-ONLY: rendered for a human to review and file; never submitted"
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "briefer",
+        "name": "Briefer",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "briefer",
+        "name": "Briefer",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 2229,
+        "output": {
+          "headline_en": "Daniel's dental claim packet is ready",
+          "headline_target": "Daniel's dental claim packet is ready",
+          "done": [
+            "Prepared Sun Life coordination-of-benefits claim for Daniel for $36.00, PREPARE-ONLY",
+            "Emailed the claim packet to Ama Okafor-Lim, SIMULATED"
+          ],
+          "waiting_on": [],
+          "labels": [
+            "SIMULATED",
+            "PREPARE-ONLY"
+          ],
+          "next_step_en": "Your next step is to review and file the prepared claim packet.",
+          "next_step_target": "Your next step is to review and file the prepared claim packet."
+        }
+      }
+    ],
+    "result": {
+      "request_id": "ama-dental-cob",
+      "request_text": "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.\nPlease prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>.",
+      "actor_member_id": "ama",
+      "actor_name": "Ama Okafor-Lim",
+      "language": "en",
+      "household_id": "demo",
+      "provider": "bedrock",
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "execution_mode": "simulated",
+      "model_calls": {
+        "limit": 30,
+        "attempted": 12,
+        "remaining": 18,
+        "exhausted": false
+      },
+      "outcome": "executed",
+      "reading": {
+        "document_class": "dental-eob",
+        "issuer": "member",
+        "subject_hint": "Daniel's dental claim",
+        "amounts": [
+          {
+            "label": "billed by the dentist",
+            "amount_text": "$180.00",
+            "quote": "cleaning at Bloor West Dental on September 3, 2026, billed $180.00"
+          },
+          {
+            "label": "paid by Manulife",
+            "amount_text": "$144.00",
+            "quote": "Manulife paid $144.00."
+          }
+        ],
+        "dates": [
+          {
+            "label": "service date",
+            "date_text": "September 3, 2026",
+            "quote": "cleaning at Bloor West Dental on September 3, 2026, billed $180.00"
+          }
+        ],
+        "transcribed_lines": [
+          "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.",
+          "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>."
+        ],
+        "summary_en": "The member has provided Daniel's dental statement and requested the preparation and email of a Sun Life coordination-of-benefits claim for the remaining amount.",
+        "evidence": [
+          "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00.",
+          "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>."
+        ],
+        "confidence": "high"
+      },
+      "assignment": {
+        "subject_member_id": "daniel",
+        "actor_member_id": "ama",
+        "skill_id": "benefits",
+        "account_id": "",
+        "confidence": "high",
+        "reasons": [
+          "Daniel's dental claim for $180.00 was partially paid by Manulife, leaving a balance to be claimed through Sun Life coordination of benefits.",
+          "Ama is requesting the preparation and emailing of the Sun Life claim packet for the remaining amount."
+        ]
+      },
+      "skill_id": "benefits",
+      "plans": [
+        {
+          "revision": 1,
+          "proposals": [
+            {
+              "id": "act-session-1-1-1",
+              "skill_id": "benefits",
+              "action_type": "benefits:claim",
+              "rail": "official-form",
+              "actor_member_id": "ama",
+              "subject_member_id": "daniel",
+              "recipient": null,
+              "amount": "36.00",
+              "currency": "CAD",
+              "payload": {
+                "insurer": "Sun Life",
+                "plan_id": "SL-1",
+                "service_date": "September 3, 2026",
+                "billed": "$180.00",
+                "primary_paid": "$144.00",
+                "claim_amount": "$36.00",
+                "provider": "Bloor West Dental"
+              },
+              "evidence_refs": [
+                "Here is Daniel's dental statement from Manulife: cleaning at Bloor West Dental on September 3, 2026, billed $180.00, Manulife paid $144.00."
+              ],
+              "rationale": "Prepare Sun Life coordination-of-benefits claim for the residual amount after Manulife paid.",
+              "idempotency_key": "614be130c0aa9d8903de71dab3439e2f780b4ea38bb1624fae9a4dbc950e2bc9",
+              "claimed_grant_id": null
+            },
+            {
+              "id": "act-session-1-1-2",
+              "skill_id": "benefits",
+              "action_type": "email:send",
+              "rail": "ses-email",
+              "actor_member_id": "ama",
+              "subject_member_id": "daniel",
+              "recipient": "<email-1>",
+              "amount": null,
+              "currency": "CAD",
+              "payload": {
+                "subject": "Daniel's Sun Life dental claim packet",
+                "body": "Attached is the prepared Sun Life coordination-of-benefits claim for Daniel's dental cleaning on September 3, 2026. The residual amount to claim is $36.00."
+              },
+              "evidence_refs": [
+                "Please prepare the Sun Life coordination-of-benefits claim for the rest and email me the packet at <email-1>."
+              ],
+              "rationale": "Email the prepared claim packet to the requester.",
+              "idempotency_key": "470b3704ea19900ef50239ecc51c4eccfbd1c4a52af5ccb1703df63a15514694",
+              "claimed_grant_id": "g-daniel-ama-benefits"
+            }
+          ],
+          "decisions": [
+            {
+              "action_id": "act-session-1-1-1",
+              "outcome": "allow",
+              "rule_id": "grant",
+              "grant_id": "g-daniel-ama-benefits",
+              "approver_ids": [],
+              "reasons": [
+                "PREPARE-ONLY rail: official-form renders a prepared form for a human to file; it never submits",
+                "grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding benefits:claim up to 500.00 CAD per-action"
+              ]
+            },
+            {
+              "action_id": "act-session-1-1-2",
+              "outcome": "allow",
+              "rule_id": "grant",
+              "grant_id": "g-daniel-ama-benefits",
+              "approver_ids": [],
+              "reasons": [
+                "grant g-daniel-ama-benefits (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding email:send up to 500.00 CAD per-action"
+              ]
+            }
+          ],
+          "verdict": "proceed",
+          "model_verdict": "proceed",
+          "needs": [],
+          "notes": [
+            "Prepared Sun Life coordination-of-benefits claim for Daniel's dental cleaning: residual $36.00 after Manulife paid $144.00 of $180.00.",
+            "Emailed the claim packet to <email-1> as requested."
+          ]
+        }
+      ],
+      "receipts": [
+        {
+          "id": "rcpt-614be130c0aa",
+          "action_id": "act-session-1-1-1",
+          "rail": "official-form",
+          "mode": "PREPARE-ONLY",
+          "provider_ref": "runs/forms/act-session-1-1-1.md",
+          "request_digest": "1b06db97a8de3a8c3d5af7b0e7e1985607ee31963b5104ff06288f2bf9b237b7",
+          "response_digest": "5b505ca68f81ef73bf9e4c14d34d77b3d8b1a764612e9d57262fc0586b92cbe9",
+          "at": "2026-09-12T17:17:54.474280+00:00",
+          "executed_under_grant": "g-daniel-ama-benefits",
+          "label_reason": "PREPARE-ONLY: rendered for a human to review and file; never submitted"
+        },
+        {
+          "id": "rcpt-470b3704ea19",
+          "action_id": "act-session-1-1-2",
+          "rail": "ses-email",
+          "mode": "SIMULATED",
+          "provider_ref": null,
+          "request_digest": "590d5d01c683f9d222c7ab2639c7372bfd2ac9476e5195bab6b85f10516b4b9f",
+          "response_digest": "",
+          "at": "2026-09-12T17:17:54.474280+00:00",
+          "executed_under_grant": "g-daniel-ama-benefits",
+          "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+        }
+      ],
+      "approvals_needed": [],
+      "model_report": {
+        "receipts": [
+          {
+            "id": "rcpt-614be130c0aa",
+            "action_id": "act-session-1-1-1",
+            "rail": "official-form",
+            "mode": "PREPARE-ONLY",
+            "provider_ref": "runs/forms/act-session-1-1-1.md",
+            "request_digest": "1b06db97a8de3a8c3d5af7b0e7e1985607ee31963b5104ff06288f2bf9b237b7",
+            "response_digest": "5b505ca68f81ef73bf9e4c14d34d77b3d8b1a764612e9d57262fc0586b92cbe9",
+            "at": "2026-09-12T17:17:54.474280+00:00",
+            "executed_under_grant": "g-daniel-ama-benefits",
+            "label_reason": "PREPARE-ONLY: rendered for a human to review and file; never submitted"
+          },
+          {
+            "id": "rcpt-470b3704ea19",
+            "action_id": "act-session-1-1-2",
+            "rail": "ses-email",
+            "mode": "SIMULATED",
+            "provider_ref": null,
+            "request_digest": "590d5d01c683f9d222c7ab2639c7372bfd2ac9476e5195bab6b85f10516b4b9f",
+            "response_digest": "",
+            "at": "2026-09-12T17:17:54.474280+00:00",
+            "executed_under_grant": "g-daniel-ama-benefits",
+            "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+          }
+        ],
+        "skipped": []
+      },
+      "briefing": {
+        "headline_en": "Daniel's dental claim packet is ready",
+        "headline_target": "Daniel's dental claim packet is ready",
+        "done": [
+          "Prepared Sun Life coordination-of-benefits claim for Daniel for $36.00, PREPARE-ONLY",
+          "Emailed the claim packet to Ama Okafor-Lim, SIMULATED"
+        ],
+        "waiting_on": [],
+        "labels": [
+          "SIMULATED",
+          "PREPARE-ONLY"
+        ],
+        "next_step_en": "Your next step is to review and file the prepared claim packet.",
+        "next_step_target": "Your next step is to review and file the prepared claim packet."
+      },
+      "guard": {
+        "decisions_checked": 2,
+        "overrides": 0,
+        "verdict_overrides": 0,
+        "dropped_proposals": 0,
+        "dropped_receipts": 0,
+        "override": false,
+        "notes": []
+      },
+      "roster": [
+        {
+          "node_id": "intake",
+          "name": "Intake reader",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 3781
+        },
+        {
+          "node_id": "matcher",
+          "name": "Case matcher",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 2046
+        },
+        {
+          "node_id": "planner",
+          "name": "Planner",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 3855
+        },
+        {
+          "node_id": "authority",
+          "name": "Authority",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 2625
+        },
+        {
+          "node_id": "executor",
+          "name": "Executor",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 2872
+        },
+        {
+          "node_id": "briefer",
+          "name": "Briefer",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 2229
+        }
+      ],
+      "execution_order": [
+        "intake",
+        "matcher",
+        "planner",
+        "authority",
+        "executor",
+        "briefer"
+      ],
+      "graph_status": "completed",
+      "elapsed_ms": 17410,
+      "notes": [],
+      "upload_name": "",
+      "intake_issues": []
+    }
+  },
+  "redactions": {
+    "arns": 0,
+    "aws_access_key_ids": 0,
+    "aws_account_ids": 0,
+    "emails": 15,
+    "uuids": 0,
+    "hex32": 0,
+    "session_ids": 24,
+    "paths": 0
+  },
+  "sanitizer": "scripts/sanitize_receipt.py: ARNs, AWS account ids, access key ids, emails, session ids, UUIDs and local paths replaced by stable tokens; sha256 request digests kept as evidence"
+}

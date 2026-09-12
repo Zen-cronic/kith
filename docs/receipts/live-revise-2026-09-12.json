@@ -1,0 +1,1101 @@
+{
+  "kind": "live-trace",
+  "date_utc": "2026-09-12",
+  "source": "runs/live/revise.json",
+  "command": "python -m household.cli run --request fixtures/requests/daniel-payment-450.json --actor ama --trace --json",
+  "env": {
+    "MODEL_PROVIDER": "bedrock",
+    "BEDROCK_MODEL_ID": "us.amazon.nova-2-lite-v1:0",
+    "NODE_MODELS": "intake=bedrock:us.amazon.nova-pro-v1:0",
+    "MAX_MODEL_CALLS": "30",
+    "EXECUTION_MODE": "simulated",
+    "AWS_REGION": "us-east-1"
+  },
+  "provider": "bedrock",
+  "model_id": "us.amazon.nova-2-lite-v1:0",
+  "execution_mode": "simulated",
+  "request_id": "daniel-payment-450",
+  "actor": "ama",
+  "upload": null,
+  "roster_trace": "intake -> matcher -> planner -> authority -> planner#2 -> authority#2 -> executor -> briefer",
+  "outcome": "partial",
+  "graph_status": "completed",
+  "elapsed_ms": 16736,
+  "wall_ms": 16877,
+  "model_calls": {
+    "limit": 30,
+    "attempted": 13,
+    "remaining": 17,
+    "exhausted": false
+  },
+  "node_calls": {
+    "intake": {
+      "model_id": "us.amazon.nova-pro-v1:0",
+      "attempted": 1,
+      "completed": 1,
+      "errored": 0,
+      "latency_ms": [
+        3206
+      ],
+      "input_tokens": 1544,
+      "output_tokens": 406
+    },
+    "matcher": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        566,
+        874
+      ],
+      "input_tokens": 4231,
+      "output_tokens": 166
+    },
+    "planner": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        1878,
+        2165
+      ],
+      "input_tokens": 7467,
+      "output_tokens": 689
+    },
+    "authority": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 4,
+      "completed": 4,
+      "errored": 0,
+      "latency_ms": [
+        864,
+        902,
+        715,
+        1189
+      ],
+      "input_tokens": 8399,
+      "output_tokens": 454
+    },
+    "executor": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        540,
+        1003
+      ],
+      "input_tokens": 3188,
+      "output_tokens": 249
+    },
+    "briefer": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        623,
+        2177
+      ],
+      "input_tokens": 6201,
+      "output_tokens": 312
+    }
+  },
+  "tokens": {
+    "input": 31030,
+    "output": 2276
+  },
+  "guard": {
+    "decisions_checked": 3,
+    "overrides": 0,
+    "verdict_overrides": 0,
+    "dropped_proposals": 0,
+    "dropped_receipts": 0,
+    "override": false,
+    "notes": []
+  },
+  "intake_issues": [],
+  "plans": [
+    {
+      "revision": 1,
+      "verdict": "revise",
+      "model_verdict": "revise",
+      "actions": [
+        "payment:transfer 450.00 CAD on internal-ledger -> needs-approval [grant-refused]"
+      ],
+      "needs": [],
+      "notes": [
+        "The payment exceeds the grant limit of $300.00 per month, but the household authority will decide whether to allow it or split it. The current plan does not split it because the authority reasons are not provided yet."
+      ]
+    },
+    {
+      "revision": 2,
+      "verdict": "proceed",
+      "model_verdict": "proceed",
+      "actions": [
+        "payment:transfer 300.00 CAD on internal-ledger -> allow [grant]",
+        "payment:transfer 150.00 CAD on internal-ledger -> needs-approval [grant-refused]"
+      ],
+      "needs": [],
+      "notes": [
+        "Split the $450.00 payment into two transfers of $300.00 and $150.00 to stay within the grant limit of $300.00 per month for grant g-daniel-ama-payments"
+      ]
+    }
+  ],
+  "receipts": [
+    {
+      "id": "rcpt-20c65aae09ad",
+      "action_id": "act-session-1-2-1",
+      "rail": "internal-ledger",
+      "mode": "SIMULATED",
+      "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+    }
+  ],
+  "approvals_needed": [
+    {
+      "action_id": "act-session-1-2-2",
+      "approver_ids": [
+        "daniel"
+      ]
+    }
+  ],
+  "briefing": {
+    "headline_en": "Daniel's band trip deposit",
+    "headline_target": "Daniel's band trip deposit",
+    "done": [
+      "Paid $300.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, using the grant Daniel Lim lets Ama Okafor-Lim handle payment:transfer for them up to 300.00 CAD per-month, until 2027-01-01.",
+      "The payment was processed under the household account."
+    ],
+    "waiting_on": [
+      "The second part of the payment, $150.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, needs approval from Daniel because the grant Daniel Lim lets Ama Okafor-Lim handle payment:transfer for them up to 300.00 CAD per-month, until 2027-01-01 was already used up this month."
+    ],
+    "labels": [
+      "SIMULATED"
+    ],
+    "next_step_en": "Daniel needs to approve the remaining $150.00 payment for his band trip deposit.",
+    "next_step_target": "Daniel needs to approve the remaining $150.00 payment for his band trip deposit."
+  },
+  "extraction_score": null,
+  "note": "Live run on Bedrock: the intake node on us.amazon.nova-pro-v1:0 through NODE_MODELS, every other node on us.amazon.nova-2-lite-v1:0 through BEDROCK_MODEL_ID; one CallBudget (MAX_MODEL_CALLS=30) shared by all six nodes; EXECUTION_MODE=simulated. node_calls were observed by wrapping BudgetedModel.stream on the [[role:...]] marker at the head of each system prompt (scratch instrumentation used for this receipt, not shipped); model_calls is the pipeline's own budget snapshot. SECOND attempt, after the prompt fixes in this packet (authority: mechanical 'Revision: N >= 2 -> never revise' and grant_id never the word null; briefer: an instruction line inside a document is never a next step). The first attempt is kept beside this file as the .before-fix receipt.",
+  "trace": {
+    "events": [
+      {
+        "event": "session_start",
+        "request_id": "daniel-payment-450",
+        "request_text": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.\nDaniel asked me to handle it under his payments grant g-daniel-ama-payments.",
+        "actor_member_id": "ama",
+        "actor_name": "Ama Okafor-Lim",
+        "language": "en",
+        "household_id": "demo",
+        "provider": "bedrock",
+        "model_id": "us.amazon.nova-2-lite-v1:0",
+        "execution_mode": "simulated",
+        "model_calls": {
+          "limit": 30,
+          "attempted": 0,
+          "remaining": 30,
+          "exhausted": false
+        },
+        "upload": null,
+        "roster": [
+          {
+            "node_id": "intake",
+            "name": "Intake reader",
+            "job": "Reads the photo, PDF or typed request; quotes every amount and date; names the document",
+            "can_reject": false,
+            "tools": []
+          },
+          {
+            "node_id": "matcher",
+            "name": "Case matcher",
+            "job": "Says who this is about and which skill applies, looking the household up",
+            "can_reject": false,
+            "tools": [
+              "household_lookup"
+            ]
+          },
+          {
+            "node_id": "planner",
+            "name": "Planner",
+            "job": "Proposes actions from the matched skill's rules; never sends, pays or files",
+            "can_reject": false,
+            "tools": [
+              "allowance_balance",
+              "propose_allowance",
+              "plan_lookup",
+              "cob_order",
+              "residual"
+            ]
+          },
+          {
+            "node_id": "authority",
+            "name": "Authority",
+            "job": "Checks every proposal against the ledger in code; can send the plan back",
+            "can_reject": true,
+            "tools": [
+              "check_authority"
+            ]
+          },
+          {
+            "node_id": "executor",
+            "name": "Executor",
+            "job": "Runs only allowed actions through the rails and returns receipts",
+            "can_reject": false,
+            "tools": [
+              "execute_action"
+            ]
+          },
+          {
+            "node_id": "briefer",
+            "name": "Briefer",
+            "job": "Tells the member what happened and what is waiting on whom, in their language",
+            "can_reject": false,
+            "tools": [
+              "grant_text"
+            ]
+          }
+        ],
+        "skills": [
+          {
+            "id": "allowance",
+            "name": "Allowance",
+            "action_types": [
+              "allowance:transfer"
+            ]
+          },
+          {
+            "id": "benefits",
+            "name": "Benefits (coordination of benefits)",
+            "action_types": [
+              "benefits:claim",
+              "email:send"
+            ]
+          },
+          {
+            "id": "household",
+            "name": "Household payments and email (core)",
+            "action_types": [
+              "payment:transfer",
+              "email:send"
+            ]
+          }
+        ]
+      },
+      {
+        "event": "node_start",
+        "node_id": "intake",
+        "name": "Intake reader",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "intake",
+        "name": "Intake reader",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 3209,
+        "output": {
+          "document_class": "text-request",
+          "issuer": "member",
+          "subject_hint": "Daniel's band trip deposit",
+          "amounts": [
+            {
+              "label": "band trip deposit",
+              "amount_text": "$450.00",
+              "quote": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+            }
+          ],
+          "dates": [
+            {
+              "label": "due date",
+              "date_text": "September 25, 2026",
+              "quote": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+            }
+          ],
+          "transcribed_lines": [
+            "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.",
+            "Daniel asked me to handle it under his payments grant g-daniel-ama-payments."
+          ],
+          "summary_en": "Request to pay $450.00 for Daniel's band trip deposit to the Toronto Youth Wind Orchestra, due September 25, 2026.",
+          "evidence": [
+            "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+          ],
+          "confidence": "high"
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "matcher",
+        "name": "Case matcher",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "matcher",
+        "name": "Case matcher",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1445,
+        "output": {
+          "subject_member_id": "daniel",
+          "actor_member_id": "ama",
+          "skill_id": "household",
+          "account_id": "",
+          "confidence": "high",
+          "reasons": [
+            "Daniel requested payment of his band trip deposit",
+            "The payment is $450.00 to the Toronto Youth Wind Orchestra, due September 25, 2026",
+            "The payment is under Daniel's payments grant g-daniel-ama-payments"
+          ]
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1882,
+        "output": {
+          "actions": [
+            {
+              "action_type": "payment:transfer",
+              "rail": "internal-ledger",
+              "subject_member_id": "daniel",
+              "recipient": "Toronto Youth Wind Orchestra",
+              "amount_text": "450.00",
+              "currency": "CAD",
+              "payload": [
+                {
+                  "key": "payee",
+                  "value": "Toronto Youth Wind Orchestra"
+                },
+                {
+                  "key": "purpose",
+                  "value": "Daniel's band trip deposit"
+                },
+                {
+                  "key": "due",
+                  "value": "September 25, 2026"
+                }
+              ],
+              "evidence_refs": [
+                "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+              ],
+              "rationale": "Daniel requested payment of his band trip deposit",
+              "claimed_grant_id": "g-daniel-ama-payments"
+            }
+          ],
+          "needs": [],
+          "notes": [
+            "The payment exceeds the grant limit of $300.00 per month, but the household authority will decide whether to allow it or split it. The current plan does not split it because the authority reasons are not provided yet."
+          ]
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1771,
+        "output": {
+          "decisions": [
+            {
+              "action_id": "act-session-1-1-1",
+              "outcome": "needs-approval",
+              "rule_id": "grant-refused",
+              "grant_id": "",
+              "approver_ids": [
+                "daniel"
+              ],
+              "reasons": [
+                "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 0 used in the last 30 days + 450.00 requested"
+              ]
+            }
+          ],
+          "verdict": "revise"
+        }
+      },
+      {
+        "event": "action",
+        "revision": 1,
+        "proposal": {
+          "id": "act-session-1-1-1",
+          "skill_id": "household",
+          "action_type": "payment:transfer",
+          "rail": "internal-ledger",
+          "actor_member_id": "ama",
+          "subject_member_id": "daniel",
+          "recipient": "Toronto Youth Wind Orchestra",
+          "amount": "450.00",
+          "currency": "CAD",
+          "payload": {
+            "payee": "Toronto Youth Wind Orchestra",
+            "purpose": "Daniel's band trip deposit",
+            "due": "September 25, 2026"
+          },
+          "evidence_refs": [
+            "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+          ],
+          "rationale": "Daniel requested payment of his band trip deposit",
+          "idempotency_key": "",
+          "claimed_grant_id": "g-daniel-ama-payments"
+        },
+        "decision": {
+          "action_id": "act-session-1-1-1",
+          "outcome": "needs-approval",
+          "rule_id": "grant-refused",
+          "grant_id": null,
+          "approver_ids": [
+            "daniel"
+          ],
+          "reasons": [
+            "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 0 used in the last 30 days + 450.00 requested"
+          ]
+        },
+        "explanation": "Needs approval from daniel: grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 0 used in the last 30 days + 450.00 requested."
+      },
+      {
+        "event": "node_start",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 2
+      },
+      {
+        "event": "node_done",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 2,
+        "status": "completed",
+        "execution_ms": 2168,
+        "output": {
+          "actions": [
+            {
+              "action_type": "payment:transfer",
+              "rail": "internal-ledger",
+              "subject_member_id": "daniel",
+              "recipient": "Toronto Youth Wind Orchestra",
+              "amount_text": "300.00",
+              "currency": "CAD",
+              "payload": [
+                {
+                  "key": "payee",
+                  "value": "Toronto Youth Wind Orchestra"
+                },
+                {
+                  "key": "purpose",
+                  "value": "Daniel's band trip deposit"
+                },
+                {
+                  "key": "due",
+                  "value": "September 25, 2026"
+                }
+              ],
+              "evidence_refs": [
+                "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+              ],
+              "rationale": "Split payment to stay within grant limit of 300.00 CAD per month",
+              "claimed_grant_id": "g-daniel-ama-payments"
+            },
+            {
+              "action_type": "payment:transfer",
+              "rail": "internal-ledger",
+              "subject_member_id": "daniel",
+              "recipient": "Toronto Youth Wind Orchestra",
+              "amount_text": "150.00",
+              "currency": "CAD",
+              "payload": [
+                {
+                  "key": "payee",
+                  "value": "Toronto Youth Wind Orchestra"
+                },
+                {
+                  "key": "purpose",
+                  "value": "Daniel's band trip deposit"
+                },
+                {
+                  "key": "due",
+                  "value": "September 25, 2026"
+                }
+              ],
+              "evidence_refs": [
+                "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+              ],
+              "rationale": "Second part of split payment for Daniel's band trip deposit",
+              "claimed_grant_id": "g-daniel-ama-payments"
+            }
+          ],
+          "needs": [],
+          "notes": [
+            "Split the $450.00 payment into two transfers of $300.00 and $150.00 to stay within the grant limit of $300.00 per month for grant g-daniel-ama-payments"
+          ]
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 2
+      },
+      {
+        "event": "node_done",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 2,
+        "status": "completed",
+        "execution_ms": 1908,
+        "output": {
+          "decisions": [
+            {
+              "action_id": "act-session-1-2-1",
+              "outcome": "allow",
+              "rule_id": "grant",
+              "grant_id": "g-daniel-ama-payments",
+              "approver_ids": [],
+              "reasons": [
+                "grant g-daniel-ama-payments (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding payment:transfer up to 300.00 CAD per-month"
+              ]
+            },
+            {
+              "action_id": "act-session-1-2-2",
+              "outcome": "needs-approval",
+              "rule_id": "grant-refused",
+              "grant_id": "",
+              "approver_ids": [
+                "daniel"
+              ],
+              "reasons": [
+                "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 300.00 used in the last 30 days + 150.00 requested"
+              ]
+            }
+          ],
+          "verdict": "proceed"
+        }
+      },
+      {
+        "event": "action",
+        "revision": 2,
+        "proposal": {
+          "id": "act-session-1-2-1",
+          "skill_id": "household",
+          "action_type": "payment:transfer",
+          "rail": "internal-ledger",
+          "actor_member_id": "ama",
+          "subject_member_id": "daniel",
+          "recipient": "Toronto Youth Wind Orchestra",
+          "amount": "300.00",
+          "currency": "CAD",
+          "payload": {
+            "payee": "Toronto Youth Wind Orchestra",
+            "purpose": "Daniel's band trip deposit",
+            "due": "September 25, 2026"
+          },
+          "evidence_refs": [
+            "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+          ],
+          "rationale": "Split payment to stay within grant limit of 300.00 CAD per month",
+          "idempotency_key": "",
+          "claimed_grant_id": "g-daniel-ama-payments"
+        },
+        "decision": {
+          "action_id": "act-session-1-2-1",
+          "outcome": "allow",
+          "rule_id": "grant",
+          "grant_id": "g-daniel-ama-payments",
+          "approver_ids": [],
+          "reasons": [
+            "grant g-daniel-ama-payments (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding payment:transfer up to 300.00 CAD per-month"
+          ]
+        },
+        "explanation": "Allowed under g-daniel-ama-payments: grant g-daniel-ama-payments (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding payment:transfer up to 300.00 CAD per-month."
+      },
+      {
+        "event": "action",
+        "revision": 2,
+        "proposal": {
+          "id": "act-session-1-2-2",
+          "skill_id": "household",
+          "action_type": "payment:transfer",
+          "rail": "internal-ledger",
+          "actor_member_id": "ama",
+          "subject_member_id": "daniel",
+          "recipient": "Toronto Youth Wind Orchestra",
+          "amount": "150.00",
+          "currency": "CAD",
+          "payload": {
+            "payee": "Toronto Youth Wind Orchestra",
+            "purpose": "Daniel's band trip deposit",
+            "due": "September 25, 2026"
+          },
+          "evidence_refs": [
+            "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+          ],
+          "rationale": "Second part of split payment for Daniel's band trip deposit",
+          "idempotency_key": "",
+          "claimed_grant_id": "g-daniel-ama-payments"
+        },
+        "decision": {
+          "action_id": "act-session-1-2-2",
+          "outcome": "needs-approval",
+          "rule_id": "grant-refused",
+          "grant_id": null,
+          "approver_ids": [
+            "daniel"
+          ],
+          "reasons": [
+            "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 300.00 used in the last 30 days + 150.00 requested"
+          ]
+        },
+        "explanation": "Needs approval from daniel: grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 300.00 used in the last 30 days + 150.00 requested."
+      },
+      {
+        "event": "approval_needed",
+        "action_id": "act-session-1-2-2",
+        "approver_ids": [
+          "daniel"
+        ],
+        "reasons": [
+          "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 300.00 used in the last 30 days + 150.00 requested"
+        ],
+        "revision": 2,
+        "explanation": "Needs approval from daniel: grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 300.00 used in the last 30 days + 150.00 requested."
+      },
+      {
+        "event": "node_start",
+        "node_id": "executor",
+        "name": "Executor",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "executor",
+        "name": "Executor",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1548,
+        "output": {
+          "receipts": [
+            {
+              "id": "rcpt-20c65aae09ad",
+              "action_id": "act-session-1-2-1",
+              "rail": "internal-ledger",
+              "mode": "SIMULATED",
+              "provider_ref": null,
+              "request_digest": "891f7d8076552f02893d092d1cfa4b8499c77d27e182bcd495f8b10baa75e9cf",
+              "response_digest": "",
+              "at": "2026-09-12T17:24:18.193777+00:00",
+              "executed_under_grant": "g-daniel-ama-payments",
+              "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+            }
+          ],
+          "skipped": [
+            "act-session-1-2-2"
+          ]
+        }
+      },
+      {
+        "event": "receipt",
+        "receipt": {
+          "id": "rcpt-20c65aae09ad",
+          "action_id": "act-session-1-2-1",
+          "rail": "internal-ledger",
+          "mode": "SIMULATED",
+          "provider_ref": null,
+          "request_digest": "891f7d8076552f02893d092d1cfa4b8499c77d27e182bcd495f8b10baa75e9cf",
+          "response_digest": "",
+          "at": "2026-09-12T17:24:18.193777+00:00",
+          "executed_under_grant": "g-daniel-ama-payments",
+          "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "briefer",
+        "name": "Briefer",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "briefer",
+        "name": "Briefer",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 2804,
+        "output": {
+          "headline_en": "Daniel's band trip deposit",
+          "headline_target": "Daniel's band trip deposit",
+          "done": [
+            "Paid $300.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, using the grant Daniel Lim lets Ama Okafor-Lim handle payment:transfer for them up to 300.00 CAD per-month, until 2027-01-01.",
+            "The payment was processed under the household account."
+          ],
+          "waiting_on": [
+            "The second part of the payment, $150.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, needs approval from Daniel because the grant Daniel Lim lets Ama Okafor-Lim handle payment:transfer for them up to 300.00 CAD per-month, until 2027-01-01 was already used up this month."
+          ],
+          "labels": [
+            "SIMULATED"
+          ],
+          "next_step_en": "Daniel needs to approve the remaining $150.00 payment for his band trip deposit.",
+          "next_step_target": "Daniel needs to approve the remaining $150.00 payment for his band trip deposit."
+        }
+      }
+    ],
+    "result": {
+      "request_id": "daniel-payment-450",
+      "request_text": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.\nDaniel asked me to handle it under his payments grant g-daniel-ama-payments.",
+      "actor_member_id": "ama",
+      "actor_name": "Ama Okafor-Lim",
+      "language": "en",
+      "household_id": "demo",
+      "provider": "bedrock",
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "execution_mode": "simulated",
+      "model_calls": {
+        "limit": 30,
+        "attempted": 13,
+        "remaining": 17,
+        "exhausted": false
+      },
+      "outcome": "partial",
+      "reading": {
+        "document_class": "text-request",
+        "issuer": "member",
+        "subject_hint": "Daniel's band trip deposit",
+        "amounts": [
+          {
+            "label": "band trip deposit",
+            "amount_text": "$450.00",
+            "quote": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+          }
+        ],
+        "dates": [
+          {
+            "label": "due date",
+            "date_text": "September 25, 2026",
+            "quote": "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+          }
+        ],
+        "transcribed_lines": [
+          "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026.",
+          "Daniel asked me to handle it under his payments grant g-daniel-ama-payments."
+        ],
+        "summary_en": "Request to pay $450.00 for Daniel's band trip deposit to the Toronto Youth Wind Orchestra, due September 25, 2026.",
+        "evidence": [
+          "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+        ],
+        "confidence": "high"
+      },
+      "assignment": {
+        "subject_member_id": "daniel",
+        "actor_member_id": "ama",
+        "skill_id": "household",
+        "account_id": "",
+        "confidence": "high",
+        "reasons": [
+          "Daniel requested payment of his band trip deposit",
+          "The payment is $450.00 to the Toronto Youth Wind Orchestra, due September 25, 2026",
+          "The payment is under Daniel's payments grant g-daniel-ama-payments"
+        ]
+      },
+      "skill_id": "household",
+      "plans": [
+        {
+          "revision": 1,
+          "proposals": [
+            {
+              "id": "act-session-1-1-1",
+              "skill_id": "household",
+              "action_type": "payment:transfer",
+              "rail": "internal-ledger",
+              "actor_member_id": "ama",
+              "subject_member_id": "daniel",
+              "recipient": "Toronto Youth Wind Orchestra",
+              "amount": "450.00",
+              "currency": "CAD",
+              "payload": {
+                "payee": "Toronto Youth Wind Orchestra",
+                "purpose": "Daniel's band trip deposit",
+                "due": "September 25, 2026"
+              },
+              "evidence_refs": [
+                "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+              ],
+              "rationale": "Daniel requested payment of his band trip deposit",
+              "idempotency_key": "",
+              "claimed_grant_id": "g-daniel-ama-payments"
+            }
+          ],
+          "decisions": [
+            {
+              "action_id": "act-session-1-1-1",
+              "outcome": "needs-approval",
+              "rule_id": "grant-refused",
+              "grant_id": null,
+              "approver_ids": [
+                "daniel"
+              ],
+              "reasons": [
+                "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 0 used in the last 30 days + 450.00 requested"
+              ]
+            }
+          ],
+          "verdict": "revise",
+          "model_verdict": "revise",
+          "needs": [],
+          "notes": [
+            "The payment exceeds the grant limit of $300.00 per month, but the household authority will decide whether to allow it or split it. The current plan does not split it because the authority reasons are not provided yet."
+          ]
+        },
+        {
+          "revision": 2,
+          "proposals": [
+            {
+              "id": "act-session-1-2-1",
+              "skill_id": "household",
+              "action_type": "payment:transfer",
+              "rail": "internal-ledger",
+              "actor_member_id": "ama",
+              "subject_member_id": "daniel",
+              "recipient": "Toronto Youth Wind Orchestra",
+              "amount": "300.00",
+              "currency": "CAD",
+              "payload": {
+                "payee": "Toronto Youth Wind Orchestra",
+                "purpose": "Daniel's band trip deposit",
+                "due": "September 25, 2026"
+              },
+              "evidence_refs": [
+                "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+              ],
+              "rationale": "Split payment to stay within grant limit of 300.00 CAD per month",
+              "idempotency_key": "20c65aae09adfaacd1725cec8ff978774bd8d9c0d158f4d034b8822376219fc0",
+              "claimed_grant_id": "g-daniel-ama-payments"
+            },
+            {
+              "id": "act-session-1-2-2",
+              "skill_id": "household",
+              "action_type": "payment:transfer",
+              "rail": "internal-ledger",
+              "actor_member_id": "ama",
+              "subject_member_id": "daniel",
+              "recipient": "Toronto Youth Wind Orchestra",
+              "amount": "150.00",
+              "currency": "CAD",
+              "payload": {
+                "payee": "Toronto Youth Wind Orchestra",
+                "purpose": "Daniel's band trip deposit",
+                "due": "September 25, 2026"
+              },
+              "evidence_refs": [
+                "Pay $450.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, due September 25, 2026."
+              ],
+              "rationale": "Second part of split payment for Daniel's band trip deposit",
+              "idempotency_key": "",
+              "claimed_grant_id": "g-daniel-ama-payments"
+            }
+          ],
+          "decisions": [
+            {
+              "action_id": "act-session-1-2-1",
+              "outcome": "allow",
+              "rule_id": "grant",
+              "grant_id": "g-daniel-ama-payments",
+              "approver_ids": [],
+              "reasons": [
+                "grant g-daniel-ama-payments (spouse-grant) from Daniel Lim covers Ama Okafor-Lim deciding payment:transfer up to 300.00 CAD per-month"
+              ]
+            },
+            {
+              "action_id": "act-session-1-2-2",
+              "outcome": "needs-approval",
+              "rule_id": "grant-refused",
+              "grant_id": null,
+              "approver_ids": [
+                "daniel"
+              ],
+              "reasons": [
+                "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 300.00 used in the last 30 days + 150.00 requested"
+              ]
+            }
+          ],
+          "verdict": "proceed",
+          "model_verdict": "proceed",
+          "needs": [],
+          "notes": [
+            "Split the $450.00 payment into two transfers of $300.00 and $150.00 to stay within the grant limit of $300.00 per month for grant g-daniel-ama-payments"
+          ]
+        }
+      ],
+      "receipts": [
+        {
+          "id": "rcpt-20c65aae09ad",
+          "action_id": "act-session-1-2-1",
+          "rail": "internal-ledger",
+          "mode": "SIMULATED",
+          "provider_ref": null,
+          "request_digest": "891f7d8076552f02893d092d1cfa4b8499c77d27e182bcd495f8b10baa75e9cf",
+          "response_digest": "",
+          "at": "2026-09-12T17:24:18.193777+00:00",
+          "executed_under_grant": "g-daniel-ama-payments",
+          "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+        }
+      ],
+      "approvals_needed": [
+        {
+          "action_id": "act-session-1-2-2",
+          "outcome": "needs-approval",
+          "rule_id": "grant-refused",
+          "grant_id": null,
+          "approver_ids": [
+            "daniel"
+          ],
+          "reasons": [
+            "grant g-daniel-ama-payments per-month limit 300.00 CAD exceeded: 300.00 used in the last 30 days + 150.00 requested"
+          ]
+        }
+      ],
+      "model_report": {
+        "receipts": [
+          {
+            "id": "rcpt-20c65aae09ad",
+            "action_id": "act-session-1-2-1",
+            "rail": "internal-ledger",
+            "mode": "SIMULATED",
+            "provider_ref": null,
+            "request_digest": "891f7d8076552f02893d092d1cfa4b8499c77d27e182bcd495f8b10baa75e9cf",
+            "response_digest": "",
+            "at": "2026-09-12T17:24:18.193777+00:00",
+            "executed_under_grant": "g-daniel-ama-payments",
+            "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+          }
+        ],
+        "skipped": [
+          "act-session-1-2-2"
+        ]
+      },
+      "briefing": {
+        "headline_en": "Daniel's band trip deposit",
+        "headline_target": "Daniel's band trip deposit",
+        "done": [
+          "Paid $300.00 from the household account to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, using the grant Daniel Lim lets Ama Okafor-Lim handle payment:transfer for them up to 300.00 CAD per-month, until 2027-01-01.",
+          "The payment was processed under the household account."
+        ],
+        "waiting_on": [
+          "The second part of the payment, $150.00 to the Toronto Youth Wind Orchestra for Daniel's band trip deposit, needs approval from Daniel because the grant Daniel Lim lets Ama Okafor-Lim handle payment:transfer for them up to 300.00 CAD per-month, until 2027-01-01 was already used up this month."
+        ],
+        "labels": [
+          "SIMULATED"
+        ],
+        "next_step_en": "Daniel needs to approve the remaining $150.00 payment for his band trip deposit.",
+        "next_step_target": "Daniel needs to approve the remaining $150.00 payment for his band trip deposit."
+      },
+      "guard": {
+        "decisions_checked": 3,
+        "overrides": 0,
+        "verdict_overrides": 0,
+        "dropped_proposals": 0,
+        "dropped_receipts": 0,
+        "override": false,
+        "notes": []
+      },
+      "roster": [
+        {
+          "node_id": "intake",
+          "name": "Intake reader",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 3209
+        },
+        {
+          "node_id": "matcher",
+          "name": "Case matcher",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1445
+        },
+        {
+          "node_id": "planner",
+          "name": "Planner",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1882
+        },
+        {
+          "node_id": "authority",
+          "name": "Authority",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1771
+        },
+        {
+          "node_id": "planner",
+          "name": "Planner",
+          "run": 2,
+          "status": "completed",
+          "execution_ms": 2168
+        },
+        {
+          "node_id": "authority",
+          "name": "Authority",
+          "run": 2,
+          "status": "completed",
+          "execution_ms": 1908
+        },
+        {
+          "node_id": "executor",
+          "name": "Executor",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1548
+        },
+        {
+          "node_id": "briefer",
+          "name": "Briefer",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 2804
+        }
+      ],
+      "execution_order": [
+        "intake",
+        "matcher",
+        "planner",
+        "authority",
+        "planner",
+        "authority",
+        "executor",
+        "briefer"
+      ],
+      "graph_status": "completed",
+      "elapsed_ms": 16736,
+      "notes": [],
+      "upload_name": "",
+      "intake_issues": []
+    }
+  },
+  "redactions": {
+    "arns": 0,
+    "aws_access_key_ids": 0,
+    "aws_account_ids": 0,
+    "emails": 0,
+    "uuids": 0,
+    "hex32": 0,
+    "session_ids": 25,
+    "paths": 0
+  },
+  "sanitizer": "scripts/sanitize_receipt.py: ARNs, AWS account ids, access key ids, emails, session ids, UUIDs and local paths replaced by stable tokens; sha256 request digests kept as evidence"
+}

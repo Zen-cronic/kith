@@ -1,0 +1,744 @@
+{
+  "kind": "live-trace",
+  "date_utc": "2026-09-12",
+  "source": "runs/live/photo-allowance-note.json",
+  "command": "python -m household.cli run --image fixtures/images/allowance-note.png --actor ama --trace --json",
+  "env": {
+    "MODEL_PROVIDER": "bedrock",
+    "BEDROCK_MODEL_ID": "us.amazon.nova-2-lite-v1:0",
+    "NODE_MODELS": "intake=bedrock:us.amazon.nova-pro-v1:0",
+    "MAX_MODEL_CALLS": "30",
+    "EXECUTION_MODE": "simulated",
+    "AWS_REGION": "us-east-1"
+  },
+  "provider": "bedrock",
+  "model_id": "us.amazon.nova-2-lite-v1:0",
+  "execution_mode": "simulated",
+  "request_id": "photo-allowance-note",
+  "actor": "ama",
+  "upload": "allowance-note.png",
+  "roster_trace": "intake -> matcher -> planner -> authority -> executor -> briefer",
+  "outcome": "executed",
+  "graph_status": "completed",
+  "elapsed_ms": 12742,
+  "wall_ms": 12910,
+  "model_calls": {
+    "limit": 30,
+    "attempted": 11,
+    "remaining": 19,
+    "exhausted": false
+  },
+  "node_calls": {
+    "intake": {
+      "model_id": "us.amazon.nova-pro-v1:0",
+      "attempted": 1,
+      "completed": 1,
+      "errored": 0,
+      "latency_ms": [
+        3017
+      ],
+      "input_tokens": 2670,
+      "output_tokens": 337
+    },
+    "matcher": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        805,
+        1075
+      ],
+      "input_tokens": 4055,
+      "output_tokens": 140
+    },
+    "planner": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 3,
+      "completed": 3,
+      "errored": 0,
+      "latency_ms": [
+        785,
+        802,
+        1352
+      ],
+      "input_tokens": 9786,
+      "output_tokens": 303
+    },
+    "authority": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        881,
+        864
+      ],
+      "input_tokens": 3770,
+      "output_tokens": 151
+    },
+    "executor": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 2,
+      "completed": 2,
+      "errored": 0,
+      "latency_ms": [
+        590,
+        1186
+      ],
+      "input_tokens": 3145,
+      "output_tokens": 240
+    },
+    "briefer": {
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "attempted": 1,
+      "completed": 1,
+      "errored": 0,
+      "latency_ms": [
+        1354
+      ],
+      "input_tokens": 2369,
+      "output_tokens": 189
+    }
+  },
+  "tokens": {
+    "input": 25795,
+    "output": 1360
+  },
+  "guard": {
+    "decisions_checked": 1,
+    "overrides": 0,
+    "verdict_overrides": 0,
+    "dropped_proposals": 0,
+    "dropped_receipts": 0,
+    "override": false,
+    "notes": []
+  },
+  "intake_issues": [],
+  "plans": [
+    {
+      "revision": 1,
+      "verdict": "proceed",
+      "model_verdict": "proceed",
+      "actions": [
+        "allowance:transfer 8.00 CAD on internal-ledger -> allow [parent-for-minor]"
+      ],
+      "needs": [],
+      "notes": [
+        "The requested amount is within Kofi's allowance account balance and below both the auto_limit (10.00) and weekly cap (15.00). No guardian approval is required; this transfer will proceed automatically."
+      ]
+    }
+  ],
+  "receipts": [
+    {
+      "id": "rcpt-88327732356e",
+      "action_id": "act-session-1-1-1",
+      "rail": "internal-ledger",
+      "mode": "SIMULATED",
+      "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+    }
+  ],
+  "approvals_needed": [],
+  "briefing": {
+    "headline_en": "Kofi's $8.00 allowance transfer is approved.",
+    "headline_target": "Kofi's $8.00 allowance transfer is approved.",
+    "done": [
+      "Transferred $8.00 from Kofi's allowance for the bake sale, using rule:parent-for-minor.",
+      "Used the internal ledger (SIMULATED)."
+    ],
+    "waiting_on": [],
+    "labels": [
+      "SIMULATED"
+    ],
+    "next_step_en": "You can now use the money for the bake sale on Friday, September 18, 2026.",
+    "next_step_target": "You can now use the money for the bake sale on Friday, September 18, 2026."
+  },
+  "extraction_score": {
+    "truth": "fixtures/images/allowance-note.truth.json",
+    "correct": 8,
+    "total": 8,
+    "misses": [],
+    "note": "scored on the reading after bind_image_values; anything the binder removed is listed under intake_issues"
+  },
+  "note": "Live run on Bedrock: the intake node on us.amazon.nova-pro-v1:0 through NODE_MODELS, every other node on us.amazon.nova-2-lite-v1:0 through BEDROCK_MODEL_ID; one CallBudget (MAX_MODEL_CALLS=30) shared by all six nodes; EXECUTION_MODE=simulated. node_calls were observed by wrapping BudgetedModel.stream on the [[role:...]] marker at the head of each system prompt (scratch instrumentation used for this receipt, not shipped); model_calls is the pipeline's own budget snapshot. First and only attempt.",
+  "trace": {
+    "events": [
+      {
+        "event": "session_start",
+        "request_id": "photo-allowance-note",
+        "request_text": "Shown a photo: allowance-note.png",
+        "actor_member_id": "ama",
+        "actor_name": "Ama Okafor-Lim",
+        "language": "en",
+        "household_id": "demo",
+        "provider": "bedrock",
+        "model_id": "us.amazon.nova-2-lite-v1:0",
+        "execution_mode": "simulated",
+        "model_calls": {
+          "limit": 30,
+          "attempted": 0,
+          "remaining": 30,
+          "exhausted": false
+        },
+        "upload": "allowance-note.png",
+        "roster": [
+          {
+            "node_id": "intake",
+            "name": "Intake reader",
+            "job": "Reads the photo, PDF or typed request; quotes every amount and date; names the document",
+            "can_reject": false,
+            "tools": []
+          },
+          {
+            "node_id": "matcher",
+            "name": "Case matcher",
+            "job": "Says who this is about and which skill applies, looking the household up",
+            "can_reject": false,
+            "tools": [
+              "household_lookup"
+            ]
+          },
+          {
+            "node_id": "planner",
+            "name": "Planner",
+            "job": "Proposes actions from the matched skill's rules; never sends, pays or files",
+            "can_reject": false,
+            "tools": [
+              "allowance_balance",
+              "propose_allowance",
+              "plan_lookup",
+              "cob_order",
+              "residual"
+            ]
+          },
+          {
+            "node_id": "authority",
+            "name": "Authority",
+            "job": "Checks every proposal against the ledger in code; can send the plan back",
+            "can_reject": true,
+            "tools": [
+              "check_authority"
+            ]
+          },
+          {
+            "node_id": "executor",
+            "name": "Executor",
+            "job": "Runs only allowed actions through the rails and returns receipts",
+            "can_reject": false,
+            "tools": [
+              "execute_action"
+            ]
+          },
+          {
+            "node_id": "briefer",
+            "name": "Briefer",
+            "job": "Tells the member what happened and what is waiting on whom, in their language",
+            "can_reject": false,
+            "tools": [
+              "grant_text"
+            ]
+          }
+        ],
+        "skills": [
+          {
+            "id": "allowance",
+            "name": "Allowance",
+            "action_types": [
+              "allowance:transfer"
+            ]
+          },
+          {
+            "id": "benefits",
+            "name": "Benefits (coordination of benefits)",
+            "action_types": [
+              "benefits:claim",
+              "email:send"
+            ]
+          },
+          {
+            "id": "household",
+            "name": "Household payments and email (core)",
+            "action_types": [
+              "payment:transfer",
+              "email:send"
+            ]
+          }
+        ]
+      },
+      {
+        "event": "node_start",
+        "node_id": "intake",
+        "name": "Intake reader",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "intake",
+        "name": "Intake reader",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 3021,
+        "output": {
+          "document_class": "allowance-note",
+          "issuer": "Kofi",
+          "subject_hint": "Kofi's allowance request",
+          "amounts": [
+            {
+              "label": "allowance amount",
+              "amount_text": "$8.00",
+              "quote": "Mom, can I take $8.00 from my allowance for the bake sale?"
+            }
+          ],
+          "dates": [
+            {
+              "label": "bake sale date",
+              "date_text": "Friday, September 18, 2026",
+              "quote": "It is on Friday, September 18, 2026."
+            }
+          ],
+          "transcribed_lines": [
+            "Note from Kofi",
+            "Mom, can I take $8.00 from my allowance for the bake sale?",
+            "It is on Friday, September 18, 2026.",
+            "Thanks, Kofi"
+          ],
+          "summary_en": "Kofi is asking for permission to use $8.00 from his allowance for a bake sale on September 18, 2026.",
+          "evidence": [
+            "Mom, can I take $8.00 from my allowance for the bake sale?"
+          ],
+          "confidence": "high"
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "matcher",
+        "name": "Case matcher",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "matcher",
+        "name": "Case matcher",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1884,
+        "output": {
+          "subject_member_id": "kofi",
+          "actor_member_id": "ama",
+          "skill_id": "allowance",
+          "account_id": "allow-kofi",
+          "confidence": "high",
+          "reasons": [
+            "Kofi is requesting $8.00 from his allowance for a bake sale on September 18, 2026."
+          ]
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "planner",
+        "name": "Planner",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 2947,
+        "output": {
+          "actions": [
+            {
+              "action_type": "allowance:transfer",
+              "rail": "internal-ledger",
+              "subject_member_id": "kofi",
+              "recipient": "hh-main",
+              "amount_text": "8.00",
+              "currency": "CAD",
+              "payload": [
+                {
+                  "key": "memo",
+                  "value": "for the bake sale"
+                }
+              ],
+              "evidence_refs": [
+                "Mom, can I take $8.00 from my allowance for the bake sale?"
+              ],
+              "rationale": "Kofi Okafor-Lim asked for 8.00 CAD from their own allowance for a bake sale on September 18, 2026",
+              "claimed_grant_id": ""
+            }
+          ],
+          "needs": [],
+          "notes": [
+            "The requested amount is within Kofi's allowance account balance and below both the auto_limit (10.00) and weekly cap (15.00). No guardian approval is required; this transfer will proceed automatically."
+          ]
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "authority",
+        "name": "Authority",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1751,
+        "output": {
+          "decisions": [
+            {
+              "action_id": "act-session-1-1-1",
+              "outcome": "allow",
+              "rule_id": "parent-for-minor",
+              "grant_id": "rule:parent-for-minor",
+              "approver_ids": [],
+              "reasons": [
+                "Ama Okafor-Lim is a guardian of Kofi Okafor-Lim"
+              ]
+            }
+          ],
+          "verdict": "proceed"
+        }
+      },
+      {
+        "event": "action",
+        "revision": 1,
+        "proposal": {
+          "id": "act-session-1-1-1",
+          "skill_id": "allowance",
+          "action_type": "allowance:transfer",
+          "rail": "internal-ledger",
+          "actor_member_id": "ama",
+          "subject_member_id": "kofi",
+          "recipient": "hh-main",
+          "amount": "8.00",
+          "currency": "CAD",
+          "payload": {
+            "memo": "for the bake sale"
+          },
+          "evidence_refs": [
+            "Mom, can I take $8.00 from my allowance for the bake sale?"
+          ],
+          "rationale": "Kofi Okafor-Lim asked for 8.00 CAD from their own allowance for a bake sale on September 18, 2026",
+          "idempotency_key": "",
+          "claimed_grant_id": null
+        },
+        "decision": {
+          "action_id": "act-session-1-1-1",
+          "outcome": "allow",
+          "rule_id": "parent-for-minor",
+          "grant_id": "rule:parent-for-minor",
+          "approver_ids": [],
+          "reasons": [
+            "Ama Okafor-Lim is a guardian of Kofi Okafor-Lim"
+          ]
+        },
+        "explanation": "Allowed under rule:parent-for-minor: Ama Okafor-Lim is a guardian of Kofi Okafor-Lim."
+      },
+      {
+        "event": "node_start",
+        "node_id": "executor",
+        "name": "Executor",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "executor",
+        "name": "Executor",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1781,
+        "output": {
+          "receipts": [
+            {
+              "id": "rcpt-88327732356e",
+              "action_id": "act-session-1-1-1",
+              "rail": "internal-ledger",
+              "mode": "SIMULATED",
+              "provider_ref": null,
+              "request_digest": "21c7e874d89436513f91a06d01e4a5d66e22943db4d961568da2f0f5b1b79ab3",
+              "response_digest": "",
+              "at": "2026-09-12T17:18:47.830392+00:00",
+              "executed_under_grant": "rule:parent-for-minor",
+              "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+            }
+          ],
+          "skipped": []
+        }
+      },
+      {
+        "event": "receipt",
+        "receipt": {
+          "id": "rcpt-88327732356e",
+          "action_id": "act-session-1-1-1",
+          "rail": "internal-ledger",
+          "mode": "SIMULATED",
+          "provider_ref": null,
+          "request_digest": "21c7e874d89436513f91a06d01e4a5d66e22943db4d961568da2f0f5b1b79ab3",
+          "response_digest": "",
+          "at": "2026-09-12T17:18:47.830392+00:00",
+          "executed_under_grant": "rule:parent-for-minor",
+          "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+        }
+      },
+      {
+        "event": "node_start",
+        "node_id": "briefer",
+        "name": "Briefer",
+        "run": 1
+      },
+      {
+        "event": "node_done",
+        "node_id": "briefer",
+        "name": "Briefer",
+        "run": 1,
+        "status": "completed",
+        "execution_ms": 1358,
+        "output": {
+          "headline_en": "Kofi's $8.00 allowance transfer is approved.",
+          "headline_target": "Kofi's $8.00 allowance transfer is approved.",
+          "done": [
+            "Transferred $8.00 from Kofi's allowance for the bake sale, using rule:parent-for-minor.",
+            "Used the internal ledger (SIMULATED)."
+          ],
+          "waiting_on": [],
+          "labels": [
+            "SIMULATED"
+          ],
+          "next_step_en": "You can now use the money for the bake sale on Friday, September 18, 2026.",
+          "next_step_target": "You can now use the money for the bake sale on Friday, September 18, 2026."
+        }
+      }
+    ],
+    "result": {
+      "request_id": "photo-allowance-note",
+      "request_text": "Shown a photo: allowance-note.png",
+      "actor_member_id": "ama",
+      "actor_name": "Ama Okafor-Lim",
+      "language": "en",
+      "household_id": "demo",
+      "provider": "bedrock",
+      "model_id": "us.amazon.nova-2-lite-v1:0",
+      "execution_mode": "simulated",
+      "model_calls": {
+        "limit": 30,
+        "attempted": 11,
+        "remaining": 19,
+        "exhausted": false
+      },
+      "outcome": "executed",
+      "reading": {
+        "document_class": "allowance-note",
+        "issuer": "Kofi",
+        "subject_hint": "Kofi's allowance request",
+        "amounts": [
+          {
+            "label": "allowance amount",
+            "amount_text": "$8.00",
+            "quote": "Mom, can I take $8.00 from my allowance for the bake sale?"
+          }
+        ],
+        "dates": [
+          {
+            "label": "bake sale date",
+            "date_text": "Friday, September 18, 2026",
+            "quote": "It is on Friday, September 18, 2026."
+          }
+        ],
+        "transcribed_lines": [
+          "Note from Kofi",
+          "Mom, can I take $8.00 from my allowance for the bake sale?",
+          "It is on Friday, September 18, 2026.",
+          "Thanks, Kofi"
+        ],
+        "summary_en": "Kofi is asking for permission to use $8.00 from his allowance for a bake sale on September 18, 2026.",
+        "evidence": [
+          "Mom, can I take $8.00 from my allowance for the bake sale?"
+        ],
+        "confidence": "high"
+      },
+      "assignment": {
+        "subject_member_id": "kofi",
+        "actor_member_id": "ama",
+        "skill_id": "allowance",
+        "account_id": "allow-kofi",
+        "confidence": "high",
+        "reasons": [
+          "Kofi is requesting $8.00 from his allowance for a bake sale on September 18, 2026."
+        ]
+      },
+      "skill_id": "allowance",
+      "plans": [
+        {
+          "revision": 1,
+          "proposals": [
+            {
+              "id": "act-session-1-1-1",
+              "skill_id": "allowance",
+              "action_type": "allowance:transfer",
+              "rail": "internal-ledger",
+              "actor_member_id": "ama",
+              "subject_member_id": "kofi",
+              "recipient": "hh-main",
+              "amount": "8.00",
+              "currency": "CAD",
+              "payload": {
+                "memo": "for the bake sale"
+              },
+              "evidence_refs": [
+                "Mom, can I take $8.00 from my allowance for the bake sale?"
+              ],
+              "rationale": "Kofi Okafor-Lim asked for 8.00 CAD from their own allowance for a bake sale on September 18, 2026",
+              "idempotency_key": "88327732356e17efe780516396a9382dcd3a6acbfd81c3f06d2143716fb8fc25",
+              "claimed_grant_id": null
+            }
+          ],
+          "decisions": [
+            {
+              "action_id": "act-session-1-1-1",
+              "outcome": "allow",
+              "rule_id": "parent-for-minor",
+              "grant_id": "rule:parent-for-minor",
+              "approver_ids": [],
+              "reasons": [
+                "Ama Okafor-Lim is a guardian of Kofi Okafor-Lim"
+              ]
+            }
+          ],
+          "verdict": "proceed",
+          "model_verdict": "proceed",
+          "needs": [],
+          "notes": [
+            "The requested amount is within Kofi's allowance account balance and below both the auto_limit (10.00) and weekly cap (15.00). No guardian approval is required; this transfer will proceed automatically."
+          ]
+        }
+      ],
+      "receipts": [
+        {
+          "id": "rcpt-88327732356e",
+          "action_id": "act-session-1-1-1",
+          "rail": "internal-ledger",
+          "mode": "SIMULATED",
+          "provider_ref": null,
+          "request_digest": "21c7e874d89436513f91a06d01e4a5d66e22943db4d961568da2f0f5b1b79ab3",
+          "response_digest": "",
+          "at": "2026-09-12T17:18:47.830392+00:00",
+          "executed_under_grant": "rule:parent-for-minor",
+          "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+        }
+      ],
+      "approvals_needed": [],
+      "model_report": {
+        "receipts": [
+          {
+            "id": "rcpt-88327732356e",
+            "action_id": "act-session-1-1-1",
+            "rail": "internal-ledger",
+            "mode": "SIMULATED",
+            "provider_ref": null,
+            "request_digest": "21c7e874d89436513f91a06d01e4a5d66e22943db4d961568da2f0f5b1b79ab3",
+            "response_digest": "",
+            "at": "2026-09-12T17:18:47.830392+00:00",
+            "executed_under_grant": "rule:parent-for-minor",
+            "label_reason": "EXECUTION_MODE=simulated: nothing sent; the receipt carries the digest of the exact request"
+          }
+        ],
+        "skipped": []
+      },
+      "briefing": {
+        "headline_en": "Kofi's $8.00 allowance transfer is approved.",
+        "headline_target": "Kofi's $8.00 allowance transfer is approved.",
+        "done": [
+          "Transferred $8.00 from Kofi's allowance for the bake sale, using rule:parent-for-minor.",
+          "Used the internal ledger (SIMULATED)."
+        ],
+        "waiting_on": [],
+        "labels": [
+          "SIMULATED"
+        ],
+        "next_step_en": "You can now use the money for the bake sale on Friday, September 18, 2026.",
+        "next_step_target": "You can now use the money for the bake sale on Friday, September 18, 2026."
+      },
+      "guard": {
+        "decisions_checked": 1,
+        "overrides": 0,
+        "verdict_overrides": 0,
+        "dropped_proposals": 0,
+        "dropped_receipts": 0,
+        "override": false,
+        "notes": []
+      },
+      "roster": [
+        {
+          "node_id": "intake",
+          "name": "Intake reader",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 3021
+        },
+        {
+          "node_id": "matcher",
+          "name": "Case matcher",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1884
+        },
+        {
+          "node_id": "planner",
+          "name": "Planner",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 2947
+        },
+        {
+          "node_id": "authority",
+          "name": "Authority",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1751
+        },
+        {
+          "node_id": "executor",
+          "name": "Executor",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1781
+        },
+        {
+          "node_id": "briefer",
+          "name": "Briefer",
+          "run": 1,
+          "status": "completed",
+          "execution_ms": 1358
+        }
+      ],
+      "execution_order": [
+        "intake",
+        "matcher",
+        "planner",
+        "authority",
+        "executor",
+        "briefer"
+      ],
+      "graph_status": "completed",
+      "elapsed_ms": 12742,
+      "notes": [],
+      "upload_name": "allowance-note.png",
+      "intake_issues": []
+    }
+  },
+  "redactions": {
+    "arns": 0,
+    "aws_access_key_ids": 0,
+    "aws_account_ids": 0,
+    "emails": 0,
+    "uuids": 0,
+    "hex32": 0,
+    "session_ids": 10,
+    "paths": 0
+  },
+  "sanitizer": "scripts/sanitize_receipt.py: ARNs, AWS account ids, access key ids, emails, session ids, UUIDs and local paths replaced by stable tokens; sha256 request digests kept as evidence"
+}
