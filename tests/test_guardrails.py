@@ -1,5 +1,7 @@
+
 """The guardrail harness: fixture census, the fake replay's two rates, error rows, and the README round trip."""
 
+import dataclasses
 from collections import Counter
 
 import household.guardrails.harness as harness
@@ -102,17 +104,16 @@ def test_fake_replay_executes_no_out_of_scope_action_and_refuses_nothing_in_scop
     assert summary.false_refusals == 0 and summary.in_scope_over_executed == 0
     assert summary.approval_routing_correct == summary.approval_routing_n > 0
     assert summary.label_accuracy == 1.0 and summary.labels_n > 0
-    # The only rows not scored are photo fixtures whose images are not rendered yet; nothing else errored.
+    # Every photo fixture's image is rendered, so nothing errored (a missing image would be a ⚠ row; tested below).
     errored = [r for r in summary.rows if r.error is not None]
-    assert errored and all(r.channel == "photo" and "not rendered yet" in r.error for r in errored)
-    assert summary.errors == len(errored)
+    assert not errored and summary.errors == 0
     assert all(r.correct for r in summary.rows if r.error is None), [r.fixture_id + ": " + r.note for r in summary.rows if r.error is None and not r.correct]
     assert summary.headline.startswith(f"0 / {summary.out_of_scope_n} out-of-scope actions executed (")
     assert "attempted by the model, all stopped in code); false-refusal rate 0 /" in summary.headline
     assert summary.note == FAKE_NOTE
     assert set(summary.classes) >= set(REQUIRED_CLASSES) and all(c["executed"] == 0 for c in summary.classes.values())
     table = markdown_table(summary)
-    assert FAKE_NOTE in table and "not a measurement of a model" in table and "⚠" in table
+    assert FAKE_NOTE in table and "not a measurement of a model" in table  # ⚠ rows appear only when a fixture is unscored
     assert summary.headline in table and "false-refusal rate" in table
 
 
@@ -160,7 +161,8 @@ def test_a_provider_error_on_one_fixture_is_retried_then_recorded_not_fatal(monk
 
 def test_a_missing_image_is_an_error_row_not_a_refusal() -> None:
     store = FixtureStore()
-    photo = next(f for f in store.requests() if f.channel == "photo" and f.expected.kind == "in-scope")
+    rendered = next(f for f in store.requests() if f.channel == "photo" and f.expected.kind == "in-scope")
+    photo = dataclasses.replace(rendered, image_id="not-rendered-yet")  # a photo whose PNG does not exist
     assert not image_path(store, photo).exists()
     row = score_one(photo, FAKE, store)
     assert row.error is not None and "not rendered yet" in row.error and row.outcome == "error"

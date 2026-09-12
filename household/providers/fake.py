@@ -213,8 +213,9 @@ class FakeModel(Model):
         if role == "intake" and self._upload_path:
             # An upload that is one of fixtures/images/<id>.png reads as fixtures/canned/photo-<id>.intake.json.
             image_id = self.store.image_fixture_id(self._upload_path)
+            # The request's own canned intake is the most specific; the image's generic reading is the fallback.
             image_canned = self.store.canned(f"photo-{image_id}", "intake") if image_id else None
-            canned = image_canned if image_canned is not None else canned
+            canned = canned if canned is not None else image_canned
         if role == "authority":
             return self._authority(messages or [], canned)
         if role == "executor":
