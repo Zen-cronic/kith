@@ -59,7 +59,7 @@ RAILS: dict[Rail, dict[str, Any]] = {
     "internal-ledger": {
         "name": "Internal household ledger",
         "label": "COMPLETE when EXECUTION_MODE=live (internal household ledger, no bank rail); SIMULATED otherwise",
-        "real": "A double-entry posting between household accounts in this app's own ledger; balances never go negative. No bank is touched.",
+        "real": "A double-entry posting in this app's own ledger; household and allowance balances never go negative, and an outside payee is an external counterparty account. No bank is touched.",
         "reasons": (LEDGER_LABEL, LEDGER_INSUFFICIENT_LABEL, SIMULATED_LABEL),
     },
     "stripe-test": {
