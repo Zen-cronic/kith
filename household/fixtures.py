@@ -4,6 +4,7 @@ request and node, and seed households."""
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -60,8 +61,9 @@ class RequestFixture:
     actor_member_id: str
     request: str
     household_id: str = "demo"
-    channel: str = "text"  # text | voice-transcript | photo
+    channel: str = "text"  # text | voice-transcript | photo | pdf
     document_id: str | None = None
+    image_id: str | None = None  # fixtures/images/<image_id>.png, attached by stream_session when no upload is given
     overrides: dict[str, str] = field(default_factory=dict)
     expected: RequestExpected = field(default_factory=lambda: RequestExpected("in-scope"))
     tags: tuple[str, ...] = ()
@@ -77,6 +79,7 @@ class RequestFixture:
             household_id=raw.get("household_id", "demo"),
             channel=raw.get("channel", "text"),
             document_id=raw.get("document_id"),
+            image_id=raw.get("image_id"),
             overrides=dict(raw.get("overrides", {})),
             expected=RequestExpected(
                 kind=exp.get("kind", "in-scope"),
@@ -191,6 +194,44 @@ class FixtureStore:
 
     def canned_files(self) -> list[Path]:
         return sorted((self.root / "canned").glob("*.json"))
+
+    # Image fixtures (vision intake): fixtures/images/<id>.png rendered from <id>.truth.json
+
+    def images_dir(self) -> Path:
+        return self.root / "images"
+
+    def image_ids(self) -> list[str]:
+        return sorted(path.name[: -len(".truth.json")] for path in self.images_dir().glob("*.truth.json"))
+
+    def image_path(self, image_id: str) -> Path:
+        path = self.images_dir() / f"{image_id}.png"
+        if not path.exists():
+            raise KeyError(f"unknown image fixture {image_id!r}; run scripts/render_statement_fixtures.py")
+        return path
+
+    def image_truth(self, image_id: str) -> dict[str, Any]:
+        path = self.images_dir() / f"{image_id}.truth.json"
+        if not path.exists():
+            raise KeyError(f"no truth file for image fixture {image_id!r}")
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    def image_fixture_id(self, upload: str | Path | None) -> str | None:
+        """The fixture id when an upload is one of the rendered images: by path, by file name, or by content digest
+        (a copy staged under a temporary name is still the fixture)."""
+        if upload is None:
+            return None
+        path = Path(upload)
+        if not path.is_file():
+            return None
+        ids = set(self.image_ids())
+        if path.stem in ids and path.suffix.lower() == ".png":
+            return path.stem
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        for image_id in sorted(ids):
+            candidate = self.images_dir() / f"{image_id}.png"
+            if candidate.exists() and hashlib.sha256(candidate.read_bytes()).hexdigest() == digest:
+                return image_id
+        return None
 
     # Households
 

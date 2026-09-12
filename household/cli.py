@@ -8,13 +8,14 @@ import json
 import sys
 import textwrap
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 from .agents.graph import describe_graph
 from .agents.roster import ROSTER
 from .config import SELECTABLE, load_settings, provider_readiness
 from .fixtures import FixtureStore
-from .pipeline import SessionResult, stream_session
+from .pipeline import SessionResult, stream_session, upload_request
 from .skills import ALL_SKILLS
 
 
@@ -27,6 +28,8 @@ def render(result: SessionResult) -> str:
     out.append(f"Household  |  provider: {result.provider} ({result.model_id})  |  execution: {result.execution_mode}  |  {result.elapsed_ms} ms")
     out.append(f"Request {result.request_id} from {result.actor_name} ({result.actor_member_id}, {result.language}):")
     out.append(_wrap(result.request_text))
+    if result.upload_name:
+        out.append(f"Attachment: {result.upload_name} (only the intake reader saw the file; every other agent read the transcription)")
     trace = " -> ".join(f"{s.node_id}{'#' + str(s.run) if s.run > 1 else ''}" for s in result.roster)
     skipped = [spec.id for spec in ROSTER if spec.id not in result.execution_order]
     out.append(f"Roster trace: {trace}" + (f"   (skipped: {', '.join(skipped)})" if skipped else ""))
@@ -38,6 +41,8 @@ def render(result: SessionResult) -> str:
             out.append(f"    amount: {a.label}: {a.amount_text}")
         for d in r.dates:
             out.append(f"    date: {d.label}: {d.date_text}")
+        for issue in result.intake_issues:
+            out.append(_wrap("unverified: " + issue))
     if result.assignment:
         a = result.assignment
         out.append(f"[matcher] subject={a.subject_member_id} actor={a.actor_member_id} skill={result.skill_id or a.skill_id} account={a.account_id or '-'}")
@@ -87,7 +92,9 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="household", description="A Strands Agents household authority agent")
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run", help="run one request through the graph")
-    run.add_argument("--request", required=True, help="request fixture id, a path to a request JSON file, or raw text")
+    run.add_argument("--request", default=None, help="request fixture id, a path to a request JSON file, or raw text")
+    run.add_argument("--image", default=None, help="a photo (PNG, JPEG, GIF, WebP) or PDF of a document to show the intake reader; "
+                                                   "alone, the file stands for the request (needs --actor); with --request, both go in")
     run.add_argument("--actor", default=None, help="member id speaking (defaults to the fixture's actor)")
     run.add_argument("--household", default=None, help="household id (defaults to the fixture's household)")
     run.add_argument("--provider", choices=SELECTABLE, default=None, help="override MODEL_PROVIDER")
@@ -112,7 +119,18 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "run":
         settings = load_settings(provider=args.provider)
         store = FixtureStore()
-        fixture = store.request_from(args.request, args.actor)
+        upload = Path(args.image) if args.image else None
+        if args.request is None and upload is None:
+            parser.error("run needs --request, --image, or both")
+        if upload is not None and not upload.is_file():
+            parser.error(f"--image {upload} is not a file")
+        if args.request is not None:
+            fixture = store.request_from(args.request, args.actor)
+        else:
+            try:
+                fixture = upload_request(upload, args.actor, store=store)  # type: ignore[arg-type]
+            except KeyError:
+                parser.error("--image alone needs --actor (whose photo is this?)")
         if args.household:
             fixture = type(fixture)(**{**fixture.__dict__, "household_id": args.household})
         ledger = None
@@ -125,7 +143,8 @@ def main(argv: list[str] | None = None) -> int:
         async def collect() -> tuple[list[dict[str, Any]], SessionResult]:
             events: list[dict[str, Any]] = []
             final: SessionResult | None = None
-            async for event in stream_session(fixture, args.actor, settings=settings, store=store, ledger=ledger, now=datetime.now(UTC)):
+            async for event in stream_session(fixture, args.actor, settings=settings, store=store, ledger=ledger, now=datetime.now(UTC),
+                                              upload=upload):
                 if event["event"] == "result":
                     final = event["result"]
                     continue

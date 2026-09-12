@@ -1,0 +1,11 @@
+{
+  "subject_member_id": "daniel",
+  "actor_member_id": "ama",
+  "skill_id": "benefits",
+  "account_id": "",
+  "confidence": "high",
+  "reasons": [
+    "A Manulife explanation of benefits for dental work: the benefits skill applies.",
+    "The statement names Daniel Lim (plan ML-7), so Daniel is the subject; Ama acts under grant g-daniel-ama-benefits (household_lookup)."
+  ]
+}

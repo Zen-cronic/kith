@@ -17,6 +17,8 @@ import time
 import uuid
 from collections.abc import AsyncIterator
 from datetime import UTC, datetime
+from decimal import Decimal
+from pathlib import Path
 from typing import Any, get_args
 
 from pydantic import BaseModel, Field
@@ -36,6 +38,7 @@ from .agents.roster import ROSTER, SPEC_BY_ID, build_agents
 from .agents.tools import SessionRecord
 from .config import Settings, load_settings
 from .fixtures import Expected, FixtureDocument, FixtureStore, RequestFixture
+from .intake import bind_image_values, bound_money, build_task, pdf_text, read_upload, sniff_format
 from .model import (
     ActionProposal,
     ActionRecord,
@@ -131,6 +134,8 @@ class SessionResult(BaseModel):
     graph_status: str
     elapsed_ms: int
     notes: list[str] = Field(default_factory=list)
+    upload_name: str = ""  # file name of the photo or PDF shown at the session, or ''
+    intake_issues: list[str] = Field(default_factory=list)  # amounts and dates the intake reported but did not transcribe
 
 
 class ApprovalResult(BaseModel):
@@ -168,8 +173,35 @@ def session_task(actor: Member, fixture: RequestFixture) -> str:
     )
 
 
+def session_header(actor: Member, fixture: RequestFixture) -> str:
+    """The first two lines of every task: who is speaking and through which channel."""
+    return f"Member: {actor.name} ({actor.id}), role {actor.role}, language {actor.language}\nChannel: {fixture.channel}\n"
+
+
+def upload_request(
+    upload: Path, actor_member_id: str | None, household_id: str = "demo", store: FixtureStore | None = None
+) -> RequestFixture:
+    """The request a bare upload stands for. A rendered fixture image resolves to its request fixture
+    (photo-<image id>, so its canned outputs and expectations apply); any other file is a one-off request."""
+    store = store or FixtureStore()
+    data = read_upload(upload)
+    fmt = sniff_format(data)
+    image_id = store.image_fixture_id(upload) if fmt != "pdf" else None
+    if image_id is not None and f"photo-{image_id}" in {r.id for r in store.requests()}:
+        fixture = store.request(f"photo-{image_id}")
+        return fixture if actor_member_id is None else RequestFixture(**{**fixture.__dict__, "actor_member_id": actor_member_id})
+    if actor_member_id is None:
+        raise KeyError(f"no actor given for upload {upload.name!r}")
+    if fmt == "pdf":
+        return RequestFixture(id=f"pdf-{upload.stem}", actor_member_id=actor_member_id, request=pdf_text(data), household_id=household_id,
+                              channel="pdf", tags=("adhoc", "upload"), notes=f"PDF {upload.name} shown at the session; not stored as a fixture.")
+    return RequestFixture(id=f"photo-{image_id or upload.stem}", actor_member_id=actor_member_id, request=f"Shown a photo: {upload.name}",
+                          household_id=household_id, channel="photo", tags=("adhoc", "upload"),
+                          notes=f"Photo {upload.name} shown at the session; not stored as a fixture.")
+
+
 async def stream_session(
-    request: RequestFixture | str,
+    request: RequestFixture | str | None,
     actor_member_id: str | None = None,
     *,
     settings: Settings | None = None,
@@ -179,15 +211,29 @@ async def stream_session(
     ledger: LedgerStore | None = None,
     now: datetime | None = None,
     session_manager: Any | None = None,
+    upload: Path | None = None,
 ) -> AsyncIterator[dict[str, Any]]:
     """Run one session and yield events as the graph executes, then the final SessionResult.
 
     Events: session_start, node_start, node_done, action (each proposal + its code decision), approval_needed,
     receipt, result. Errors surface as exceptions (ModelCallLimitExceeded carries its own event shape).
+
+    `upload` is a photo (PNG, JPEG, GIF, WebP) or PDF the member showed. It becomes the intake task; after the intake
+    node the reading is bound to its transcribed lines, and no money action may move an amount that was not bound.
+    With no `request`, the upload stands for the request (see `upload_request`).
     """
     settings = settings or load_settings()
     store = store or FixtureStore()
-    fixture = store.request_from(request, actor_member_id) if isinstance(request, str) else request
+    if isinstance(request, str):
+        fixture = store.request_from(request, actor_member_id)
+    elif request is None:
+        if upload is None:
+            raise ValueError("a request or an upload is required")
+        fixture = upload_request(upload, actor_member_id, store=store)
+    else:
+        fixture = request
+    if upload is None and fixture.image_id is not None:
+        upload = store.image_path(fixture.image_id)
     actor_id = actor_member_id or fixture.actor_member_id
     if household is None:
         household = ledger.load(fixture.household_id) if ledger is not None else store.household(fixture.household_id)
@@ -213,6 +259,7 @@ async def stream_session(
     pending: list[dict[str, Any]] = []  # events produced inside hooks, flushed after the node_done event
     checked: dict[int, Any] = {}
     notes: list[str] = []
+    intake_issues: list[str] = []  # what the image binder could not verify; the planner sees them as needs
 
     def current_skill() -> Skill:
         assignment = assignment_of(graph.state)
@@ -228,10 +275,21 @@ async def stream_session(
         if node_result is None or id(node_result) in checked:
             return
         checked[id(node_result)] = node_result
-        if node_id == "planner":
+        if node_id == "intake" and upload is not None:
+            # Image binder: an amount or date the model did not transcribe leaves the reading and becomes a need.
+            reading = structured_from_node(node_result, IntakeReading)
+            if reading is not None:
+                bound, issues = bind_image_values(reading)
+                node_result.result.structured_output = bound
+                for issue in issues:
+                    intake_issues.append(issue)
+                    guard.note(f"intake binder: {issue}")
+        elif node_id == "planner":
             plan = structured_from_node(node_result, ActionPlan)
             if plan is not None:
-                _register_plan(plan, current_skill(), record, plans, guard, household, actor, session_id)
+                allowed_amounts = bound_money(reading_of(graph.state)) if upload is not None else None
+                _register_plan(plan, current_skill(), record, plans, guard, household, actor, session_id,
+                               allowed_amounts=allowed_amounts, extra_needs=intake_issues)
         elif node_id == "authority":
             verdict = structured_from_node(node_result, AuthorityVerdict)
             corrected = _check_authority(verdict, record, plans, guard, household, now, settings)
@@ -257,12 +315,21 @@ async def stream_session(
                 pending.append({"event": "receipt", "receipt": receipt.model_dump(mode="json")})
 
     def compose(target_id: str, graph_: Any, event: Any) -> str:
-        return _compose_input(target_id, graph_, fixture, actor, household, record, plans, settings)
+        return _compose_input(target_id, graph_, fixture, actor, household, record, plans, settings, intake_issues=intake_issues)
 
     graph = build_graph(agents, settings, compose, on_node_done=apply_guard, session_manager=session_manager)
-    task = session_task(actor, fixture)
+    task: str | list[Any] = session_task(actor, fixture)
     invocation_state = {"request_id": fixture.id, "actor_member_id": actor.id, "language": actor.language,
                         "household_id": household.id, "session_id": session_id}
+    if upload is not None:
+        # The upload is the intake task. Only the intake node ever sees the bytes; every later node reads the
+        # typed reading that compose() renders. The fake provider keys canned readings off upload_path.
+        header = session_header(actor, fixture)
+        if fixture.image_id is None and "upload" not in fixture.tags:
+            header += f"Request:\n{fixture.request}\n"
+        task = build_task(upload, upload.name, preamble=header)
+        invocation_state["upload_path"] = str(upload)
+        invocation_state["upload_kind"] = "pdf" if isinstance(task, str) else "image"
 
     yield {
         "event": "session_start",
@@ -276,6 +343,7 @@ async def stream_session(
         "model_id": settings.model_id,
         "execution_mode": settings.execution_mode,
         "model_calls": budget.snapshot(),
+        "upload": upload.name if upload is not None else None,
         "roster": [{"node_id": s.id, "name": s.name, "job": s.job, "can_reject": s.can_reject, "tools": list(s.tools)} for s in ROSTER],
         "skills": [{"id": s.id, "name": s.name, "action_types": list(s.action_types)} for s in ALL_SKILLS],
     }
@@ -321,7 +389,8 @@ async def stream_session(
     if graph_result is None:
         raise RuntimeError("graph produced no result event")
 
-    session = _finalize(fixture, actor, household, settings, record, graph_result, plans, approvals_needed, guard, steps, elapsed_ms, notes)
+    session = _finalize(fixture, actor, household, settings, record, graph_result, plans, approvals_needed, guard, steps, elapsed_ms, notes,
+                        upload=upload, intake_issues=intake_issues)
     session.model_calls = budget.snapshot()
     session.model_report = model_report["value"]
     if ledger is not None:
@@ -330,7 +399,7 @@ async def stream_session(
 
 
 def run_session(
-    request: RequestFixture | str,
+    request: RequestFixture | str | None,
     actor_member_id: str | None = None,
     *,
     settings: Settings | None = None,
@@ -339,13 +408,14 @@ def run_session(
     household: Household | None = None,
     ledger: LedgerStore | None = None,
     now: datetime | None = None,
+    upload: Path | None = None,
 ) -> SessionResult:
     """Synchronous convenience wrapper around stream_session (CLI, tests, the guardrail harness)."""
 
     async def collect() -> SessionResult:
         final: SessionResult | None = None
         async for event in stream_session(request, actor_member_id, settings=settings, model=model, store=store,
-                                          household=household, ledger=ledger, now=now):
+                                          household=household, ledger=ledger, now=now, upload=upload):
             if event["event"] == "result":
                 final = event["result"]
         assert final is not None
@@ -421,9 +491,12 @@ def _register_plan(
     household: Household,
     actor: Member,
     session_id: str,
+    allowed_amounts: set[Decimal] | None = None,
+    extra_needs: list[str] | None = None,
 ) -> None:
     """Turn the model's proposals into ledger proposals with code-assigned ids and the session actor. Malformed
-    proposals are dropped and noted; they never reach the authority."""
+    proposals are dropped and noted; they never reach the authority. In an upload session `allowed_amounts` holds
+    the amounts bound to transcribed lines: a money action on any other amount is dropped as unverified."""
     revision = record.revision + 1
     ids: list[str] = []
     proposals: list[ActionProposal] = []
@@ -441,9 +514,12 @@ def _register_plan(
         amount = item.amount_text.strip() or None
         if amount is not None:
             try:
-                money(amount)
+                value = money(amount)
             except ValueError as exc:
                 problems.append(str(exc))
+            else:
+                if allowed_amounts is not None and value not in allowed_amounts:
+                    problems.append(f"unverified amount: {amount} is not quoted from a transcribed line of the uploaded document")
         if problems:
             guard.dropped_proposals += 1
             note = f"guard_dropped_proposal (revision {revision}, action {index}): " + "; ".join(problems)
@@ -470,7 +546,8 @@ def _register_plan(
         ids.append(action_id)
         proposals.append(proposal)
     record.plans.append(ids)
-    plans.append(PlanRevision(revision=revision, proposals=proposals, needs=list(plan.needs), notes=list(plan.notes) + dropped))
+    plans.append(PlanRevision(revision=revision, proposals=proposals, needs=list(extra_needs or []) + list(plan.needs),
+                              notes=list(plan.notes) + dropped))
 
 
 def _check_authority(
@@ -564,6 +641,7 @@ def _compose_input(
     record: SessionRecord,
     plans: list[PlanRevision],
     settings: Settings,
+    intake_issues: list[str] | None = None,
 ) -> str:
     """What each node sees: validated typed predecessor outputs, rendered by code. Sections are 'Heading:' lines
     followed by one JSON line, so the fake provider and a reviewer can read them; the request text comes last."""
@@ -585,6 +663,8 @@ def _compose_input(
         revision = record.revision + 1
         parts.append(f"Revision: {revision}")
         parts.append("From intake:\n" + dumps(reading))
+        if intake_issues:
+            parts.append("Unverified from intake (nothing may be proposed on these):\n" + dumps(intake_issues))
         parts.append("From matcher:\n" + dumps(assignment))
         parts.append("Skill block:\n" + skill.prompt())
         parts.append("Household snapshot:\n" + dumps(snapshot_for(household, assignment.subject_member_id)))
@@ -614,6 +694,8 @@ def _compose_input(
         rails = sorted({p.rail for p in record.current_plan()})
         parts.append("Member:\n" + dumps({"id": actor.id, "name": actor.name, "role": actor.role, "language": actor.language}))
         parts.append("From intake:\n" + dumps(reading))
+        if intake_issues:
+            parts.append("Unverified from intake:\n" + dumps(intake_issues))
         parts.append("From matcher:\n" + dumps(assignment))
         parts.append(f"Plan (revision {plans[-1].revision}):\n" + dumps([p.model_dump(mode="json") for p in record.current_plan()]))
         parts.append("Decisions:\n" + dumps([{**d.model_dump(mode="json"), "explanation": authority.explain(d)} for d in decisions]))
@@ -637,6 +719,8 @@ def _finalize(
     steps: list[RosterStep],
     elapsed_ms: int,
     notes: list[str],
+    upload: Path | None = None,
+    intake_issues: list[str] | None = None,
 ) -> SessionResult:
     reading = structured_from_node(result.results.get("intake"), IntakeReading)
     assignment = structured_from_node(result.results.get("matcher"), CaseAssignment)
@@ -681,4 +765,6 @@ def _finalize(
         graph_status=str(result.status).split(".")[-1].lower(),
         elapsed_ms=elapsed_ms,
         notes=notes,
+        upload_name=upload.name if upload is not None else "",
+        intake_issues=list(intake_issues or []),
     )
