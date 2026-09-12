@@ -1,4 +1,9 @@
-"""Create a receipt-owned, IAM-only fixture Runtime preview in explicit steps."""
+"""Create a receipt-owned, scoped-IAM household Runtime preview in explicit steps.
+
+Every resource-creating step (provision, publish, create) is a human gate: run `plan`, show the operator the
+receipt (resource names + the exact IAM policy), and only run the later steps once the operator approves. Read-only
+calls (sts, describe, IAM simulate) never mutate anything.
+"""
 from __future__ import annotations
 
 import argparse
@@ -16,45 +21,91 @@ from botocore.exceptions import ClientError
 from botocore.validate import validate_parameters
 
 REPOSITORY = 'bedrock-agentcore-household-preview'
-ROLE = 'AmazonBedrockAgentCoreFrontDeskPreview'
+ROLE = 'AmazonBedrockAgentCoreHouseholdPreview'
 RUNTIME = 'household_preview'
-POLICY = 'FrontDeskFixtureRuntime'
+POLICY = 'HouseholdRuntime'
+
+# The live household models. Nova 2 Lite is the default node model, Nova Pro the intake reader, Nova 2 Sonic the
+# voice model. Cross-region inference profiles route to the same foundation models in whichever region serves the
+# request, so the underlying foundation-model ARN is named exactly but left region-agnostic (`:*:`); this is a named
+# resource, not a `Resource: "*"` grant.
+INFERENCE_PROFILES = ('us.amazon.nova-pro-v1:0', 'us.amazon.nova-2-lite-v1:0')
+CROSS_REGION_MODELS = ('amazon.nova-pro-v1:0', 'amazon.nova-2-lite-v1:0')
+SONIC_MODEL = 'amazon.nova-2-sonic-v1:0'
+BEDROCK_ACTIONS = ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream', 'bedrock:InvokeModelWithBidirectionalStream']
+
+ENVIRONMENT = {
+    'MODEL_PROVIDER': 'bedrock',
+    'BEDROCK_MODEL_ID': 'us.amazon.nova-2-lite-v1:0',
+    'NODE_MODELS': 'intake=bedrock:us.amazon.nova-pro-v1:0',
+    'SONIC_MODEL_ID': SONIC_MODEL,
+    'EXECUTION_MODE': 'live',
+    'MAX_MODEL_CALLS': '30',
+    'OTEL_SDK_DISABLED': 'true',
+}
 
 
-def plan(account: str, region: str, image: str, commit: str, owner: str) -> dict:
+def bedrock_resources(account: str, region: str) -> list[str]:
+    root = f'arn:aws:bedrock:{region}:{account}:inference-profile'
+    resources = [f'{root}/{profile}' for profile in INFERENCE_PROFILES]
+    resources += [f'arn:aws:bedrock:*::foundation-model/{model}' for model in CROSS_REGION_MODELS]
+    resources.append(f'arn:aws:bedrock:{region}::foundation-model/{SONIC_MODEL}')
+    return resources
+
+
+def iam_policy(account: str, region: str, ses_from: str | None) -> dict:
+    logs = f'arn:aws:logs:{region}:{account}:log-group:/aws/bedrock-agentcore/runtimes/{RUNTIME}-*'
+    statements = [
+        {'Sid': 'PullImage', 'Effect': 'Allow', 'Action': ['ecr:BatchGetImage', 'ecr:GetDownloadUrlForLayer'],
+         'Resource': f'arn:aws:ecr:{region}:{account}:repository/{REPOSITORY}'},
+        # ecr:GetAuthorizationToken has no resource-level scoping in AWS; `Resource: "*"` is mandatory for this action
+        # alone and is the only unscoped grant in this policy.
+        {'Sid': 'EcrAuth', 'Effect': 'Allow', 'Action': 'ecr:GetAuthorizationToken', 'Resource': '*'},
+        {'Sid': 'LogGroup', 'Effect': 'Allow', 'Action': ['logs:CreateLogGroup', 'logs:DescribeLogStreams'], 'Resource': logs},
+        {'Sid': 'LogStream', 'Effect': 'Allow', 'Action': ['logs:CreateLogStream', 'logs:PutLogEvents'], 'Resource': logs + ':log-stream:*'},
+        {'Sid': 'InvokeModels', 'Effect': 'Allow', 'Action': BEDROCK_ACTIONS, 'Resource': bedrock_resources(account, region)},
+    ]
+    if ses_from:
+        statements.append({
+            'Sid': 'SendMail', 'Effect': 'Allow', 'Action': ['ses:SendEmail', 'ses:SendRawEmail'],
+            'Resource': f'arn:aws:ses:{region}:{account}:identity/{ses_from}',
+            'Condition': {'StringEquals': {'ses:FromAddress': ses_from}},
+        })
+    return {'Version': '2012-10-17', 'Statement': statements}
+
+
+def plan(account: str, region: str, image: str, commit: str, owner: str, ses_from: str | None = None) -> dict:
     if not re.fullmatch(r'\d{12}', account) or region != 'us-east-1':
         raise ValueError('Expected a 12-digit account and the verified us-east-1 region')
     if not re.fullmatch(r'sha256:[0-9a-f]{64}', image) or not re.fullmatch(r'[0-9a-f]{40}', commit):
         raise ValueError('Use the full verified image ID and source commit')
     root = f'arn:aws:bedrock-agentcore:{region}:{account}'
-    logs = f'arn:aws:logs:{region}:{account}:log-group:/aws/bedrock-agentcore/runtimes/{RUNTIME}-*'
+    tags = {'Project': 'household', 'Purpose': 'runtime-preview', 'DeploymentOwner': owner}
+    environment = {**ENVIRONMENT, 'AWS_REGION': region}
+    if ses_from:
+        environment['SES_FROM'] = ses_from
     return {
         'account': account, 'region': region, 'imageId': image, 'sourceCommit': commit,
-        'owner': owner, 'repository': REPOSITORY, 'role': ROLE,
-        'tags': {'Project': 'household', 'Purpose': 'fixture-preview', 'DeploymentOwner': owner},
-        'trust': {'Version': '2012-10-17', 'Statement': [{
-            'Effect': 'Allow', 'Principal': {'Service': 'bedrock-agentcore.amazonaws.com'},
-            'Action': 'sts:AssumeRole', 'Condition': {
-                'StringEquals': {'aws:SourceAccount': account},
-                'ArnLike': {'aws:SourceArn': f'{root}:runtime/{RUNTIME}-*'},
-            },
-        }]},
-        'policy': {'Version': '2012-10-17', 'Statement': [
-            {'Effect': 'Allow', 'Action': ['ecr:BatchGetImage', 'ecr:GetDownloadUrlForLayer'],
-             'Resource': f'arn:aws:ecr:{region}:{account}:repository/{REPOSITORY}'},
-            {'Effect': 'Allow', 'Action': 'ecr:GetAuthorizationToken', 'Resource': '*'},
-            {'Effect': 'Allow', 'Action': ['logs:CreateLogGroup', 'logs:DescribeLogStreams'], 'Resource': logs},
-            {'Effect': 'Allow', 'Action': ['logs:CreateLogStream', 'logs:PutLogEvents'], 'Resource': logs + ':log-stream:*'},
-            {'Effect': 'Allow', 'Action': 'logs:DescribeLogGroups', 'Resource': f'arn:aws:logs:{region}:{account}:log-group:*'},
-        ]},
+        'owner': owner, 'repository': REPOSITORY, 'sesFrom': ses_from, 'tags': tags,
+        'iam': {
+            'role': ROLE,
+            'policyName': POLICY,
+            'trust': {'Version': '2012-10-17', 'Statement': [{
+                'Effect': 'Allow', 'Principal': {'Service': 'bedrock-agentcore.amazonaws.com'},
+                'Action': 'sts:AssumeRole', 'Condition': {
+                    'StringEquals': {'aws:SourceAccount': account},
+                    'ArnLike': {'aws:SourceArn': f'{root}:runtime/{RUNTIME}-*'},
+                },
+            }]},
+            'policy': iam_policy(account, region, ses_from),
+        },
         'runtimeRequest': {
             'agentRuntimeName': RUNTIME, 'roleArn': f'arn:aws:iam::{account}:role/{ROLE}',
             'networkConfiguration': {'networkMode': 'PUBLIC'},
             'protocolConfiguration': {'serverProtocol': 'HTTP'},
-            'lifecycleConfiguration': {'idleRuntimeSessionTimeout': 60, 'maxLifetime': 300},
-            'environmentVariables': {'MODEL_PROVIDER': 'fake', 'AWS_REGION': region,
-                                     'MAX_MODEL_CALLS': '20', 'OTEL_SDK_DISABLED': 'true'},
-            'description': 'Front Desk fixture preview; IAM access; no live model or Memory',
+            'lifecycleConfiguration': {'idleRuntimeSessionTimeout': 300, 'maxLifetime': 1800},
+            'environmentVariables': environment,
+            'description': 'Household runtime preview; scoped IAM for Bedrock (text + Nova Sonic voice); no Memory',
         },
     }
 
@@ -117,18 +168,19 @@ def provision(session, state, path):
     state['repositoryUri'] = repo['repositoryUri']
     state['repositoryArn'] = repo['repositoryArn']
     save(path, state)
+    trust = state['iam']['trust']
     try:
         role = iam.get_role(RoleName=ROLE)['Role']
         require_owner({t['Key']: t['Value'] for t in role.get('Tags', [])}, state)
-        if role['AssumeRolePolicyDocument'] != state['trust']:
+        if role['AssumeRolePolicyDocument'] != trust:
             raise ValueError('Owned role trust drifted; refusing to replace it')
     except ClientError as exc:
         if exc.response['Error']['Code'] != 'NoSuchEntity':
             raise
-        role = iam.create_role(RoleName=ROLE, AssumeRolePolicyDocument=json.dumps(state['trust']), Tags=tags)['Role']
+        role = iam.create_role(RoleName=ROLE, AssumeRolePolicyDocument=json.dumps(trust), Tags=tags)['Role']
     state['roleArn'] = role['Arn']
     save(path, state)
-    iam.put_role_policy(RoleName=ROLE, PolicyName=POLICY, PolicyDocument=json.dumps(state['policy']))
+    iam.put_role_policy(RoleName=ROLE, PolicyName=POLICY, PolicyDocument=json.dumps(state['iam']['policy']))
     state['provisioned'] = True
     save(path, state)
 
@@ -180,25 +232,42 @@ def create(session, state, path):
     save(path, state)
 
 
+def resolve_image(explicit: str | None) -> str:
+    if explicit:
+        return explicit
+    # The verified local artifact built by check 2; its Id is the digest the plan pins.
+    info = json.loads(subprocess.check_output(['docker', 'image', 'inspect', 'household:runtime'], text=True))[0]
+    return info['Id']
+
+
+def resolve_commit(explicit: str | None) -> str:
+    return explicit or subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['plan', 'provision', 'publish', 'create', 'status'])
     parser.add_argument('--state', type=Path, default=Path('runs/aws-preview/deployment.json'))
     parser.add_argument('--profile', default='hackathon-1')
-    parser.add_argument('--account', required=True)
+    parser.add_argument('--account')
     parser.add_argument('--image')
     parser.add_argument('--commit')
+    parser.add_argument('--ses-from', default=None)
     args = parser.parse_args()
     if args.action == 'plan':
         if args.state.exists():
             raise ValueError('Receipt already exists; preserve it for ownership and recovery')
+        session = boto3.Session(profile_name=args.profile, region_name='us-east-1')
+        account = args.account or client(session, 'sts').get_caller_identity()['Account']
         args.state.parent.mkdir(parents=True, exist_ok=True)
-        state = plan(args.account, 'us-east-1', args.image or '', args.commit or '', str(uuid.uuid4()))
+        state = plan(account, 'us-east-1', resolve_image(args.image), resolve_commit(args.commit), str(uuid.uuid4()),
+                     ses_from=args.ses_from)
         save(args.state, state)
     else:
         state = json.loads(args.state.read_text())
         session = boto3.Session(profile_name=args.profile, region_name=state['region'])
-        if args.account != state['account'] or client(session, 'sts').get_caller_identity()['Account'] != args.account:
+        account = args.account or state['account']
+        if account != state['account'] or client(session, 'sts').get_caller_identity()['Account'] != account:
             raise ValueError('AWS account does not match the deployment receipt')
         if args.action == 'status':
             response = client(session, 'bedrock-agentcore-control').get_agent_runtime(agentRuntimeId=state['runtimeId'])
