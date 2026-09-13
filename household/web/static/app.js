@@ -2,9 +2,12 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const Q = window.HouseholdQueue;
+  const P = window.HouseholdPip;
   const el = Q.el;
   const LANGUAGE_NAMES = { en: "English", es: "Español", fr: "Français" };
+  const MEMBER_ACCENTS = ["--m-coral", "--m-blue", "--m-teal", "--m-plum", "--m-amber"];
   const state = { meta: null, household: null, fixtures: [], member: null, token: null, fixtureId: null, upload: null, generation: 0, request: null, session: null };
+  if (P) P.renderAll();
 
   // Context shared with queue.js
 
@@ -83,6 +86,36 @@
     renderLedger();
     Q.renderQueue($("queue"), state.household.actions, ctx);
     Q.renderReceipts($("receipts"), state.household.receipts.map((r) => withAction(r)), ctx);
+    updateHomeGreeting();
+  }
+
+  // Pip greets the identified member by name and reflects the household's current state.
+  function updateHomeGreeting() {
+    if (!state.member || !state.household || !P) return;
+    const first = state.member.name.split(" ")[0];
+    const pending = state.household.actions.filter((a) => a.status === "needs-approval").length;
+    const done = state.household.receipts.length;
+    $("home-greeting-text").textContent = `Hi ${first}! I'm Pip. Tell me what you need below.`;
+    $("home-greeting-sub").textContent = pending
+      ? `${pending} thing${pending === 1 ? "" : "s"} waiting on a grown-up · ${done} receipt${done === 1 ? "" : "s"} so far`
+      : done ? `${done} receipt${done === 1 ? "" : "s"} so far — ask me for the next thing.`
+        : "Ready when you are.";
+    P.setMood($("pip-home"), pending ? "waiting" : done ? "done" : "idle");
+  }
+
+  // Pip's session face mirrors the worst honesty label on screen; waiting wins when a grown-up is still needed.
+  function updateSessionPip() {
+    const s = state.session; if (!s || !P) return;
+    const pending = s.approvals.filter((a) => !s.decided[a.action_id]).length;
+    const modes = Object.values(s.receipts).map((r) => r.mode)
+      .concat(Object.values(s.decided).filter((d) => d.receipt).map((d) => d.receipt.mode));
+    let mood, speech;
+    if (!s.result && !modes.length) { mood = "thinking"; speech = "Working on it…"; }
+    else if (pending) { mood = "waiting"; speech = "One thing needs a grown-up — I set it aside for a PIN."; }
+    else if (modes.length) { mood = P.moodFromModes(modes, false); speech = "All done — here is your receipt."; }
+    else { mood = "idle"; speech = "All set."; }
+    P.setMood($("pip-session"), mood);
+    $("pip-session-speech").textContent = speech;
   }
 
   function withAction(receipt) {
@@ -102,8 +135,10 @@
     const h = state.household;
     $("household-name").textContent = h.name;
     const grid = $("member-grid"); grid.replaceChildren();
-    h.members.forEach((m) => {
+    h.members.forEach((m, i) => {
       const card = el("button", "member-card"); card.type = "button"; card.dataset.memberId = m.id; card.dataset.role = m.role;
+      card.style.setProperty("--m", `var(${MEMBER_ACCENTS[i % MEMBER_ACCENTS.length]})`);
+      card.appendChild(el("span", "avatar", (m.name.trim()[0] || "?").toUpperCase()));
       card.appendChild(el("span", "name", m.name));
       card.appendChild(memberMeta(m));
       card.appendChild(el("span", "note", m.role === "minor" ? "Asks for themself; a guardian approves what is above their allowance rule." : "Decides for themself and approves for the children."));
@@ -295,6 +330,7 @@
     ["approvals", "session-receipts", "briefing-done", "briefing-waiting", "briefing-labels", "guard-notes"].forEach((id) => { $(id).replaceChildren(); });
     $("outcome-chip").className = "chip outcome";
     document.querySelectorAll(".agent").forEach((li) => { li.className = "agent"; const st = li.querySelector(".state"); st.textContent = ""; st.className = "state"; });
+    if (P) { P.setMood($("pip-session"), "thinking"); $("pip-session-speech").textContent = "Working on it…"; }
   }
 
   async function startSession(body, title) {
@@ -470,6 +506,7 @@
     $("executor-body").appendChild(Q.receiptRow(enriched, ctx));
     $("session-receipts").appendChild(Q.receiptRow(enriched, ctx));
     $("executor-card").hidden = false; $("session-receipts-card").hidden = false;
+    updateSessionPip();
   }
 
   function renderApproval(ev) {
@@ -499,6 +536,7 @@
     $("briefing-next").lang = lang;
     const labels = $("briefing-labels"); labels.replaceChildren(); (b.labels || []).forEach((mode) => labels.appendChild(Q.modeChip(mode)));
     $("briefing-card").hidden = false;
+    updateSessionPip();
   }
 
   function renderGuard(result) {
@@ -520,6 +558,21 @@
     chip.className = `chip outcome outcome-${outcome === "executed" ? "allow" : outcome === "needs-approval" || outcome === "partial" ? "needs-approval" : outcome === "no-action" ? "none" : "block"}`;
     chip.textContent = { executed: "done", "needs-approval": "waiting for approval", partial: "partly done, waiting for approval", blocked: "blocked", "no-action": "nothing to do", declined: "declined" }[outcome] || outcome;
     chip.hidden = false;
+    // Once a grown-up has decided every pending approval, the "waiting" briefing is stale — settle it honestly.
+    // The exact amount, approver name and label live in the receipt below; this only clears the contradiction.
+    if (s.approvals.length && !pending && !$("briefing-card").hidden) {
+      const bh = $("briefing-headline");
+      if (outcome === "executed" || outcome === "partial") {
+        bh.textContent = "Approved — the receipt is below."; bh.lang = "en";
+        $("briefing-next").textContent = "The receipt below is the proof; nothing else is waiting.";
+      } else if (outcome === "declined") {
+        bh.textContent = "Declined — nothing moved."; bh.lang = "en";
+        $("briefing-next").textContent = "The decline is recorded in the ledger.";
+      }
+      $("briefing-headline-en").textContent = "";
+      $("briefing-waiting-row").hidden = true;
+    }
+    updateSessionPip();
   }
 
   $("back-home").onclick = async () => { resetSession(); await loadHousehold(); show("home"); };

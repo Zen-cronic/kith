@@ -4,21 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kith</title>
-<meta name="theme-color" content="#F4F1E9">
-<link rel="preload" href="/static/fonts/fraunces.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="preload" href="/static/fonts/manrope.ttf" as="font" type="font/ttf" crossorigin>
+<meta name="theme-color" content="#FBF6EC">
+<link rel="preload" href="/static/fonts/fredoka.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/atkinson.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="/" aria-label="Kith home"><span class="brand-mark" aria-hidden="true"><i></i><i></i></span><strong>Kith<span class="brand-period">.</span></strong></a>
+  <a class="brand" href="/" aria-label="Kith home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="26" height="26"><path d="M16 4 L28 14 v13 a2 2 0 0 1-2 2 H6 a2 2 0 0 1-2-2 V14 Z" fill="var(--primary)"/><circle cx="12" cy="21" r="1.7" fill="var(--primary-ink)"/><circle cx="20" cy="21" r="1.7" fill="var(--primary-ink)"/><path d="M12 24.5 q4 3 8 0" stroke="var(--primary-ink)" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+    </span>
+    <strong>Kith<span class="brand-period">.</span></strong>
+  </a>
   <ol class="steps" id="steps">
     <li data-step="members" class="current">Members</li>
     <li data-step="home">Home</li>
     <li data-step="session">Session</li>
   </ol>
   <div class="topbar-right">
-    <span class="mono" id="provider-line">Loading…</span>
+    <span class="provider-tag" id="provider-line">Loading…</span>
     <span class="who-line" id="who-line" hidden></span>
     <button class="btn ghost" id="switch-member" hidden>Switch member</button>
   </div>
@@ -26,9 +31,13 @@
 
 <main id="screen-members" class="screen single welcome">
   <section class="welcome-story">
-    <span class="eyebrow"><span class="tiny-rule"></span> Who is speaking?</span>
+    <div class="pip-hero">
+      <div class="pip" data-mood="idle" id="pip-welcome"></div>
+      <p class="pip-speech" id="pip-welcome-speech">Hi, I'm Pip — your household helper. Tap your card and I'll get started.</p>
+    </div>
+    <span class="eyebrow"><span class="tiny-rule"></span> Who is here?</span>
     <h1 class="display">One household.<br>Everyone decides <em>their part.</em></h1>
-    <p class="lead">Pick your card and enter your PIN. The agent knows who may decide what for whom: it completes what it is allowed to and proves it with a receipt, and it routes the rest to the right parent for one tap.</p>
+    <p class="lead">Pick your card and enter your PIN. Pip knows who may decide what for whom: it does the work it's allowed to and proves it with a receipt, and routes the rest to the right grown-up for one tap.</p>
     <div id="service-unavailable" hidden>
       <p class="staff-note" id="startup-error" role="alert"></p>
       <button class="btn ghost" id="reload-service">Reload</button>
@@ -53,6 +62,14 @@
 </main>
 
 <main id="screen-home" class="screen home" hidden>
+  <section class="home-greeting">
+    <div class="pip" data-mood="idle" id="pip-home"></div>
+    <div class="greeting-copy">
+      <p class="pip-speech" id="home-greeting-text">Hi!</p>
+      <p class="home-greeting-sub" id="home-greeting-sub"></p>
+    </div>
+  </section>
+
   <section class="column ledger">
     <div class="pane-head"><strong>Ledger</strong><span class="muted small">Who may decide what for whom</span></div>
     <article class="card"><h2>Members</h2><div id="ledger-members"></div></article>
@@ -73,7 +90,7 @@
         <button class="btn ghost compact" id="upload-clear" type="button" hidden>Remove</button>
       </div>
       <p class="small muted" id="upload-note"></p>
-      <div class="row"><button class="btn primary" id="run-request">Ask the household agent</button></div>
+      <div class="row"><button class="btn primary" id="run-request">Ask Pip</button></div>
       <div class="row voice-row">
         <button class="btn ghost" id="talk" type="button">Talk instead</button>
         <span class="small muted" id="voice-banner" role="status"></span>
@@ -117,6 +134,10 @@
   </section>
 
   <section class="member-pane" id="member-pane">
+    <div class="pip-present">
+      <div class="pip" data-mood="thinking" id="pip-session"></div>
+      <p class="pip-speech" id="pip-session-speech">Working on it…</p>
+    </div>
     <div class="pane-head member-head"><strong id="member-pane-title">For you</strong><span class="chip outcome" id="outcome-chip" hidden></span></div>
     <article class="card briefing" id="briefing-card" hidden>
       <span class="eyebrow">What happened</span>
@@ -130,7 +151,7 @@
       <div class="chips" id="briefing-labels"></div>
     </article>
     <article class="card" id="approvals-card" hidden><h2>Waiting for approval</h2><div id="approvals"></div></article>
-    <article class="card" id="session-receipts-card" hidden><h2>Receipts</h2><div id="session-receipts"></div></article>
+    <article class="card receipt-card" id="session-receipts-card" hidden><h2>Pip hands you the receipt</h2><div id="session-receipts"></div></article>
     <article class="card" id="guard-card" hidden><h2>Authority guard</h2><p id="guard-text" class="small"></p><ul id="guard-notes" class="small muted"></ul></article>
   </section>
 </main>
@@ -139,10 +160,11 @@
   <h2 id="wir-heading">What is real</h2>
   <p class="small" id="wir-env"></p>
   <ul class="wir-rails" id="wir-rails"></ul>
-  <details class="wir-more"><summary>How labels are decided</summary><p class="small" id="wir-intro"></p></details>
+  <details class="wir-more"><summary>How Pip keeps it honest</summary><p class="small" id="wir-intro"></p></details>
 </aside>
 
 <script src="/static/queue.js"></script>
+<script src="/static/pip.js"></script>
 <script src="/static/app.js"></script>
 </body>
 </html>
