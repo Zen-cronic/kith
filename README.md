@@ -233,7 +233,6 @@ Two routes carry a `.before-fix.json` counterpart, kept on purpose to show the e
 - **No real family.** The demo household, its members, PINs, grants, and documents are fictional and synthetic.
 - **Voice and statements are synthetic.** The voice audio is a recorded fixture; provider references on receipts are masked in the UI.
 - **Channels beyond web/voice/CLI are roadmap.** The identity and trust seam exists in code; Telegram, SMS, and Alexa+ adapters are not wired in.
-- **The mascot redesign is planned, not built.** The shipped UI is the editorial screen shown above.
 
 ## License
 

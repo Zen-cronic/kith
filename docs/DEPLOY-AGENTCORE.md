@@ -20,7 +20,7 @@ is a separate review; this packet proves the container and deployment shape, not
 ## 1. Reproduce locally (no AWS)
 
 ```bash
-cd ~/code/hackathons/agentsforhumans-2026/placeholder-2-s1
+cd <kith-repo-root>
 export VIRTUAL_ENV="$HOME/.pyenv/versions/.agentsforhumans-home"
 export PATH="$VIRTUAL_ENV/bin:$PATH"
 MODEL_PROVIDER=fake OTEL_SDK_DISABLED=true python -m pytest tests/test_agentcore_app.py
