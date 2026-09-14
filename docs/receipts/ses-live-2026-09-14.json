@@ -1,0 +1,13 @@
+{
+  "id": "rcpt-f7322fbbbd8c",
+  "action_id": "ses-live-proof",
+  "rail": "ses-email",
+  "mode": "COMPLETE",
+  "provider_ref": "010001a0a0f7c25d-c27c25bd-52f0-4271-a2e7-1cf64a4ca7c0-000000",
+  "request_digest": "9a85da3904efc3ddec1c971881801593991fcc6e9618bca3c8c844a8468d8b94",
+  "response_digest": "aaaac8a34a044ac6d438ce166d231dd1eec7d2e46498da65d8920bac00442537",
+  "at": "2026-09-14T17:29:46.467990+00:00",
+  "executed_under_grant": null,
+  "label_reason": "SES sandbox: verified identities only",
+  "_note": "Live Amazon SES send through Kith's production ses-email rail (household.executor.execute with EXECUTION_MODE=live, us-east-1). provider_ref is the real SES MessageId returned by sesv2.send_email. The email:send action delivered a prepared coordination-of-benefits document to the responsible adult; the account is in the SES sandbox, so the recipient is a verified identity (the operator's own address, masked here alongside the sender). Regenerate with EXECUTION_MODE=live against a verified SES identity."
+}

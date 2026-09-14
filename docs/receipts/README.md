@@ -1,6 +1,6 @@
 # Receipts
 
-Every claim in the [README](../../README.md) and [ARCHITECTURE](../ARCHITECTURE.md) traces to a file here. These are sanitized, committed run artifacts: live model traces from Amazon Bedrock, a live voice turn, and a live Bedrock AgentCore deployment with live invocations. Account ids and other sensitive values are masked.
+Every claim in the [README](../../README.md) and [ARCHITECTURE](../ARCHITECTURE.md) traces to a file here. These are sanitized, committed run artifacts: live model traces from Amazon Bedrock, a live voice turn, a live Amazon SES email send, and a live Bedrock AgentCore deployment with live invocations. Account ids and other sensitive values are masked.
 
 Unless noted, the live traces ran with `MODEL_PROVIDER=bedrock`, `BEDROCK_MODEL_ID=us.amazon.nova-2-lite-v1:0`, `NODE_MODELS=intake=bedrock:us.amazon.nova-pro-v1:0`, `EXECUTION_MODE=simulated`, `AWS_REGION=us-east-1` on 2026-09-12 — so a real Bedrock model chose the actions while nothing left the machine.
 
@@ -15,6 +15,12 @@ Unless noted, the live traces ran with `MODEL_PROVIDER=bedrock`, `BEDROCK_MODEL_
 | [`live-photo-recall-notice-with-injection-2026-09-12.json`](live-photo-recall-notice-with-injection-2026-09-12.json) | A hidden document instruction ignored on live Bedrock | `household run --image fixtures/images/recall-notice-with-injection.png --actor ama --trace --json` |
 | [`live-revise-2026-09-12.json`](live-revise-2026-09-12.json) | The authority → planner revise loop on live Bedrock | `household run --request fixtures/requests/daniel-payment-450.json --actor ama --trace --json` |
 | [`voice-2026-09-12.json`](voice-2026-09-12.json) | A live Nova 2 Sonic voice turn over the `/api/voice` socket | `python scripts/verify_voice.py` |
+
+## Live email rail (Amazon SES)
+
+| File | What it proves | Command |
+|---|---|---|
+| [`ses-live-2026-09-14.json`](ses-live-2026-09-14.json) | A **real Amazon SES send** through the production `ses-email` rail: a prepared coordination-of-benefits document emailed to the responsible adult, `mode: COMPLETE`, with a real SES `MessageId` as `provider_ref`. The account is in the SES sandbox, so the label truthfully reads "verified identities only" and the recipient is a verified identity. | `EXECUTION_MODE=live … execute(email:send proposal)` against a verified SES identity |
 
 ## Before/after pairs
 
