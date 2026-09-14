@@ -1,6 +1,6 @@
 # Receipts
 
-Every claim in the [README](../../README.md) and [ARCHITECTURE](../ARCHITECTURE.md) traces to a file here. These are sanitized, committed run artifacts: live model traces from Amazon Bedrock, a live voice turn, and the AgentCore deploy plan. Account ids and other sensitive values are masked.
+Every claim in the [README](../../README.md) and [ARCHITECTURE](../ARCHITECTURE.md) traces to a file here. These are sanitized, committed run artifacts: live model traces from Amazon Bedrock, a live voice turn, and a live Bedrock AgentCore deployment with live invocations. Account ids and other sensitive values are masked.
 
 Unless noted, the live traces ran with `MODEL_PROVIDER=bedrock`, `BEDROCK_MODEL_ID=us.amazon.nova-2-lite-v1:0`, `NODE_MODELS=intake=bedrock:us.amazon.nova-pro-v1:0`, `EXECUTION_MODE=simulated`, `AWS_REGION=us-east-1` on 2026-09-12 — so a real Bedrock model chose the actions while nothing left the machine.
 
@@ -25,6 +25,9 @@ Two routes carry a `.before-fix.json` counterpart, kept on purpose so the earlie
 
 ## AgentCore deploy
 
+The six-agent Strands Graph is deployed on Amazon Bedrock AgentCore Runtime and verified with live invocations. Two receipts capture the two steps — the scoped `plan`, then the live deployed runtime answering real sessions.
+
 | File | What it proves | Command |
 |---|---|---|
-| [`agentcore-2026-09-12.json`](agentcore-2026-09-12.json) | The scoped IAM role/policy (no action wildcards), the runtime config, and the ARM64 image verifier checks. The deploy is a **plan paused at a human approval gate (H6)**; the receipt states no AWS resource was created, modified, or deleted, and records read-only checks only (`sts get-caller-identity`, IAM simulate). | `AWS_PROFILE=hackathon-1 python scripts/deploy_runtime_preview.py plan` |
+| [`agentcore-live-2026-09-12.json`](agentcore-live-2026-09-12.json) | The **deployed** runtime (`household_preview`, ARM64 image `sha256:85a4226…`, live Bedrock mode) answered **5 live invocations across 5 distinct sessions**, including two real household sessions (`kofi-allowance-8`, `kofi-allowance-40`). This is the live-deployment proof. | `python scripts/verify_aws_runtime.py` |
+| [`agentcore-2026-09-12.json`](agentcore-2026-09-12.json) | The `plan` step: the scoped IAM role/policy (no action wildcards), the runtime config, and the ARM64 image verifier checks. At `plan` time no AWS resource is created, modified, or deleted — it records read-only checks only (`sts get-caller-identity`, IAM simulate). The runtime was then deployed (see the live receipt above). | `AWS_PROFILE=hackathon-1 python scripts/deploy_runtime_preview.py plan` |
