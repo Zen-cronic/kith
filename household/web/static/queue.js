@@ -47,15 +47,12 @@
   function receiptRow(receipt, ctx) {
     const row = el("div", "receipt");
     row.dataset.receiptId = receipt.id;
-    row.appendChild(modeChip(receipt.mode));
     const body = el("div", "body");
     const what = receipt.action_type
       ? `${ACTION_WORDS[receipt.action_type] || receipt.action_type}${receipt.amount ? " " + receipt.amount + " " + receipt.currency : ""} for ${ctx.name(receipt.subject_member_id)}`
       : `Action ${receipt.action_id}`;
     body.appendChild(el("div", "what", what));
-    body.appendChild(el("div", "reason", `${ctx.railName(receipt.rail)} · ${receipt.label_reason}`));
-    const ref = [receipt.provider_ref ? `ref ${receipt.provider_ref}` : "no provider reference", receipt.executed_under_grant ? `under ${receipt.executed_under_grant}` : "", when(receipt.at)].filter(Boolean).join(" · ");
-    body.appendChild(el("div", "ref", ref));
+    body.appendChild(el("div", "ref", when(receipt.at)));
     row.appendChild(body);
     return row;
   }

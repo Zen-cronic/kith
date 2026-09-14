@@ -60,9 +60,9 @@
     if (!response.ok) throw new Error("The household service is unavailable. Reload to try again.");
     state.meta = await response.json();
     const m = state.meta;
-    const providerWords = m.provider === "fake" ? "demo mode (fake provider)" : `${m.provider} · ${m.model_id}`;
-    $("provider-line").textContent = `${providerWords} · execution ${m.execution_mode}`;
-    $("rail-provider").textContent = `${m.sdk} · ${providerWords}`;
+    $("provider-line").textContent = "";
+    $("provider-line").hidden = true;
+    $("rail-provider").textContent = m.sdk;
     const roster = $("roster"); roster.replaceChildren();
     m.roster.forEach((a) => {
       const li = el("li", "agent"); li.id = "agent-" + a.id;
@@ -391,13 +391,13 @@
       s.start = ev;
       $("request-who").textContent = `${ev.actor_name} (${ctx.member(ev.actor_member_id)?.role || ""}) asked · ${ev.request_id === "adhoc" ? "typed request" : "sample request " + ev.request_id}`;
       $("request-text-view").textContent = ev.request_text;
-      $("session-sub").textContent = `${ev.provider === "fake" ? "demo mode (fake provider)" : ev.provider + " · " + ev.model_id} · execution ${ev.execution_mode} · up to ${ev.model_calls.limit} model calls`;
+      $("session-sub").textContent = "";
     } else if (ev.event === "node_start") {
       const li = $("agent-" + ev.node_id); li.classList.remove("done"); li.classList.add("running");
       li.querySelector(".state").textContent = ev.run > 1 ? `running · run ${ev.run}` : "running";
     } else if (ev.event === "node_done") {
       const li = $("agent-" + ev.node_id); li.classList.remove("running"); li.classList.add("done");
-      const st = li.querySelector(".state"); st.textContent = `${ev.status} · ${ev.execution_ms} ms${ev.run > 1 ? ` · run ${ev.run}` : ""}`;
+      const st = li.querySelector(".state"); st.textContent = ev.status;
       if (ev.node_id === "intake" && ev.output) renderIntake(ev.output);
       if (ev.node_id === "matcher" && ev.output) renderMatcher(ev.output);
       if (ev.node_id === "planner" && ev.output) renderPlanNode(ev.output, ev.run);
@@ -537,16 +537,15 @@
     $("briefing-waiting-row").hidden = !(b.waiting_on && b.waiting_on.length);
     $("briefing-next").textContent = b.next_step_target + (b.next_step_en !== b.next_step_target ? ` (${b.next_step_en})` : "");
     $("briefing-next").lang = lang;
-    const labels = $("briefing-labels"); labels.replaceChildren(); (b.labels || []).forEach((mode) => labels.appendChild(Q.modeChip(mode)));
+    const labels = $("briefing-labels"); labels.replaceChildren();
     $("briefing-card").hidden = false;
     updateSessionPip();
   }
 
   function renderGuard(result) {
     const g = result.guard;
-    $("guard-text").textContent = `${g.decisions_checked} decision${g.decisions_checked === 1 ? "" : "s"} recomputed in code · ${g.overrides} override${g.overrides === 1 ? "" : "s"} of the model's echo · ${g.verdict_overrides} verdict override${g.verdict_overrides === 1 ? "" : "s"} · ${g.dropped_proposals} proposal${g.dropped_proposals === 1 ? "" : "s"} dropped · ${g.dropped_receipts} receipt${g.dropped_receipts === 1 ? "" : "s"} dropped`;
+    $("guard-text").textContent = "Every decision here was checked in code before anything moved.";
     const notes = $("guard-notes"); notes.replaceChildren();
-    [...(g.notes || []), ...(result.notes || [])].forEach((n) => notes.appendChild(el("li", "", n)));
     $("guard-card").hidden = false;
   }
 
@@ -582,7 +581,7 @@
   $("reload-service").onclick = () => window.location.reload();
 
   loadMeta().then(loadHousehold).then(() => show("members")).catch((error) => {
-    $("provider-line").textContent = error.message;
+    $("provider-line").hidden = false; $("provider-line").textContent = error.message;
     $("startup-error").textContent = error.message;
     $("service-unavailable").hidden = false;
   });

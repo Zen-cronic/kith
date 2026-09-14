@@ -27,7 +27,7 @@
       "birth_year": 1982,
       "guardians": [],
       "email": null,
-      "language": "fr",
+      "language": "en",
       "pin_hash": "09bdb86e4be61727d4e5adc737cb4c5c297d770c30fd3f217cc12defdd448e85",
       "pin_salt": "13c4bc0c67b0e50331df298095e450a2",
       "memory_actor_id": "demo.daniel",

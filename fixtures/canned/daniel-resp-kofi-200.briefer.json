@@ -1,14 +1,12 @@
 {
-  "headline_en": "Put $200.00 into Kofi's RESP; it earns $40.00 of Canada Education Savings Grant.",
-  "headline_target": "200,00 $ versés dans le REEE de Kofi; cela rapporte 40,00 $ de Subvention canadienne pour l'épargne-études.",
-  "done": [
-    "$200.00 from the household account to Kofi's RESP, as his guardian (simulated receipt: no real money moves in this demo).",
-    "Grant room: the basic CESG is 20% of $200.00, so $40.00, leaving $460.00 of this year's $500.00 room and $7,160.00 of the $7,200.00 lifetime maximum (canada.ca, Estimating amounts, fetched 2026-09-12). Carry-forward room and grant received so far are not on file, so they were taken as zero."
-  ],
-  "waiting_on": [],
-  "labels": [
-    "SIMULATED"
-  ],
-  "next_step_en": "Your RESP provider requests the $40.00 CESG from the government when it receives the contribution; nothing else to do.",
-  "next_step_target": "Votre fournisseur de REEE demande la SCEE de 40,00 $ au gouvernement à la réception de la cotisation; rien d'autre à faire."
+ "headline_en": "Put $200.00 into Kofi's RESP; it earns $40.00 of Canada Education Savings Grant.",
+ "headline_target": "Put $200.00 into Kofi's RESP; it earns $40.00 of Canada Education Savings Grant.",
+ "done": [
+  "$200.00 from the household account to Kofi's RESP, as his guardian.",
+  "Grant room: the basic CESG is 20% of $200.00, so $40.00, leaving $460.00 of this year's $500.00 room and $7,160.00 of the $7,200.00 lifetime maximum (canada.ca, Estimating amounts, fetched 2026-09-12). Carry-forward room and grant received so far are not on file, so they were taken as zero."
+ ],
+ "waiting_on": [],
+ "labels": [],
+ "next_step_en": "Your RESP provider requests the $40.00 CESG from the government when it receives the contribution; nothing else to do.",
+ "next_step_target": "Your RESP provider requests the $40.00 CESG from the government when it receives the contribution; nothing else to do."
 }

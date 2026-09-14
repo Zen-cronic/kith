@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -125,21 +125,10 @@
 </main>
 
 <main id="screen-session" class="screen session" hidden>
-  <aside class="rail">
-    <div class="rail-head"><span class="eyebrow">Behind the answer</span><strong>Six agents</strong><span class="muted" id="rail-provider"></span></div>
-    <ol class="roster" id="roster"></ol>
-  </aside>
-
-  <section class="staff">
-    <div class="pane-head"><strong>Session<span class="pane-index">01</span></strong><span class="muted small" id="session-sub"></span></div>
-    <p class="staff-note" id="session-error" role="alert" hidden></p>
-    <button class="btn ghost" id="back-home">Back to home</button>
-    <article class="card" id="request-card"><h2>Request</h2><p id="request-who" class="small muted"></p><p id="request-text-view" class="request-text"></p></article>
-    <article class="card" id="intake-card" hidden><h2>Intake</h2><div id="intake-body"></div></article>
-    <article class="card" id="matcher-card" hidden><h2>Case</h2><div id="matcher-body"></div></article>
-    <article class="card" id="plan-card" hidden><h2>Plan and authority</h2><div id="plan-body"></div></article>
-    <article class="card" id="executor-card" hidden><h2>Executor</h2><div id="executor-body"></div></article>
-  </section>
+  <div class="session-bar">
+    <button class="btn ghost back-btn" id="back-home"><span aria-hidden="true">←</span> Back to home</button>
+  </div>
+  <p class="staff-note session-error" id="session-error" role="alert" hidden></p>
 
   <section class="member-pane" id="member-pane">
     <div class="pip-present">
@@ -160,7 +149,28 @@
     </article>
     <article class="card" id="approvals-card" hidden><h2>Waiting for approval</h2><div id="approvals"></div></article>
     <article class="card receipt-card" id="session-receipts-card" hidden><h2>Pip hands you the receipt</h2><div id="session-receipts"></div></article>
-    <article class="card" id="guard-card" hidden><h2>Authority guard</h2><p id="guard-text" class="small"></p><ul id="guard-notes" class="small muted"></ul></article>
+  </section>
+
+  <aside class="rail">
+    <div class="rail-head"><span class="eyebrow">Behind the answer</span><strong>Six agents</strong><span class="muted" id="rail-provider"></span></div>
+    <ol class="roster" id="roster"></ol>
+  </aside>
+
+  <section class="staff">
+    <details class="trace" id="trace">
+      <summary class="trace-summary">
+        <span class="trace-summary-label"><span class="eyebrow">How Pip worked it out</span><span class="trace-hint">The full step-by-step audit trail</span></span>
+      </summary>
+      <div class="trace-body">
+        <p class="muted small trace-sub" id="session-sub"></p>
+        <article class="card" id="request-card"><h2>Request</h2><p id="request-who" class="small muted"></p><p id="request-text-view" class="request-text"></p></article>
+        <article class="card" id="intake-card" hidden><h2>Intake</h2><div id="intake-body"></div></article>
+        <article class="card" id="matcher-card" hidden><h2>Case</h2><div id="matcher-body"></div></article>
+        <article class="card" id="plan-card" hidden><h2>Plan and authority</h2><div id="plan-body"></div></article>
+        <article class="card" id="executor-card" hidden><h2>Executor</h2><div id="executor-body"></div></article>
+        <article class="card" id="guard-card" hidden><h2>Authority guard</h2><p id="guard-text" class="small"></p><ul id="guard-notes" class="small muted"></ul></article>
+      </div>
+    </details>
   </section>
 </main>
 

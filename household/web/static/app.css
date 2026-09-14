@@ -68,7 +68,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-:root {
+:root:not([data-theme="light"]) {
   color-scheme: dark;
   --paper: #1D1A16;
   --surface: #29251F;
@@ -306,15 +306,59 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .empty { font-size: 13px; color: var(--secondary-ink); }
 .decided { margin-top: 10px; padding: 14px 16px; background: var(--complete-bg); border-radius: var(--radius-sm); display: grid; gap: 8px; }
 
-/* Session: rail | staff | member pane */
-.screen.session { flex: 1; display: grid; grid-template-columns: 210px minmax(380px, 1fr) minmax(400px, 1.05fr); gap: 0; min-height: 0; }
+/* Session: the member-facing result is the hero; the roster + step cards are a recessive
+   "behind the answer" sidebar. Reading order stays hero-first on mobile and on desktop. */
+.screen.session {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.86fr);
+  grid-template-areas: "bar bar" "err err" "hero rail" "hero staff";
+  align-content: start;
+  gap: 18px 30px;
+  padding: 22px 40px 56px;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  /* Exact money is the trust proposition: force an unambiguous zero on every figure here */
+  font-variant-numeric: slashed-zero;
+}
 .screen.session > * { min-width: 0; }
-.rail { border-right: 1px solid var(--line); background: var(--surface-2); padding: 26px 18px 18px; display: flex; flex-direction: column; gap: 18px; }
-.rail-head { display: flex; flex-direction: column; gap: 6px; }
-.rail-head strong { font: 600 22px/1.2 var(--font-round); color: var(--ink); }
+.session-bar { grid-area: bar; display: flex; align-items: center; gap: 14px; }
+.session-bar .back-btn { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; }
+.session-error { grid-area: err; margin: 0; background: var(--destructive-bg); color: var(--destructive); font-weight: 700; }
+
+/* Hero: the member-facing result, card-forward on the warm ground. Sticky on desktop so
+   it stays with the reader while the (optional) audit trail scrolls. */
+.member-pane { grid-area: hero; position: sticky; top: 16px; align-self: start; background: transparent; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.pip-present { display: flex; align-items: center; gap: 14px; background: linear-gradient(180deg, var(--surface), var(--surface-2)); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px; box-shadow: var(--shadow-sm); }
+.pip-present .pip { width: 72px; height: 76px; }
+.pip-present .pip-speech { font-size: 17px; font-weight: 500; }
+.member-head { flex-direction: row; align-items: center; justify-content: space-between; gap: 12px; padding: 2px 2px 0; }
+.member-head strong { font: 600 26px/1.15 var(--font-round); letter-spacing: -.01em; color: var(--ink); }
+.chip.outcome { font-size: 12px; padding: 5px 12px; }
+.briefing { border: 2px solid var(--primary-soft); padding: 24px; box-shadow: var(--shadow-md); }
+.briefing-headline { font: 600 27px/1.18 var(--font-round); letter-spacing: -.008em; margin: 12px 0 8px; color: var(--ink); }
+.briefing-facts { margin: 16px 0 0; }
+.briefing-facts > div { display: grid; grid-template-columns: 96px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.briefing-facts dt { font-size: 12px; font-weight: 700; padding-top: 3px; color: var(--secondary-ink); }
+.briefing-facts dd { margin: 0; }
+.briefing-facts ul { margin: 0; padding-left: 16px; }
+/* The receipt Pip hands over: a warm proof card */
+.receipt-card { border: 2px solid var(--primary-soft); background: var(--surface); }
+/* Approval: the one card that must not recede — warm-alert treatment when present */
+#approvals-card { border: 2px solid var(--waiting-line); background: var(--waiting-bg); box-shadow: var(--shadow-md); }
+#approvals-card h2 { color: var(--waiting-ink); letter-spacing: .06em; }
+#approvals-card .action { border-top-color: var(--waiting-line); }
+#approvals-card .approval-form { background: var(--surface); }
+
+/* Sidebar block 1: the six-agent roster (recessive) */
+.rail { grid-area: rail; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); padding: 18px 18px 8px; display: flex; flex-direction: column; gap: 8px; }
+.rail-head { display: flex; flex-direction: column; gap: 4px; }
+.rail-head strong { font: 600 19px/1.2 var(--font-round); color: var(--ink); }
 .rail-head > .muted { font-size: 11px; overflow-wrap: anywhere; }
 .roster { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.agent { display: grid; grid-template-columns: 10px 1fr; gap: 9px; padding: 14px 0; border-top: 1px solid var(--line); align-items: start; }
+.agent { display: grid; grid-template-columns: 10px 1fr; gap: 9px; padding: 12px 0; border-top: 1px solid var(--line); align-items: start; }
+.agent:first-child { border-top: 0; padding-top: 4px; }
 .agent .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line-strong); margin-top: 6px; }
 .agent.running .dot { background: var(--prepare); animation: pulse 1.2s ease-in-out infinite; }
 .agent.done .dot { background: var(--complete); }
@@ -326,34 +370,25 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .agent .state.good { color: var(--complete); }
 .agent .state.bad { color: var(--destructive); }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.6); } }
-.rail-foot { margin-top: auto; }
-.staff { padding: 0 28px 32px; background: var(--paper); display: flex; flex-direction: column; gap: 16px; }
-.staff .pane-head { padding-top: 24px; }
-.staff > #back-home { align-self: flex-start; }
-.member-pane { background: var(--surface-2); padding: 26px 32px 40px; display: flex; flex-direction: column; gap: 16px; }
-.pip-present { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 16px; box-shadow: var(--shadow-sm); }
-.pip-present .pip { width: 72px; height: 76px; }
-.pip-present .pip-speech { font-size: 16px; }
-.member-head { flex-direction: row; align-items: center; justify-content: space-between; padding-top: 0; }
-.chip.outcome { font-size: 12px; }
-.briefing { border: 2px solid var(--primary-soft); padding: 24px; }
-.briefing-headline { font: 600 26px/1.2 var(--font-round); letter-spacing: -.005em; margin: 12px 0 8px; color: var(--ink); }
-.briefing-facts { margin: 16px 0 0; }
-.briefing-facts > div { display: grid; grid-template-columns: 96px 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
-.briefing-facts dt { font-size: 12px; font-weight: 700; padding-top: 3px; color: var(--secondary-ink); }
-.briefing-facts dd { margin: 0; }
-.briefing-facts ul { margin: 0; padding-left: 16px; }
-/* The receipt Pip hands over: a warm proof card */
-.receipt-card { border: 2px solid var(--primary-soft); background: var(--surface); }
+
+/* Sidebar block 2: the raw step cards, folded into a quiet audit trail the member can open on demand */
+.staff { grid-area: staff; background: transparent; padding: 0; }
+.trace { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface-2); }
+.trace-summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; border-radius: var(--radius); }
+.trace-summary::-webkit-details-marker { display: none; }
+.trace-summary-label { display: flex; flex-direction: column; gap: 3px; }
+.trace-hint { font-size: 12px; color: var(--secondary-ink); }
+.trace-summary::after { content: '⌄'; font: 700 20px/1 var(--font-body); color: var(--secondary-ink); margin-top: -6px; transition: transform .18s ease; }
+.trace[open] .trace-summary::after { transform: rotate(180deg); }
+.trace-summary:hover .eyebrow, .trace-summary:hover::after { color: var(--primary-deep); }
+.trace-body { display: flex; flex-direction: column; gap: 12px; padding: 2px 16px 16px; }
+.trace-sub { margin: 0 0 2px; }
+.staff .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: none; padding: 16px 18px; font-size: 13.5px; }
+.staff .card h2 { margin-bottom: 10px; }
+.staff .request-text { font-size: 14px; }
 .plan-revision { border-top: 1px dashed var(--line-strong); padding-top: 10px; margin-top: 10px; }
 .plan-revision:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
 .plan-revision .rev { font-family: var(--font-figure); font-size: 10.5px; color: var(--secondary-ink); margin-bottom: 6px; }
-
-/* Approval screen: warm but sober — cuteness recedes, clarity wins */
-.approvals-card { border: 2px solid var(--waiting-line); background: var(--waiting-bg); }
-.approvals-card h2 { color: var(--waiting-ink); }
-.approvals-card .action { border-top-color: var(--waiting-line); }
-.approvals-card .approval-form { background: var(--surface); }
 
 /* Voice */
 .voice-row { margin-top: 12px; align-items: center; gap: 10px; }
@@ -369,7 +404,7 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   .screen.single.welcome { padding: 40px 32px 24px; column-gap: 40px; }
   .welcome .display { font-size: 48px; }
   .screen.home { padding-inline: 24px; }
-  .screen.session { grid-template-columns: 170px minmax(320px, 1fr) minmax(340px, 1fr); }
+  .screen.session { grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr); gap: 16px 22px; padding: 20px 24px 48px; }
 }
 @media screen and (max-width: 960px) {
   .topbar .steps { display: none; }
@@ -377,9 +412,8 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   .welcome .display { font-size: 42px; }
   .member-panel { margin-top: 28px; }
   .screen.home { padding: 20px 18px 40px; }
-  .screen.session { display: flex; flex-direction: column; }
-  .rail { border-right: 0; border-bottom: 1px solid var(--line); }
-  .staff, .member-pane { padding: 24px 18px 32px; }
+  .screen.session { grid-template-columns: 1fr; grid-template-areas: "bar" "err" "hero" "rail" "staff"; gap: 16px; padding: 18px 18px 44px; }
+  .member-pane { position: static; }
 }
 @media screen and (max-width: 700px) {
   .topbar { padding: 12px 16px; min-height: auto; flex-wrap: wrap; gap: 8px 12px; }
@@ -393,8 +427,11 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   .home-greeting .pip-speech { font-size: 20px; }
   .home-tab { flex: 1 1 auto; padding: 10px 12px; text-align: center; }
   .card { padding: 18px 16px; }
+  .briefing { padding: 20px 18px; }
   .briefing-facts > div { display: block; }
+  .briefing-facts dt { padding-bottom: 2px; }
   .briefing-headline { font-size: 23px; }
+  .member-head strong { font-size: 24px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
