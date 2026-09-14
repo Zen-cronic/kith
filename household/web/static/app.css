@@ -245,15 +245,21 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .pin-head strong { font: 600 20px/1.3 var(--font-round); }
 .pin-row { margin-top: 8px; }
 #pin { width: 150px; font-size: 22px; letter-spacing: .3em; font-family: var(--font-figure); text-align: center; }
-.mount { margin-top: 28px; }
 
-/* Home: greeting header + three columns */
-.screen.home { flex: 1; display: grid; grid-template-columns: 1.05fr 1fr 1.1fr; gap: 24px; padding: 28px 40px 48px; max-width: 1600px; width: 100%; margin: 0 auto; align-items: start; }
-.home-greeting { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; background: linear-gradient(180deg, var(--surface), var(--surface-2)); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 24px; box-shadow: var(--shadow-sm); }
+/* Home: greeting header + tab bar + one full-width section at a time */
+.screen.home { flex: 1; display: flex; flex-direction: column; gap: 20px; padding: 28px 40px 48px; max-width: 1080px; width: 100%; margin: 0 auto; }
+.home-greeting { display: flex; align-items: center; gap: 18px; background: linear-gradient(180deg, var(--surface), var(--surface-2)); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 24px; box-shadow: var(--shadow-sm); }
 .home-greeting .pip { width: 78px; height: 82px; }
 .greeting-copy { min-width: 0; }
 .home-greeting .pip-speech { font-size: 22px; font-weight: 600; }
 .home-greeting-sub { margin: 4px 0 0; font-size: 14px; color: var(--secondary-ink); }
+
+/* Tab bar: a pill toggle group, one section active. Wraps on narrow screens — never scrolls the page. */
+.home-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.home-tab { font: 600 14px/1 var(--font-round); border: 2px solid var(--line-strong); background: var(--surface); color: var(--ink); border-radius: 999px; padding: 10px 20px; cursor: pointer; min-height: 44px; box-shadow: var(--shadow-sm); transition: background .15s, border-color .15s, color .15s, box-shadow .15s; }
+.home-tab:hover { border-color: var(--primary); background: var(--primary-soft); color: var(--primary-deep); }
+.home-tab[aria-selected="true"] { background: var(--primary); border-color: var(--primary); color: var(--primary-ink); box-shadow: var(--shadow-md); }
+.home-panel { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
 .column { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
 .pane-head { display: flex; flex-direction: column; gap: 4px; padding-bottom: 12px; }
 .pane-head strong { font: 600 24px/1.2 var(--font-round); letter-spacing: -.005em; color: var(--ink); }
@@ -349,25 +355,6 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
 .approvals-card .action { border-top-color: var(--waiting-line); }
 .approvals-card .approval-form { background: var(--surface); }
 
-/* What is real */
-.what-is-real { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; font-size: 13px; box-shadow: var(--shadow-sm); }
-.what-is-real h2 { font: 600 20px/1.2 var(--font-round); margin: 0 0 8px; color: var(--ink); }
-.what-is-real #wir-env { margin: 0 0 12px; color: var(--secondary-ink); }
-.wir-rails { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-.wir-rails li { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: start; padding-top: 10px; border-top: 1px solid var(--line); }
-.wir-rails li:first-child { border-top: 0; padding-top: 0; }
-.wir-rails .name { font-weight: 700; font-size: 13px; }
-.wir-rails .reason { grid-column: 2; font-size: 12px; color: var(--secondary-ink); }
-.wir-more { margin-top: 12px; }
-.wir-more summary { cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--primary-deep); min-height: 32px; display: flex; align-items: center; }
-.rail .what-is-real { padding: 14px; font-size: 11.5px; }
-.rail .what-is-real h2 { font-size: 16px; }
-.rail .wir-rails .reason { display: none; }
-/* Narrow rail: stack the chip above its label so labels never clip */
-.rail .wir-rails li { grid-template-columns: 1fr; gap: 5px; }
-.rail .wir-rails .chip { justify-self: start; }
-.rail .wir-rails .name { font-size: 12px; overflow-wrap: anywhere; }
-
 /* Voice */
 .voice-row { margin-top: 12px; align-items: center; gap: 10px; }
 .voice-panel { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 12px; }
@@ -381,8 +368,7 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   .topbar { padding-inline: 24px; gap: 16px; }
   .screen.single.welcome { padding: 40px 32px 24px; column-gap: 40px; }
   .welcome .display { font-size: 48px; }
-  .screen.home { grid-template-columns: 1fr 1fr; padding-inline: 24px; }
-  .screen.home .queue { grid-column: 1 / -1; }
+  .screen.home { padding-inline: 24px; }
   .screen.session { grid-template-columns: 170px minmax(320px, 1fr) minmax(340px, 1fr); }
 }
 @media screen and (max-width: 960px) {
@@ -390,19 +376,23 @@ ul.plain { list-style: none; margin: 0; padding: 0; }
   .screen.single.welcome { display: block; padding: 28px 20px 32px; }
   .welcome .display { font-size: 42px; }
   .member-panel { margin-top: 28px; }
-  .screen.home { display: flex; flex-direction: column; padding: 20px 18px 40px; }
+  .screen.home { padding: 20px 18px 40px; }
   .screen.session { display: flex; flex-direction: column; }
   .rail { border-right: 0; border-bottom: 1px solid var(--line); }
   .staff, .member-pane { padding: 24px 18px 32px; }
 }
 @media screen and (max-width: 700px) {
-  .topbar { padding: 12px 16px; min-height: 68px; flex-wrap: wrap; gap: 10px; }
-  .provider-tag { display: none; }
+  .topbar { padding: 12px 16px; min-height: auto; flex-wrap: wrap; gap: 8px 12px; }
+  .topbar-right { gap: 10px; flex-wrap: wrap; }
+  .provider-tag { font-size: 10.5px; padding: 5px 10px; }
   .member-grid { grid-template-columns: 1fr; }
   .display { font-size: 34px; }
   .welcome .display { font-size: 36px; }
   .pip-hero { flex-direction: column; text-align: center; }
   .home-greeting { flex-direction: column; text-align: center; }
+  .home-greeting .pip-speech { font-size: 20px; }
+  .home-tab { flex: 1 1 auto; padding: 10px 12px; text-align: center; }
+  .card { padding: 18px 16px; }
   .briefing-facts > div { display: block; }
   .briefing-headline { font-size: 23px; }
 }

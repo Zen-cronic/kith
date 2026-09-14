@@ -42,7 +42,6 @@
       <p class="staff-note" id="startup-error" role="alert"></p>
       <button class="btn ghost" id="reload-service">Reload</button>
     </div>
-    <div class="mount" id="mount-members"></div>
   </section>
   <section class="member-panel" aria-labelledby="members-heading">
     <div class="section-topline"><span class="eyebrow">Members</span><span class="muted small" id="household-name"></span></div>
@@ -70,7 +69,14 @@
     </div>
   </section>
 
-  <section class="column ledger">
+  <nav class="home-tabs" id="home-tabs" role="tablist" aria-label="Home sections">
+    <button class="home-tab" type="button" role="tab" id="tab-ledger" data-tab="ledger" aria-controls="panel-ledger" aria-selected="false">Ledger</button>
+    <button class="home-tab" type="button" role="tab" id="tab-ask" data-tab="ask" aria-controls="panel-ask" aria-selected="true">Ask</button>
+    <button class="home-tab" type="button" role="tab" id="tab-queue" data-tab="queue" aria-controls="panel-queue" aria-selected="false">Queue</button>
+    <button class="home-tab" type="button" role="tab" id="tab-receipts" data-tab="receipts" aria-controls="panel-receipts" aria-selected="false">Receipts</button>
+  </nav>
+
+  <section class="home-panel ledger" id="panel-ledger" role="tabpanel" aria-labelledby="tab-ledger" tabindex="0" hidden>
     <div class="pane-head"><strong>Ledger</strong><span class="muted small">Who may decide what for whom</span></div>
     <article class="card"><h2>Members</h2><div id="ledger-members"></div></article>
     <article class="card"><h2>Grants</h2><div id="ledger-grants"></div></article>
@@ -78,7 +84,7 @@
     <article class="card"><h2>Accounts</h2><div id="ledger-accounts"></div></article>
   </section>
 
-  <section class="column ask">
+  <section class="home-panel ask" id="panel-ask" role="tabpanel" aria-labelledby="tab-ask" tabindex="0">
     <div class="pane-head"><strong>Ask</strong><span class="muted small" id="ask-as"></span></div>
     <article class="card ask-card">
       <h2>Your request</h2>
@@ -107,11 +113,14 @@
     <article class="card"><h2>Sample requests</h2><p class="small muted">Written for the member who is speaking. Pick one to fill it in.</p><div class="sample-list" id="sample-list"></div></article>
   </section>
 
-  <section class="column queue">
+  <section class="home-panel queue" id="panel-queue" role="tabpanel" aria-labelledby="tab-queue" tabindex="0" hidden>
     <div class="pane-head"><strong>Action queue</strong><span class="muted small">Proposed, waiting, done</span></div>
     <div id="queue"></div>
+  </section>
+
+  <section class="home-panel receipts" id="panel-receipts" role="tabpanel" aria-labelledby="tab-receipts" tabindex="0" hidden>
+    <div class="pane-head"><strong>Receipts</strong><span class="muted small">Proof of every allowed action</span></div>
     <article class="card"><h2>Receipts</h2><div id="receipts"></div></article>
-    <div class="mount" id="mount-home"></div>
   </section>
 </main>
 
@@ -119,7 +128,6 @@
   <aside class="rail">
     <div class="rail-head"><span class="eyebrow">Behind the answer</span><strong>Six agents</strong><span class="muted" id="rail-provider"></span></div>
     <ol class="roster" id="roster"></ol>
-    <div class="mount rail-foot" id="mount-session"></div>
   </aside>
 
   <section class="staff">
@@ -155,13 +163,6 @@
     <article class="card" id="guard-card" hidden><h2>Authority guard</h2><p id="guard-text" class="small"></p><ul id="guard-notes" class="small muted"></ul></article>
   </section>
 </main>
-
-<aside class="what-is-real" id="what-is-real" aria-labelledby="wir-heading">
-  <h2 id="wir-heading">What is real</h2>
-  <p class="small" id="wir-env"></p>
-  <ul class="wir-rails" id="wir-rails"></ul>
-  <details class="wir-more"><summary>How Pip keeps it honest</summary><p class="small" id="wir-intro"></p></details>
-</aside>
 
 <script src="/static/queue.js"></script>
 <script src="/static/pip.js"></script>

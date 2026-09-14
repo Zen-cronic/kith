@@ -29,7 +29,7 @@
     ["members", "home", "session"].forEach((s) => { $("screen-" + s).hidden = s !== step; });
     document.body.dataset.screen = step;
     window.scrollTo({ top: 0, behavior: "instant" });
-    $("mount-" + step).appendChild($("what-is-real"));
+    if (step === "home") activateHomeTab("ask");
     $("switch-member").hidden = !state.member;
     $("who-line").hidden = !state.member;
     const order = ["members", "home", "session"];
@@ -38,6 +38,20 @@
       li.classList.toggle("done", order.indexOf(li.dataset.step) < order.indexOf(step));
     });
   }
+
+  // Home tabs: one section (Ledger / Ask / Queue / Receipts) is visible at a time; Ask is the default on entering home.
+  const HOME_TABS = ["ledger", "ask", "queue", "receipts"];
+  function activateHomeTab(name) {
+    if (!HOME_TABS.includes(name)) name = "ask";
+    HOME_TABS.forEach((t) => {
+      const btn = $("tab-" + t), panel = $("panel-" + t);
+      if (btn) btn.setAttribute("aria-selected", String(t === name));
+      if (panel) panel.hidden = t !== name;
+    });
+  }
+  document.querySelectorAll(".home-tab").forEach((btn) => {
+    btn.addEventListener("click", () => activateHomeTab(btn.dataset.tab));
+  });
 
   // Meta and the "What is real" panel
 
@@ -49,17 +63,6 @@
     const providerWords = m.provider === "fake" ? "demo mode (fake provider)" : `${m.provider} · ${m.model_id}`;
     $("provider-line").textContent = `${providerWords} · execution ${m.execution_mode}`;
     $("rail-provider").textContent = `${m.sdk} · ${providerWords}`;
-    const backend = m.backend === "local" ? "this computer" : m.backend === "agentcore" ? "AWS AgentCore Runtime" : "the configured Runtime service";
-    $("wir-env").textContent = `Execution mode: ${m.execution_mode} · Model: ${providerWords} · Runs on: ${backend}. Labels below are what each rail earns in this environment right now.`;
-    $("wir-intro").textContent = m.rails.intro;
-    const list = $("wir-rails"); list.replaceChildren();
-    m.rails.items.forEach((rail) => {
-      const li = el("li"); li.dataset.rail = rail.id;
-      li.appendChild(Q.modeChip(rail.now.mode));
-      li.appendChild(el("span", "name", rail.name));
-      li.appendChild(el("span", "reason", `${rail.now.reason} — ${rail.real}`));
-      list.appendChild(li);
-    });
     const roster = $("roster"); roster.replaceChildren();
     m.roster.forEach((a) => {
       const li = el("li", "agent"); li.id = "agent-" + a.id;
